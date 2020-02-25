@@ -52,7 +52,6 @@ export default {
       function computeModelMatrix(entity, time) {
         return entity.computeModelMatrix(time, new Cesium.Matrix4());
       }
-
       var emitterModelMatrix = new Cesium.Matrix4();
       var translation = new Cesium.Cartesian3();
       var rotation = new Cesium.Quaternion();
@@ -74,7 +73,6 @@ export default {
           emitterModelMatrix
         );
       }
-
       var pos1 = Cesium.Cartesian3.fromDegrees(
         -75.15787310614596,
         39.97862668312678
@@ -84,17 +82,23 @@ export default {
         39.95355089912078
       );
       var position = new Cesium.SampledPositionProperty();
-
+      // /*
+      //   * position. addSample 添加一个新样本。
+      //   名称	类型	描述
+      //   time		采样时间。
+      //   position	笛卡尔3	在提供的时间的位置。
+      //   derivatives	Array。< Cartesian3 >	可选在提供的时间的派生值数组
+      //   * */
       position.addSample(start, pos2);
       position.addSample(stop, pos1);
-
+      // 添加到位置参数
       var entity = viewer.entities.add({
-        availability: new Cesium.TimeIntervalCollection([
-          new Cesium.TimeInterval({
-            start: start,
-            stop: stop
-          })
-        ]),
+        // availability: new Cesium.TimeIntervalCollection([
+        //   new Cesium.TimeInterval({
+        //     start: start,
+        //     stop: stop
+        //   })
+        // ]),
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -127,32 +131,10 @@ export default {
         })
       );
 
-      var gravityScratch = new Cesium.Cartesian3();
-
-      function applyGravity(p, dt) {
-        // We need to compute a local up vector for each particle in geocentric space.
-        var position = p.position;
-
-        Cesium.Cartesian3.normalize(position, gravityScratch);
-        Cesium.Cartesian3.multiplyByScalar(
-          gravityScratch,
-          viewModel.gravity * dt,
-          gravityScratch
-        );
-
-        p.velocity = Cesium.Cartesian3.add(
-          p.velocity,
-          gravityScratch,
-          p.velocity
-        );
-      }
-
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         particleSystem.modelMatrix = computeModelMatrix(entity, time);
-
         // Account for any changes to the emitter model matrix.
         particleSystem.emitterModelMatrix = computeEmitterModelMatrix();
-
         // Spin the emitter if enabled.
         if (viewModel.spin) {
           viewModel.heading += 1.0;

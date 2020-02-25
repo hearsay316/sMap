@@ -40,16 +40,16 @@
     </blockquote>
     <div class="S3-move">
       <div @click="HandleClickS3Move">点击切换场景</div>
-      <div @click="HandleS3CreateMapFire">点击着火</div>
-      <div @click="HandleS3CreateMapCart">点击添加小车</div>
+      <div @click="HandleS3Create('isMapFire')">点击着火</div>
+      <div @click="HandleS3Create('isMapCart')">点击添加小车</div>
       <div @click="HandleS3CreateFireFighting">救火</div>
-      <div @click="HandleS3CreateWater">扫水</div>
     </div>
   </div>
 </template>
 
 <script>
 import Cesium from "Cesium";
+
 var viewer, canvas;
 var scene;
 var widget;
@@ -63,9 +63,11 @@ export default {
   name: "S3MTiles",
   data() {
     return {
-      isMapFire: false,
-      isMapCart: false,
-      isMapWater: false,
+      Status: {
+        isMapFire: false,
+        isMapCart: false,
+        isMapWater: false
+      },
       MapFireXYZ: [],
       MapCartXYZ: [],
       MapWaterXYZ: []
@@ -77,6 +79,7 @@ export default {
   methods: {
     HandleS3CreateFireFighting() {
       let vm = this;
+      vm.HandleS3Create();
       console.log(viewer.entities, cart);
       let { x, y, z } = this.MapFireXYZ[0];
       let { x: x1, y: y1, z: z1 } = this.MapCartXYZ[0];
@@ -94,7 +97,11 @@ export default {
             y: x1,
             z: z1
           };
-          vm.HandleS3MountedWater();
+          vm.HandleS3MountedWater(cart, {
+            x1,
+            y1,
+            z1
+          });
           return;
         }
         x1 += x2;
@@ -102,75 +109,67 @@ export default {
         z1 += z2;
         var position = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
         cart.position = position;
-        console.log(111);
         --index;
       }, 0);
     },
-    HandleS3CreateWater() {
-      this.isMapWater = !this.isMapWater;
-    },
-    HandleS3MountedWater() {
-      //let { x: x1, y: y1, z: z1 } = this.winter;
-      // var pos1 = Cesium.Cartesian3.fromDegrees(x, y, z);
-      // var pos2 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
-      // var position = new Cesium.SampledPositionProperty();
-      //
-      // position.addSample(start, pos1);
-      // position.addSample(stop, pos2);
-      //
-      console.log(x, y, z);
-      var position = Cesium.Cartesian3.fromDegrees(x, y, z);
-      console.log(viewer.entities);
-      var entity = viewer.entities.add({
-        position: position
+    HandleS3Create(eventStatus) {
+      Object.keys(this.Status).forEach(item => {
+        console.log(item === eventStatus, item, eventStatus);
+        if (item === eventStatus) {
+          this.Status[eventStatus] = !this.Status[eventStatus];
+        } else {
+          this.Status[item] = false;
+        }
       });
-      let viewModel = {
-        emissionRate: 200,
-        minimumParticleLife: 1.5,
-        maximumParticleLife: 1.8,
-        minimumSpeed: 7.0,
-        maximumSpeed: 9.0,
-        startScale: 3.0,
-        endScale: 1.5,
+    },
+    HandleS3MountedWater(cart) {
+      var emitterModelMatrix = new Cesium.Matrix4();
+      var translation = new Cesium.Cartesian3();
+      var rotation = new Cesium.Quaternion();
+      var hpr = new Cesium.HeadingPitchRoll();
+      var trs = new Cesium.TranslationRotationScale();
+      var entity = cart;
+      var viewModel = {
+        emissionRate: 40.0,
+        gravity: -3.5,
+        minimumParticleLife: 6,
+        maximumParticleLife: 7,
+        minimumSpeed: 9,
+        maximumSpeed: 9.5,
+        startScale: 1,
+        endScale: 20,
         particleSize: 1
       };
-      let particleSystem = scene.primitives.add(
+      viewer.zoomTo(entity);
+      scene.logarithmicDepthBuffer = false;
+      //关闭HDR
+      scene.highDynamicRange = false;
+      var particleSystem = viewer.scene.primitives.add(
         new Cesium.ParticleSystem({
-          // 粒子的图片
           image:
             "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fountain2.png",
-          // 起始颜色
           startColor: new Cesium.Color(1, 1, 1, 0.6),
           endColor: new Cesium.Color(0.8, 0.86, 1, 0.4),
-          // 开始大小比例
           startScale: viewModel.startScale,
-          // 结束大小比例
           endScale: viewModel.endScale,
-          // 最小生命周期
           minimumParticleLife: viewModel.minimumParticleLife,
-          // 最大生命周期
           maximumParticleLife: viewModel.maximumParticleLife,
-          // 最小速度
           minimumSpeed: viewModel.minimumSpeed,
-          // 最大速度
           maximumSpeed: viewModel.maximumSpeed,
-          // 粒子大小
           imageSize: new Cesium.Cartesian2(
             viewModel.particleSize,
             viewModel.particleSize
           ),
-          // 粒子数量
           emissionRate: viewModel.emissionRate,
-          lifetime: 16,
-          // 循环是否开启
-          loop: true,
-          // 粒子的释放方向
-          emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(45.0)),
-          // 是否以米为单位
-          sizeInMeters: true
+          //粒子发射器
+          emitter: new Cesium.CircleEmitter(0.2),
+          emitterModelMatrix: computeEmitterModelMatrix(),
+          //  updateCallback: applyGravity,
+          sizeInMeters: true,
+          performance: false,
+          lifetime: 16.0 // 默认情况下，粒子系统将永远运行。要使粒子系统运行一定的持续时间，请使用lifetime以秒为单位指定持续时间并将其设置loop为false。
         })
       );
-
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         particleSystem.modelMatrix = computeModelMatrix(entity, time);
         // Account for any changes to the emitter model matrix.
@@ -181,16 +180,15 @@ export default {
         return entity.computeModelMatrix(time, new Cesium.Matrix4());
       }
 
-      var emitterModelMatrix = new Cesium.Matrix4();
-      var translation = new Cesium.Cartesian3();
-      var rotation = new Cesium.Quaternion();
-      var hpr = new Cesium.HeadingPitchRoll();
-      var trs = new Cesium.TranslationRotationScale();
-
       // 改变粒子系统的位置
       function computeEmitterModelMatrix() {
-        hpr = Cesium.HeadingPitchRoll.fromDegrees(0.0, 0.0, 0.0, hpr);
-        trs.translation = Cesium.Cartesian3.fromElements(-2, 0, 2, translation);
+        hpr = Cesium.HeadingPitchRoll.fromDegrees(0, 80, 220, hpr);
+        trs.translation = Cesium.Cartesian3.fromElements(
+          0,
+          0,
+          5.4,
+          translation
+        );
         trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
         return Cesium.Matrix4.fromTranslationRotationScale(
           trs,
@@ -279,9 +277,6 @@ export default {
         );
       }
     },
-    HandleS3CreateMapFire() {
-      this.isMapFire = !this.isMapFire;
-    },
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
@@ -293,10 +288,6 @@ export default {
         viewFrom: new Cesium.Cartesian3(x, y, z),
         position: position
       });
-    },
-    HandleS3CreateMapCart() {
-      this.isMapCart = !this.isMapCart;
-      console.log(11);
     },
     HandleClickS3Move() {
       try {
@@ -320,47 +311,11 @@ export default {
         console.log(e);
       }
     },
-    changePosition(value) {
-      var sceme = viewer.scene;
-      if (viewer.dataSources.length === 0) {
-        sweetAlert("error", "Please add KML file firstly", "error");
-        return;
-      }
-      var entity =
-        viewer.dataSources._dataSources[0]._entityCollection._entities
-          ._array[0];
-      if (!Cesium.defined(entity.currentPosition)) {
-        var position = entity.position;
-        var time = position._composite.intervals._intervals[0].stop;
-        entity.currentPosition = position.getValue(time);
-      }
-      var coordinate = Cesium.Cartographic.fromCartesian(
-        entity.currentPosition
-      );
-      var longitude = Cesium.Math.toDegrees(coordinate.longitude);
-      var latitude = Cesium.Math.toDegrees(coordinate.latitude);
-      var height = coordinate.height;
-      longitude -= value / 50000;
-      latitude -= value / 50000;
-      var newPosition = Cesium.Cartesian3.fromDegrees(
-        longitude,
-        latitude,
-        height
-      );
-      entity.position = newPosition;
-    },
     onload() {
       let vm = this;
       var infoboxContainer = document.getElementById("bubble");
       //初始化viewer部件
       viewer = new Cesium.Viewer("cesiumContainer");
-      // viewer.imageryLayers.addImageryProvider(
-      //   new Cesium.BingMapsImageryProvider({
-      //     url: "https://dev.virtualearth.net",
-      //     mapStyle: Cesium.BingMapsStyle.AERIAL,
-      //     key: URL_CONFIG.BING_MAP_KEY
-      //   })
-      // );
       viewer.customInfobox = infoboxContainer;
       scene = viewer.scene;
       canvas = scene.canvas;
@@ -446,15 +401,15 @@ export default {
           z = 0;
         }
         console.log(x, y, z);
-        if (vm.isMapFire) {
+        if (vm.Status.isMapFire) {
           vm.MapFireXYZ.push({ x, y, z });
           vm.HandleS3MountedFire();
         }
-        if (vm.isMapCart) {
+        if (vm.Status.isMapCart) {
           vm.MapCartXYZ.push({ x, y, z });
           vm.HandleS3MountedMapCart();
         }
-        if (vm.isMapWater) {
+        if (vm.Status.isMapWater) {
           vm.MapWaterXYZ.push({ x, y, z });
           vm.HandleS3MountedWater();
         }
