@@ -68,7 +68,7 @@ const routes = [
     path: "/S3MTiles",
     name: "S3MTiles",
     meta: {
-      title: "主页面显示",
+      title: "S3MTiles",
       icon:
         "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
     },
@@ -82,7 +82,7 @@ const routes = [
     path: "/ParticleWater",
     name: "ParticleWater",
     meta: {
-      title: "小车喷水测试",
+      title: "ParticleWater",
       icon:
         "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
     },
@@ -90,9 +90,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(
-        /* webpackChunkName: "ParticleWater" */ "../views/ParticleWater.vue"
-      )
+      import(/* webpackChunkName: "ParticleWater" */ "../views/ParticleWater.vue")
   }
 ];
 
