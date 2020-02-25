@@ -40,9 +40,25 @@
     </blockquote>
     <div class="S3-move">
       <div @click="HandleClickS3Move">点击切换场景</div>
-      <div @click="HandleS3Create('isMapFire')">点击着火</div>
-      <div @click="HandleS3Create('isMapCart')">点击添加小车</div>
-      <div @click="HandleS3CreateFireFighting">救火</div>
+      <div
+        @click="HandleS3Create('isMapFire')"
+        :class="{ bgcolor: Status.isMapFire }"
+      >
+        点击着火
+      </div>
+      <div
+        @click="HandleS3Create('isMapCart')"
+        :class="{ bgcolor: Status.isMapCart }"
+      >
+        点击添加小车
+      </div>
+      <div
+        v-if="eachS3Move"
+        @click="HandleS3CreateFireFighting"
+        :class="{ bgcolor: Status.isMapWater }"
+      >
+        救火
+      </div>
     </div>
   </div>
 </template>
@@ -61,8 +77,17 @@ let start;
 let stop;
 export default {
   name: "S3MTiles",
+  computed: {
+    eachS3Move() {
+      return this.S3Move.isMapFire + this.S3Move.isMapCart === 2;
+    }
+  },
   data() {
     return {
+      S3Move: {
+        isMapFire: 0,
+        isMapCart: 0
+      },
       Status: {
         isMapFire: false,
         isMapCart: false,
@@ -290,6 +315,7 @@ export default {
       });
     },
     HandleClickS3Move() {
+      // this.S3Move = !this.S3Move
       try {
         if (scene.camera) {
           scene.camera.setView({
@@ -401,13 +427,15 @@ export default {
           z = 0;
         }
         console.log(x, y, z);
-        if (vm.Status.isMapFire) {
+        if (vm.Status.isMapFire && vm.Status.isMapFire <= 1) {
           vm.MapFireXYZ.push({ x, y, z });
           vm.HandleS3MountedFire();
+          vm.S3Move.isMapFire += 1;
         }
-        if (vm.Status.isMapCart) {
+        if (vm.Status.isMapCart && vm.Status.isMapCart <= 1) {
           vm.MapCartXYZ.push({ x, y, z });
           vm.HandleS3MountedMapCart();
+          vm.S3Move.isMapCart += 1;
         }
         if (vm.Status.isMapWater) {
           vm.MapWaterXYZ.push({ x, y, z });
@@ -434,5 +462,8 @@ export default {
   position: absolute;
   background: #fff;
   padding: 8px;
+}
+.bgcolor {
+  background: #00e5e5;
 }
 </style>
