@@ -313,13 +313,7 @@ export default {
       );
       // 设置粒子的坐标
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
-        console.log(
-          scene,
-          time,
-          computeModelMatrix(entity, time),
-          computeEmitterModelMatrix(),
-          1111
-        );
+        console.log(scene,time,computeModelMatrix(entity, time),computeEmitterModelMatrix(),1111)
         particleSystem.modelMatrix = computeModelMatrix(entity, time);
         // Account for any changes to the emitter model matrix.
         particleSystem.emitterModelMatrix = computeEmitterModelMatrix();

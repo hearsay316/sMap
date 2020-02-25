@@ -3,7 +3,14 @@
     <router-view />
   </div>
 </template>
-
+<script>
+import { initStats } from "./utils/base";
+export default {
+  mounted() {
+    initStats();
+  }
+};
+</script>
 <style lang="stylus">
   html,body,#app{
     width 100%
