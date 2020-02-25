@@ -10,7 +10,7 @@ prod:
     - release
   script:
     - cnpm i;
-    - npm run build:prod;
+    - npm run build;
     - rm -rf /home/www/webgl/*;
     - cp -r dist/* /home/www/webgl;
   tags:
