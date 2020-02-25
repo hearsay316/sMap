@@ -1,5 +1,6 @@
 // vue.config.js
 module.exports = {
+  publicPath: "./",
   // 选项...
   devServer: {
     before(app) {
