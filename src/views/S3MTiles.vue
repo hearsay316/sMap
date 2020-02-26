@@ -77,6 +77,7 @@ let start;
 let stop;
 let FireParticleSystem;
 let FireEntity;
+let WaterParticleSystem;
 export default {
   name: "S3MTiles",
   computed: {
@@ -172,7 +173,7 @@ export default {
       scene.logarithmicDepthBuffer = false;
       //关闭HDR
       scene.highDynamicRange = false;
-      var particleSystem = viewer.scene.primitives.add(
+      WaterParticleSystem = viewer.scene.primitives.add(
         new Cesium.ParticleSystem({
           image:
             "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fountain2.png",
@@ -199,9 +200,9 @@ export default {
         })
       );
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
-        particleSystem.modelMatrix = computeModelMatrix(entity, time);
+        WaterParticleSystem.modelMatrix = computeModelMatrix(entity, time);
         // Account for any changes to the emitter model matrix.
-        particleSystem.emitterModelMatrix = computeEmitterModelMatrix();
+        WaterParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
       });
       this.HandleS3DestroyedFire();
       function computeModelMatrix(entity, time) {
@@ -230,6 +231,8 @@ export default {
         if (index <= 0) {
           clearInterval(time);
           viewer.entities.remove(FireEntity);
+          //FireParticleSystem.destroy();
+          console.log(scene.primitives,scene.primitives.remove(WaterParticleSystem));
         }
         index -= 0.05;
         var particleSize = parseFloat(index);
