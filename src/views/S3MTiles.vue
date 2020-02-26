@@ -75,6 +75,8 @@ let cart;
 let time;
 let start;
 let stop;
+let FireParticleSystem;
+let FireEntity;
 export default {
   name: "S3MTiles",
   computed: {
@@ -84,6 +86,7 @@ export default {
   },
   data() {
     return {
+      entity: undefined,
       S3Move: {
         isMapFire: 0,
         isMapCart: 0
@@ -200,7 +203,7 @@ export default {
         // Account for any changes to the emitter model matrix.
         particleSystem.emitterModelMatrix = computeEmitterModelMatrix();
       });
-
+      this.HandleS3DestroyedFire();
       function computeModelMatrix(entity, time) {
         return entity.computeModelMatrix(time, new Cesium.Matrix4());
       }
@@ -221,10 +224,26 @@ export default {
         );
       }
     },
+    HandleS3DestroyedFire() {
+      let index = 1;
+      let time = setInterval(() => {
+        if (index <= 0) {
+          clearInterval(time);
+          viewer.entities.remove(FireEntity);
+        }
+        index -= 0.05;
+        var particleSize = parseFloat(index);
+        FireParticleSystem.minimumImageSize.x = particleSize;
+        FireParticleSystem.minimumImageSize.y = particleSize;
+        FireParticleSystem.maximumImageSize.x = particleSize;
+        FireParticleSystem.maximumImageSize.y = particleSize;
+      }, 400);
+    },
     HandleS3MountedFire() {
+      let vm = this;
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       console.log(viewer.entities);
-      var entity = viewer.entities.add({
+      FireEntity = viewer.entities.add({
         position: position
       });
       let viewModel = {
@@ -237,7 +256,7 @@ export default {
         endScale: 1.5,
         particleSize: 1
       };
-      let particleSystem = scene.primitives.add(
+      FireParticleSystem = scene.primitives.add(
         new Cesium.ParticleSystem({
           // 粒子的图片
           image:
@@ -276,9 +295,9 @@ export default {
       );
 
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
-        particleSystem.modelMatrix = computeModelMatrix(entity, time);
+        FireParticleSystem.modelMatrix = computeModelMatrix(FireEntity, time);
         // Account for any changes to the emitter model matrix.
-        particleSystem.emitterModelMatrix = computeEmitterModelMatrix();
+        FireParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
       });
 
       function computeModelMatrix(entity, time) {
