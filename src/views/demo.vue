@@ -39,18 +39,22 @@
       </audio>
     </blockquote>
     <div class="S3-move">
-      <div @click="HandleClickS3Move">点击切换场景</div>
+      <div @click="HandleClickS3Move">进入系统演示</div>
       <div
         @click="HandleS3Create('isMapFire')"
         :class="{ bgcolor: Status.isMapFire }"
       >
         点击着火
       </div>
+
       <div
-        @click="HandleS3Create('isMapCart')"
-        :class="{ bgcolor: Status.isMapCart }"
+        @click="HandleS3CreateFireFighting"
+        :class="{ bgcolor: Status.isMapFire }"
       >
-        点击添加小车
+        启动预案
+      </div>
+      <div @click="HandleS3Deploy" :class="{ bgcolor: Status.isMapFire }">
+        开始部署
       </div>
       <div
         v-if="eachS3Move"
@@ -79,9 +83,6 @@ let FireParticleSystem;
 let FireEntity;
 let WaterParticleSystem;
 let carts = [];
-// //102.06943685862204 24.969427388802274 1571.2370406630653
-// S3MTiles.vue?2889:452 102.06946361643989 24.96939567838009 1571.213370078212
-// S3MTiles.vue?2889:452 102.06953602518084 24.969451096085642 1571.356784142299
 let positionXYZ = [
   {
     x: 102.06943685862204,
@@ -118,7 +119,11 @@ export default {
         isMapCart: false,
         isMapWater: false
       },
-      MapFireXYZ: [],
+      MapFireXYZ: {
+        x: 102.07025202712828,
+        y: 24.969712733889363,
+        z: 1577.620664980985
+      },
       MapCartXYZ: [],
       MapWaterXYZ: []
     };
@@ -131,34 +136,41 @@ export default {
       let vm = this;
       vm.HandleS3Create();
       console.log(viewer.entities, cart);
-      let { x, y, z } = this.MapFireXYZ[0];
-      let { x: x1, y: y1, z: z1 } = this.MapCartXYZ[0];
-      console.log(x1, y1, z1);
-      console.log(x, y, z);
+      let { x, y, z } = this.MapFireXYZ;
+      let { x: x1, y: y1, z: z1 } = positionXYZ[0];
+      let { x: x2, y: y2, z: z2 } = positionXYZ[1];
+      let { x: x3, y: y3, z: z3 } = positionXYZ[2];
       let index = 500;
-      let x2 = (x - x1) / index;
-      let y2 = (y - y1) / index;
-      let z2 = (z - z1) / index;
+      let addx = (x - x1) / index;
+      let addy = (y - y1) / index;
+      let addz = (z - z1) / index;
+      let cart1 = carts[0]
+      let cart2 = carts[1]
+      let cart3 = carts[2]
+      console.log(carts,3333)
       time = setInterval(() => {
         if (index === 100) {
           clearInterval(time);
-          vm.winter = {
-            x: x1,
-            y: x1,
-            z: z1
-          };
-          vm.HandleS3MountedWater(cart, {
-            x1,
-            y1,
-            z1
+          carts.forEach(cart=>{
+            vm.HandleS3MountedWater(cart);
           });
           return;
         }
-        x1 += x2;
-        y1 += y2;
-        z1 += z2;
-        var position = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
-        cart.position = position;
+        x1 += addx;
+        y1 += addy;
+        z1 += addz;
+        x2 += addx;
+        y2 += addy;
+        z2 += addz;
+        x3 += addx;
+        y3 += addy;
+        z3 += addz;
+        var position1 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
+        cart1.position = position1;
+        var position2 = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
+        cart2.position = position2;
+        var position3 = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
+        cart3.position = position3;
         --index;
       }, 0);
     },
@@ -264,7 +276,10 @@ export default {
     },
     HandleS3MountedFire() {
       let vm = this;
-      var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+      let {x,y,z} = vm.MapFireXYZ;
+      var position = Cesium.Cartesian3.fromDegrees(
+          x,y,z
+      );
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
         position: position
@@ -344,14 +359,30 @@ export default {
         );
       }
     },
+    HandleS3Deploy() {
+      positionXYZ.forEach(xyz => {
+        let { x, y, z } = xyz;
+        var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        let cart = viewer.entities.add({
+          model: {
+            uri:
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 32,
+            maximumScale: 0.5
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position
+        });
+        carts.push(cart);
+      });
+    },
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
-          minimumPixelSize: 32,
-          maximumScale: 0.5
+          minimumPixelSize: 32
         },
         viewFrom: new Cesium.Cartesian3(x, y, z),
         position: position
@@ -374,6 +405,7 @@ export default {
               roll: 7.638334409421077e-14
             }
           });
+          this.HandleS3MountedFire();
         } else {
           console.log(scene);
         }

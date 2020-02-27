@@ -90,7 +90,23 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "ParticleWater" */ "../views/ParticleWater.vue")
+      import(
+        /* webpackChunkName: "ParticleWater" */ "../views/ParticleWater.vue"
+      )
+  },
+  {
+    path: "/demo",
+    name: "demo",
+    meta: {
+      title: "demo",
+      icon:
+        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "ParticleWater" */ "../views/demo.vue")
   }
 ];
 
