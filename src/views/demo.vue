@@ -41,13 +41,6 @@
     <div class="S3-move">
       <div @click="HandleClickS3Move">进入系统演示</div>
       <div
-        @click="HandleS3Create('isMapFire')"
-        :class="{ bgcolor: Status.isMapFire }"
-      >
-        点击着火
-      </div>
-
-      <div
         @click="HandleS3CreateFireFighting"
         :class="{ bgcolor: Status.isMapFire }"
       >
@@ -81,7 +74,11 @@ let start;
 let stop;
 let FireParticleSystem;
 let FireEntity;
-let WaterParticleSystem;
+let MapFireXYZ = {
+  x: 102.07025202712828,
+  y: 24.969712733889363,
+  z: 1577.620664980985
+};
 let carts = [];
 let positionXYZ = [
   {
@@ -100,6 +97,7 @@ let positionXYZ = [
     z: 1571.356784142299
   }
 ];
+let WaterParticleSystems = [];
 export default {
   name: "S3MTiles",
   computed: {
@@ -136,7 +134,7 @@ export default {
       let vm = this;
       vm.HandleS3Create();
       console.log(viewer.entities, cart);
-      let { x, y, z } = this.MapFireXYZ;
+      let { x, y, z } = MapFireXYZ;
       let { x: x1, y: y1, z: z1 } = positionXYZ[0];
       let { x: x2, y: y2, z: z2 } = positionXYZ[1];
       let { x: x3, y: y3, z: z3 } = positionXYZ[2];
@@ -144,14 +142,14 @@ export default {
       let addx = (x - x1) / index;
       let addy = (y - y1) / index;
       let addz = (z - z1) / index;
-      let cart1 = carts[0]
-      let cart2 = carts[1]
-      let cart3 = carts[2]
-      console.log(carts,3333)
+      let cart1 = carts[0];
+      let cart2 = carts[1];
+      let cart3 = carts[2];
+      console.log(carts, 3333);
       time = setInterval(() => {
         if (index === 100) {
           clearInterval(time);
-          carts.forEach(cart=>{
+          carts.forEach(cart => {
             vm.HandleS3MountedWater(cart);
           });
           return;
@@ -185,6 +183,7 @@ export default {
       });
     },
     HandleS3MountedWater(cart) {
+      let vm = this;
       var emitterModelMatrix = new Cesium.Matrix4();
       var translation = new Cesium.Cartesian3();
       var rotation = new Cesium.Quaternion();
@@ -202,11 +201,13 @@ export default {
         endScale: 20,
         particleSize: 1
       };
-      viewer.zoomTo(entity);
+      // viewer.zoomTo(entity);
+      vm.HandleClickS3Fire();
       scene.logarithmicDepthBuffer = false;
       //关闭HDR
       scene.highDynamicRange = false;
-      WaterParticleSystem = viewer.scene.primitives.add(
+      console.log(222);
+      let WaterParticleSystem = viewer.scene.primitives.add(
         new Cesium.ParticleSystem({
           image:
             "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fountain2.png",
@@ -232,6 +233,7 @@ export default {
           lifetime: 16.0 // 默认情况下，粒子系统将永远运行。要使粒子系统运行一定的持续时间，请使用lifetime以秒为单位指定持续时间并将其设置loop为false。
         })
       );
+      WaterParticleSystems.push(WaterParticleSystem);
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         WaterParticleSystem.modelMatrix = computeModelMatrix(entity, time);
         // Account for any changes to the emitter model matrix.
@@ -264,7 +266,9 @@ export default {
         if (index <= 0) {
           clearInterval(time);
           viewer.entities.remove(FireEntity);
-          scene.primitives.remove(WaterParticleSystem);
+          WaterParticleSystems.forEach(WaterParticleSystem =>
+            scene.primitives.remove(WaterParticleSystem)
+          );
         }
         index -= 0.05;
         var particleSize = parseFloat(index);
@@ -276,10 +280,8 @@ export default {
     },
     HandleS3MountedFire() {
       let vm = this;
-      let {x,y,z} = vm.MapFireXYZ;
-      var position = Cesium.Cartesian3.fromDegrees(
-          x,y,z
-      );
+      let { x, y, z } = MapFireXYZ;
+      var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
         position: position
@@ -389,6 +391,28 @@ export default {
       });
       carts.push(cart);
     },
+    HandleClickS3Fire() {
+      try {
+        if (scene.camera) {
+          scene.camera.setView({
+            destination: new Cesium.Cartesian3(
+              -1209371.1848499542,
+              5655586.079866716,
+              2693109.1253441786
+            ),
+            orientation: {
+              heading: 6.283185042289299,
+              pitch: -0.7854026364258244,
+              roll: 6.283185307179586
+            }
+          });
+        } else {
+          console.log(scene);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     HandleClickS3Move() {
       // this.S3Move = !this.S3Move
       try {
@@ -490,6 +514,7 @@ export default {
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
+        console.log(scene.camera, scene.Cartesian3);
         //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
         //viewer.entities.removeAll();
         //获取点击位置笛卡尔坐标
@@ -504,7 +529,7 @@ export default {
         }
         console.log(x, y, z);
         if (vm.Status.isMapFire && vm.Status.isMapFire <= 1) {
-          vm.MapFireXYZ.push({ x, y, z });
+          MapFireXYZ.push({ x, y, z });
           vm.HandleS3MountedFire();
           vm.S3Move.isMapFire += 1;
         }
