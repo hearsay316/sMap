@@ -39,22 +39,18 @@
       </audio>
     </blockquote>
     <div class="S3-move">
-      <div @click="HandleClickS3Move">进入系统演示</div>
-      <div
-        @click="HandleS3CreateFireFighting"
-        :class="{ bgcolor: Status.isMapFire }"
-      >
-        启动预案
+      <div @click="HandleClickS3Move" v-if="Status.isMapSystem" :class="{ bgcolor: Status.isMapSystem }">
+        进入系统演示
       </div>
-      <div @click="HandleS3Deploy" :class="{ bgcolor: Status.isMapFire }">
+      <div @click="HandleS3Deploy" v-if="Status.isMapFire" :class="{ bgcolor: Status.isMapFire }">
         开始部署
       </div>
       <div
-        v-if="eachS3Move"
+          v-if="Status.isMapCart"
         @click="HandleS3CreateFireFighting"
-        :class="{ bgcolor: Status.isMapWater }"
+        :class="{ bgcolor: Status.isMapCart }"
       >
-        救火
+        启动预案
       </div>
     </div>
   </div>
@@ -115,7 +111,7 @@ export default {
       Status: {
         isMapFire: false,
         isMapCart: false,
-        isMapWater: false
+        isMapSystem: true
       },
       MapFireXYZ: {
         x: 102.07025202712828,
@@ -132,8 +128,6 @@ export default {
   methods: {
     HandleS3CreateFireFighting() {
       let vm = this;
-      vm.HandleS3Create();
-      console.log(viewer.entities, cart);
       let { x, y, z } = MapFireXYZ;
       let { x: x1, y: y1, z: z1 } = positionXYZ[0];
       let { x: x2, y: y2, z: z2 } = positionXYZ[1];
@@ -362,6 +356,8 @@ export default {
       }
     },
     HandleS3Deploy() {
+      this.Status.isMapFire = false;
+      this.Status.isMapCart = true;
       positionXYZ.forEach(xyz => {
         let { x, y, z } = xyz;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -414,7 +410,8 @@ export default {
       }
     },
     HandleClickS3Move() {
-      // this.S3Move = !this.S3Move
+       this.Status.isMapSystem = false;
+      this.Status.isMapFire = true;
       try {
         if (scene.camera) {
           scene.camera.setView({
@@ -526,21 +523,6 @@ export default {
         z = cartographic.height;
         if (z < 0) {
           z = 0;
-        }
-        console.log(x, y, z);
-        if (vm.Status.isMapFire && vm.Status.isMapFire <= 1) {
-          MapFireXYZ.push({ x, y, z });
-          vm.HandleS3MountedFire();
-          vm.S3Move.isMapFire += 1;
-        }
-        if (vm.Status.isMapCart && vm.Status.isMapCart <= 1) {
-          vm.MapCartXYZ.push({ x, y, z });
-          vm.HandleS3MountedMapCart();
-          vm.S3Move.isMapCart += 1;
-        }
-        if (vm.Status.isMapWater) {
-          vm.MapWaterXYZ.push({ x, y, z });
-          vm.HandleS3MountedWater();
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
