@@ -39,26 +39,23 @@
       </audio>
     </blockquote>
     <div class="S3-move">
-      <div @click="HandleClickS3Move">点击切换场景</div>
-      <div
-        @click="HandleS3Create('isMapFire')"
-        :class="{ bgcolor: Status.isMapFire }"
+      <el-button
+        type="primary"
+        @click="HandleClickS3Move"
+        v-if="Status.isMapSystem"
+        >进入系统演示</el-button
       >
-        点击着火
-      </div>
-      <div
-        @click="HandleS3Create('isMapCart')"
-        :class="{ bgcolor: Status.isMapCart }"
+      <el-button type="primary" @click="HandleS3Deploy" v-if="Status.isMapFire">
+        开始部署</el-button
       >
-        点击添加小车
-      </div>
-      <div
-        v-if="eachS3Move"
+
+      <el-button
+        type="primary"
+        v-if="Status.isMapCart"
         @click="HandleS3CreateFireFighting"
-        :class="{ bgcolor: Status.isMapWater }"
       >
-        救火
-      </div>
+        启动预案</el-button
+      >
     </div>
   </div>
 </template>
@@ -77,11 +74,12 @@ let start;
 let stop;
 let FireParticleSystem;
 let FireEntity;
-let WaterParticleSystem;
+let MapFireXYZ = {
+  x: 102.07025202712828,
+  y: 24.969712733889363,
+  z: 1577.620664980985
+};
 let carts = [];
-// //102.06943685862204 24.969427388802274 1571.2370406630653
-// S3MTiles.vue?2889:452 102.06946361643989 24.96939567838009 1571.213370078212
-// S3MTiles.vue?2889:452 102.06953602518084 24.969451096085642 1571.356784142299
 let positionXYZ = [
   {
     x: 102.06943685862204,
@@ -99,6 +97,7 @@ let positionXYZ = [
     z: 1571.356784142299
   }
 ];
+let WaterParticleSystems = [];
 export default {
   name: "S3MTiles",
   computed: {
@@ -116,49 +115,76 @@ export default {
       Status: {
         isMapFire: false,
         isMapCart: false,
-        isMapWater: false
+        isMapSystem: false
       },
-      MapFireXYZ: [],
+      MapFireXYZ: {
+        x: 102.07025202712828,
+        y: 24.969712733889363,
+        z: 1577.620664980985
+      },
       MapCartXYZ: [],
       MapWaterXYZ: []
     };
   },
   mounted() {
     this.onload();
+    this.confirm();
   },
   methods: {
+    confirm() {
+      let vm = this;
+      let time = setTimeout(() => {
+        vm.$confirm("页面加载完成,是否进入开启演练?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            vm.HandleClickS3Move();
+          })
+          .catch(() => {
+            vm.Status.isMapSystem = true;
+          });
+        clearTimeout(time);
+      }, 1500);
+    },
     HandleS3CreateFireFighting() {
       let vm = this;
-      vm.HandleS3Create();
-      console.log(viewer.entities, cart);
-      let { x, y, z } = this.MapFireXYZ[0];
-      let { x: x1, y: y1, z: z1 } = this.MapCartXYZ[0];
-      console.log(x1, y1, z1);
-      console.log(x, y, z);
+      let { x, y, z } = MapFireXYZ;
+      let { x: x1, y: y1, z: z1 } = positionXYZ[0];
+      let { x: x2, y: y2, z: z2 } = positionXYZ[1];
+      let { x: x3, y: y3, z: z3 } = positionXYZ[2];
       let index = 500;
-      let x2 = (x - x1) / index;
-      let y2 = (y - y1) / index;
-      let z2 = (z - z1) / index;
+      let addx = (x - x1) / index;
+      let addy = (y - y1) / index;
+      let addz = (z - z1) / index;
+      let cart1 = carts[0];
+      let cart2 = carts[1];
+      let cart3 = carts[2];
+      console.log(carts, 3333);
       time = setInterval(() => {
         if (index === 100) {
           clearInterval(time);
-          vm.winter = {
-            x: x1,
-            y: x1,
-            z: z1
-          };
-          vm.HandleS3MountedWater(cart, {
-            x1,
-            y1,
-            z1
+          carts.forEach(cart => {
+            vm.HandleS3MountedWater(cart);
           });
           return;
         }
-        x1 += x2;
-        y1 += y2;
-        z1 += z2;
-        var position = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
-        cart.position = position;
+        x1 += addx;
+        y1 += addy;
+        z1 += addz;
+        x2 += addx;
+        y2 += addy;
+        z2 += addz;
+        x3 += addx;
+        y3 += addy;
+        z3 += addz;
+        var position1 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
+        cart1.position = position1;
+        var position2 = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
+        cart2.position = position2;
+        var position3 = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
+        cart3.position = position3;
         --index;
       }, 0);
     },
@@ -173,6 +199,7 @@ export default {
       });
     },
     HandleS3MountedWater(cart) {
+      let vm = this;
       var emitterModelMatrix = new Cesium.Matrix4();
       var translation = new Cesium.Cartesian3();
       var rotation = new Cesium.Quaternion();
@@ -190,11 +217,13 @@ export default {
         endScale: 20,
         particleSize: 1
       };
-      viewer.zoomTo(entity);
+      // viewer.zoomTo(entity);
+      vm.HandleClickS3Fire();
       scene.logarithmicDepthBuffer = false;
       //关闭HDR
       scene.highDynamicRange = false;
-      WaterParticleSystem = viewer.scene.primitives.add(
+      console.log(222);
+      let WaterParticleSystem = viewer.scene.primitives.add(
         new Cesium.ParticleSystem({
           image:
             "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fountain2.png",
@@ -220,6 +249,7 @@ export default {
           lifetime: 16.0 // 默认情况下，粒子系统将永远运行。要使粒子系统运行一定的持续时间，请使用lifetime以秒为单位指定持续时间并将其设置loop为false。
         })
       );
+      WaterParticleSystems.push(WaterParticleSystem);
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         WaterParticleSystem.modelMatrix = computeModelMatrix(entity, time);
         // Account for any changes to the emitter model matrix.
@@ -248,11 +278,20 @@ export default {
     },
     HandleS3DestroyedFire() {
       let index = 1;
+      let vm = this;
       let time = setInterval(() => {
         if (index <= 0) {
           clearInterval(time);
           viewer.entities.remove(FireEntity);
-          scene.primitives.remove(WaterParticleSystem);
+          WaterParticleSystems.forEach(WaterParticleSystem =>
+            scene.primitives.remove(WaterParticleSystem)
+          );
+          this.$confirm("灭火成功,演示完毕", "提示", {
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            showClose: false
+          });
         }
         index -= 0.05;
         var particleSize = parseFloat(index);
@@ -264,6 +303,7 @@ export default {
     },
     HandleS3MountedFire() {
       let vm = this;
+      let { x, y, z } = MapFireXYZ;
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
@@ -344,22 +384,81 @@ export default {
         );
       }
     },
+    HandleS3Deploy() {
+      let vm = this;
+      vm.$message({
+        message: "部署成功",
+        type: "success"
+      });
+
+      positionXYZ.forEach(xyz => {
+        let { x, y, z } = xyz;
+        var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        let cart = viewer.entities.add({
+          model: {
+            uri:
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 64,
+            maximumScale: 0.8
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position
+        });
+        carts.push(cart);
+      });
+      let time = setTimeout(() => {
+        this.$confirm("消防车辆加载完毕,是否启动预案?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            vm.HandleS3CreateFireFighting();
+          })
+          .catch(() => {
+            vm.Status.isMapFire = false;
+            vm.Status.isMapCart = true;
+          });
+        clearTimeout(time);
+      }, 2500);
+    },
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
-          minimumPixelSize: 32,
-          maximumScale: 0.5
+          minimumPixelSize: 32
         },
         viewFrom: new Cesium.Cartesian3(x, y, z),
         position: position
       });
       carts.push(cart);
     },
+    HandleClickS3Fire() {
+      try {
+        if (scene.camera) {
+          scene.camera.setView({
+            destination: new Cesium.Cartesian3(
+              -1209371.1848499542,
+              5655586.079866716,
+              2693109.1253441786
+            ),
+            orientation: {
+              heading: 6.283185042289299,
+              pitch: -0.7854026364258244,
+              roll: 6.283185307179586
+            }
+          });
+        } else {
+          console.log(scene);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     HandleClickS3Move() {
-      // this.S3Move = !this.S3Move
+      let vm = this;
       try {
         if (scene.camera) {
           scene.camera.setView({
@@ -374,11 +473,35 @@ export default {
               roll: 7.638334409421077e-14
             }
           });
+          this.HandleS3MountedFire();
+          vm.$message({
+            message: "切换场景成功",
+            type: "success"
+          });
+          let time = setTimeout(() => {
+            this.$confirm("发现着火点,是否部署消防?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            })
+              .then(() => {
+                vm.HandleS3Deploy();
+              })
+              .catch(() => {
+                vm.Status.isMapSystem = false;
+                vm.Status.isMapFire = true;
+              });
+            clearTimeout(time);
+          }, 2500);
         } else {
           console.log(scene);
         }
       } catch (e) {
         console.log(e);
+        vm.$message({
+          message: "切换场景失败",
+          type: "success"
+        });
       }
     },
     onload() {
@@ -458,6 +581,7 @@ export default {
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
+        console.log(scene.camera, scene.Cartesian3);
         //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
         //viewer.entities.removeAll();
         //获取点击位置笛卡尔坐标
@@ -469,21 +593,6 @@ export default {
         z = cartographic.height;
         if (z < 0) {
           z = 0;
-        }
-        console.log(x, y, z);
-        if (vm.Status.isMapFire && vm.Status.isMapFire <= 1) {
-          vm.MapFireXYZ.push({ x, y, z });
-          vm.HandleS3MountedFire();
-          vm.S3Move.isMapFire += 1;
-        }
-        if (vm.Status.isMapCart && vm.Status.isMapCart <= 1) {
-          vm.MapCartXYZ.push({ x, y, z });
-          vm.HandleS3MountedMapCart();
-          vm.S3Move.isMapCart += 1;
-        }
-        if (vm.Status.isMapWater) {
-          vm.MapWaterXYZ.push({ x, y, z });
-          vm.HandleS3MountedWater();
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
@@ -501,6 +610,7 @@ export default {
   left: 20px;
   background: #fff;
   padding: 5px 8px;
+  border-radius: 8px;
 }
 .bubble {
   position: absolute;

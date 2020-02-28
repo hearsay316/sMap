@@ -30,7 +30,8 @@ export default {
 <style lang="stylus" scoped>
 .index
   display flex
-  justify-content center
+  justify-content space-evenly
+  flex-wrap:wrap
   .index-item
     display flex
     width 260px
