@@ -115,7 +115,7 @@ export default {
       Status: {
         isMapFire: false,
         isMapCart: false,
-        isMapSystem: true
+        isMapSystem: false
       },
       MapFireXYZ: {
         x: 102.07025202712828,
@@ -128,8 +128,26 @@ export default {
   },
   mounted() {
     this.onload();
+    this.confirm();
   },
   methods: {
+    confirm() {
+      let vm = this;
+      let time = setTimeout(() => {
+        vm.$confirm("页面加载完成,是否进入开启演练?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            vm.HandleClickS3Move();
+          })
+          .catch(() => {
+            vm.Status.isMapSystem = true;
+          });
+        clearTimeout(time);
+      }, 1500);
+    },
     HandleS3CreateFireFighting() {
       let vm = this;
       let { x, y, z } = MapFireXYZ;
@@ -372,8 +390,7 @@ export default {
         message: "部署成功",
         type: "success"
       });
-      vm.Status.isMapFire = false;
-      vm.Status.isMapCart = true;
+
       positionXYZ.forEach(xyz => {
         let { x, y, z } = xyz;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -381,14 +398,29 @@ export default {
           model: {
             uri:
               "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
-            minimumPixelSize: 32,
-            maximumScale: 0.5
+            minimumPixelSize: 64,
+            maximumScale: 0.8
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position
         });
         carts.push(cart);
       });
+      let time = setTimeout(() => {
+        this.$confirm("消防车辆加载完毕,是否启动预案?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            vm.HandleS3CreateFireFighting();
+          })
+          .catch(() => {
+            vm.Status.isMapFire = false;
+            vm.Status.isMapCart = true;
+          });
+        clearTimeout(time);
+      }, 2500);
     },
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -427,7 +459,6 @@ export default {
     },
     HandleClickS3Move() {
       let vm = this;
-
       try {
         if (scene.camera) {
           scene.camera.setView({
@@ -447,8 +478,21 @@ export default {
             message: "切换场景成功",
             type: "success"
           });
-          vm.Status.isMapSystem = false;
-          vm.Status.isMapFire = true;
+          let time = setTimeout(() => {
+            this.$confirm("发现着火点,是否部署消防?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            })
+              .then(() => {
+                vm.HandleS3Deploy();
+              })
+              .catch(() => {
+                vm.Status.isMapSystem = false;
+                vm.Status.isMapFire = true;
+              });
+            clearTimeout(time);
+          }, 2500);
         } else {
           console.log(scene);
         }
