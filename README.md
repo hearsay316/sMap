@@ -23,7 +23,7 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### 地图的欸之参数
+### 地图的的之参数
        -20183889.354184173,
         22645826.766457584,
         3223367.6070640916

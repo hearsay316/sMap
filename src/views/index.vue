@@ -29,6 +29,7 @@ export default {
 
 <style lang="stylus" scoped>
 .index
+  padding  50px 20px
   display flex
   justify-content space-evenly
   flex-wrap:wrap
