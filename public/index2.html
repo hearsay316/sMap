@@ -75,7 +75,7 @@
             viewer = new Cesium.Viewer('cesiumContainer');
             scene = viewer.scene;
             scene.globe.depthTestAgainstTerrain = false;
-            serverUrl = host + '/iserver/services/plot-jingyong/rest/plot/';
+            serverUrl = 'http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot';
             InitPlot(viewer, serverUrl);
 
         function InitPlot(viewer, serverUrl) {

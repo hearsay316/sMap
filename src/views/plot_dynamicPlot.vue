@@ -118,9 +118,55 @@ export default {
       //globe : Globe 获取地球对象。
       scene.globe.depthTestAgainstTerrain = false;
       serverUrl =
-        "http://support.supermap.com.cn:8090/iserver/services/plot-jingyong/rest/plot/";
+        "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       InitPlot(viewer, serverUrl);
-
+      try {
+        //添加S3M图层服务
+        var promise = scene.open(
+          "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
+        );
+        Cesium.when(
+          promise,
+          function(layers) {
+            if (!scene.pickPositionSupported) {
+              alert("不支持深度拾取,属性查询功能无法使用！");
+            }
+            layer = scene.layers.find("Config");
+            //设置属性查询参数
+            layer.setQueryParameter({
+              url:
+                "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
+              dataSourceName: "testMap",
+              dataSetName: "New_Region",
+              keyWord: "SmID"
+            });
+            //设置相机视角
+            scene.camera.setView({
+              destination: new Cesium.Cartesian3(
+                -20183889.354184173,
+                22645826.766457584,
+                3223367.6070640916
+              ),
+              orientation: {
+                heading: 5.662887035643514,
+                pitch: -1.4213836938199456,
+                roll: 9.769962616701378e-14
+              }
+            });
+          },
+          function(e) {
+            if (widget._showRenderLoopErrors) {
+              var title = "渲染时发生错误，已停止渲染。";
+              widget.showErrorPanel(title, undefined, e);
+            }
+          }
+        );
+      } catch (e) {
+        if (widget._showRenderLoopErrors) {
+          var title = "渲染时发生错误，已停止渲染.";
+          widget.showErrorPanel(title, undefined, e);
+        }
+      }
       function InitPlot(viewer, serverUrl) {
         if (!viewer) {
           return;
