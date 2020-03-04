@@ -9,6 +9,17 @@
         <h5 class="panel-title text-center">点线面绘制</h5>
       </div>
       <div class="panel-body content">
+        <button
+          @click="distance"
+          type="button"
+          id="distance"
+          class="button black"
+        >
+          测距
+        </button>
+        <button type="button" id="area" class="button black">测面</button>
+        <button type="button" id="height" class="button black">测高</button>
+        <button type="button" id="clear" class="button black">清除</button>
         <input
           type="button"
           class="btn btn-default"
@@ -65,7 +76,7 @@
       </div>
 
       <div
-        id="cesiumContainer"
+        id="CesiumContainer"
         class="fullSize"
         style="position: relative;left: 250px;height: 100%;border: 1px solid #3473b7;"
       ></div>
@@ -75,30 +86,41 @@
 
 <script>
 import Cesium from "Cesium";
-var cesium, viewer, serverUrl, plotting;
-var plottingLayer;
-var plotEditControl;
-cesium = Cesium;
+let viewer,
+  serverUrl,
+  plotting,
+  plottingLayer,
+  plotEditControl,
+  handlerDis,
+  handlerArea,
+  handlerHeight,scene,stylePanel;
+
 export default {
   name: "plot_dynamicPlot",
   data() {
-    return {};
+    return {
+    };
   },
   mounted() {
-    console.log();
     this.loader();
   },
   methods: {
+    distance() {
+      handlerDis && handlerDis.activate();
+    },
     draw_text() {
-      // plottingLayer.removeAll();
-      console.log(plottingLayer);
-      var point = [
-        new cesium.PlotPoint3D(91.2289399584463, 44.2810161553334, 0)
+      plottingLayer.removeAll();
+      let point = [
+        new Cesium.PlotPoint3D(
+          102.06986722761297,
+          24.96955121966692,
+          1571.6802484637028
+        )
       ];
       plottingLayer.createSymbol(0, 34, point, function(even) {
-        var geo = even.feature;
+        let geo = even.feature;
         geo.textContent = "Supermap";
-        geo.symbolTextStyle.foreColor = new cesium.Color(1, 0, 0, 1);
+        geo.symbolTextStyle.foreColor = new Cesium.Color(1, 0, 0, 1);
         geo.symbolTextStyle.fontSize = 50;
         geo.symbolTextStyle.fontName = "Times New Roman";
       });
@@ -108,48 +130,64 @@ export default {
     },
     draw_dot() {
       plottingLayer.removeAll();
-      var point = [
-        new cesium.PlotPoint3D(91.2289399584463, 44.2810161553334, 0)
+      let point = [
+        new Cesium.PlotPoint3D(
+          102.07023581119256,
+          24.969594422800746,
+          1575.4190939222883
+        )
       ];
       plottingLayer.createSymbol(421, 30502, point);
     },
     draw_line() {
       plottingLayer.removeAll();
-      var points = [];
-      points[0] = new cesium.PlotPoint3D(79.6055940054417, 33.8928629711926, 0);
-      points[1] = new cesium.PlotPoint3D(90.3419566246079, 54.4258592161011, 0);
-      points[2] = new cesium.PlotPoint3D(99.9884446983602, 33.3627305537104, 0);
-      points[3] = new cesium.PlotPoint3D(
-        112.3419566246079,
-        54.1258592161011,
-        0
+      let points = [];
+      points[0] = new Cesium.PlotPoint3D(
+        102.06988197556804,
+        24.969722158409823,
+        1574.1689433117238
+      );
+      points[1] = new Cesium.PlotPoint3D(
+        102.06989351602357,
+        24.969487185038716,
+        1571.6157855966949
+      );
+      points[2] = new Cesium.PlotPoint3D(
+        102.07005796362276,
+        24.96972089097666,
+        1572.042152964426
+      );
+      points[3] = new Cesium.PlotPoint3D(
+        102.07013268343763,
+        24.969533458879962,
+        1571.89301488553
       );
       //创建标号
       plottingLayer.createSymbol(0, 24, points);
     },
     draw_polygon() {
       plottingLayer.removeAll();
-      var points = [];
-      points[0] = new cesium.PlotPoint3D(75.3616029975312, 48.7966690280813, 0);
-      points[1] = new cesium.PlotPoint3D(81.432156521036, 35.6457727434013, 0);
-      points[2] = new cesium.PlotPoint3D(102.429727232917, 36.6596802340062, 0);
-      points[3] = new cesium.PlotPoint3D(114.503081229812, 50.7762562321923, 0);
+      let points = [];
+      points[0] = new Cesium.PlotPoint3D(75.3616029975312, 48.7966690280813, 0);
+      points[1] = new Cesium.PlotPoint3D(81.432156521036, 35.6457727434013, 0);
+      points[2] = new Cesium.PlotPoint3D(102.429727232917, 36.6596802340062, 0);
+      points[3] = new Cesium.PlotPoint3D(114.503081229812, 50.7762562321923, 0);
       plottingLayer.createSymbol(0, 32, points);
     },
     loader() {
       //若本地没有标绘相关服务则可访问支持中心的iserver
-      // var host = document.location.toString().match('/file:\/\//') ? 'http://localhost:8090' : 'http://' + document.location.host;
-      var host = "http://support.supermap.com.cn:8090";
-      viewer = new Cesium.Viewer("cesiumContainer");
-      window.scene = viewer.scene;
+      // let host = document.location.toString().match('/file:\/\//') ? 'http://localhost:8090' : 'http://' + document.location.host;
+      viewer = new Cesium.Viewer("CesiumContainer");
+      scene = viewer.scene;
+      window.scene = scene;
       //globe : Globe 获取地球对象。
-      window.scene.globe.depthTestAgainstTerrain = false;
+      scene.globe.depthTestAgainstTerrain = false;
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       InitPlot(viewer, serverUrl);
       try {
         //添加S3M图层服务
-        var promise = scene.open(
+        let promise = scene.open(
           "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
         );
         Cesium.when(
@@ -183,41 +221,142 @@ export default {
           },
           function(e) {
             if (widget._showRenderLoopErrors) {
-              var title = "渲染时发生错误，已停止渲染。";
+              let title = "渲染时发生错误，已停止渲染。";
               widget.showErrorPanel(title, undefined, e);
             }
           }
         );
       } catch (e) {
         if (widget._showRenderLoopErrors) {
-          var title = "渲染时发生错误，已停止渲染.";
+          let title = "渲染时发生错误，已停止渲染.";
           widget.showErrorPanel(title, undefined, e);
         }
       }
+      let clampMode = 0;
+      let handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+      handler.setInputAction(function(e) {
+        console.log(scene.camera, scene.Cartesian3);
+        //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
+        //viewer.entities.removeAll();
+        //获取点击位置笛卡尔坐标
+        let positions = scene.pickPosition(e.position);
+        //将笛卡尔坐标转化为经纬度坐标
+        let cartographic = Cesium.Cartographic.fromCartesian(positions);
+        let x = Cesium.Math.toDegrees(cartographic.longitude);
+        let y = Cesium.Math.toDegrees(cartographic.latitude);
+        let z = cartographic.height;
+        if (z < 0) {
+          z = 0;
+        }
+        console.log(x, y, z);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       function InitPlot(viewer, serverUrl) {
         if (!viewer && !viewer.scene) {
           return;
         }
-        console.log(scene);
-        plottingLayer = new Cesium.PlottingLayer(window.scene, "plottingLayer");
-        console.log(plottingLayer);
+        plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
         scene.layers.add(plottingLayer);
 
-        plotEditControl = new cesium.PlotEditControl(
+        plotEditControl = new Cesium.PlotEditControl(
           window.scene,
           plottingLayer
         ); //编辑控件
         plotEditControl.activate();
 
-        plotting = cesium.Plotting.getInstance(serverUrl, viewer.scene);
+        plotting = Cesium.Plotting.getInstance(serverUrl, scene);
 
-        window.stylePanel = new StylePanel(
+        stylePanel = new StylePanel(
           "stylePanel",
           plotEditControl,
           plotting
         );
+        window.stylePanel = stylePanel;
       }
+      //初始化测量距离
+      handlerDis = new Cesium.MeasureHandler(
+        viewer,
+        Cesium.MeasureMode.Distance,
+        clampMode
+      );
+      //注册测距功能事件
+      handlerDis.measureEvt.addEventListener(function(result) {
+        console.log(result);
+        let dis = Number(result.distance);
+        let distance =
+          dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
+        handlerDis.disLabel.text = "距离:" + distance;
+      });
+      handlerDis.activeEvt.addEventListener(function(isActive) {
+        if (isActive == true) {
+          viewer.enableCursorStyle = false;
+          viewer._element.style.cursor = "";
+          $("body")
+            .removeClass("measureCur")
+            .addClass("measureCur");
+        } else {
+          viewer.enableCursorStyle = true;
+          $("body").removeClass("measureCur");
+        }
+      });
 
+      //初始化测量面积
+      handlerArea = new Cesium.MeasureHandler(
+        viewer,
+        Cesium.MeasureMode.Area,
+        clampMode
+      );
+      handlerArea.measureEvt.addEventListener(function(result) {
+        let mj = Number(result.area);
+        let area =
+          mj > 1000000
+            ? (mj / 1000000).toFixed(2) + "km²"
+            : mj.toFixed(2) + "㎡";
+        handlerArea.areaLabel.text = "面积:" + area;
+      });
+      handlerArea.activeEvt.addEventListener(function(isActive) {
+        if (isActive == true) {
+          viewer.enableCursorStyle = false;
+          viewer._element.style.cursor = "";
+          $("body")
+            .removeClass("measureCur")
+            .addClass("measureCur");
+        } else {
+          viewer.enableCursorStyle = true;
+          $("body").removeClass("measureCur");
+        }
+      });
+
+      //初始化测量高度
+      handlerHeight = new Cesium.MeasureHandler(viewer, Cesium.MeasureMode.DVH);
+      handlerHeight.measureEvt.addEventListener(function(result) {
+        let distance =
+          result.distance > 1000
+            ? (result.distance / 1000).toFixed(2) + "km"
+            : result.distance + "m";
+        let vHeight =
+          result.verticalHeight > 1000
+            ? (result.verticalHeight / 1000).toFixed(2) + "km"
+            : result.verticalHeight + "m";
+        let hDistance =
+          result.horizontalDistance > 1000
+            ? (result.horizontalDistance / 1000).toFixed(2) + "km"
+            : result.horizontalDistance + "m";
+        handlerHeight.disLabel.text = "空间距离:" + distance;
+        handlerHeight.vLabel.text = "垂直高度:" + vHeight;
+        handlerHeight.hLabel.text = "水平距离:" + hDistance;
+      });
+      handlerHeight.activeEvt.addEventListener(function(isActive) {
+        if (isActive == true) {
+          viewer.enableCursorStyle = false;
+          viewer._element.style.cursor = "";
+          $("body")
+            .removeClass("measureCur")
+            .addClass("measureCur");
+        } else {
+          viewer.enableCursorStyle = true;
+          $("body").removeClass("measureCur");
+        }
+      });
       //删除指定标号
       function deleteSeleGeo() {
         plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);
@@ -235,18 +374,30 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+.plot_dynamicPlot {
+  width: 100%
+  height: 100%
+  overflow hidden
+}
 
+.easyui-panel,#plotPanel{
+  box-sizing border-box
+}
 .panel {
-    height: 100%;
+  height: 100%;
+}
+
+#menu {
+  overflow hidden
 }
 
 /*下拉框的高度*/
 .combo-p {
-    height: 150px;
+  height: 150px;
 }
 
 /*滚动条*/
 .propertygrid {
-    overflow: auto;
+  overflow: auto;
 }
 </style>
