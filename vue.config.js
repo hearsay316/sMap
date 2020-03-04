@@ -1,4 +1,5 @@
 // vue.config.js
+const UploadSshPlugin = require('./plugins/uploadSshPlugin')
 module.exports = {
   publicPath: "./",
   // 选项...
@@ -18,5 +19,13 @@ module.exports = {
     config.externals = {
       Cesium: "Cesium"
     };
+    if (process.env.VUE_APP_ENV === 'production') {
+      config.plugins.push(new UploadSshPlugin({
+        host: process.env.host,
+        username: process.env.name,
+        password: process.env.password,
+        port: process.env.port
+      }))
+    }
   }
 };

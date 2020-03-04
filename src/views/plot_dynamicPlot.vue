@@ -13,19 +13,19 @@
           type="button"
           class="btn btn-default"
           value="绘点"
-          onclick="draw_dot()"
+          @click="draw_dot"
         />
         <input
           type="button"
           class="btn btn-default"
           value="绘线"
-          onclick="draw_line()"
+          @click="draw_line"
         />
         <input
           type="button"
           class="btn btn-default"
           value="绘面"
-          onclick="draw_polygon()"
+          @click="draw_polygon"
         />
         <input
           type="button"
@@ -85,8 +85,8 @@ export default {
     return {};
   },
   mounted() {
-      console.log()
-      this.loader();
+    console.log();
+    this.loader();
   },
   methods: {
     draw_text() {
@@ -105,6 +105,36 @@ export default {
     },
     clearLayers() {
       plottingLayer.removeAll();
+    },
+    draw_dot() {
+      plottingLayer.removeAll();
+      var point = [
+        new cesium.PlotPoint3D(91.2289399584463, 44.2810161553334, 0)
+      ];
+      plottingLayer.createSymbol(421, 30502, point);
+    },
+    draw_line() {
+      plottingLayer.removeAll();
+      var points = [];
+      points[0] = new cesium.PlotPoint3D(79.6055940054417, 33.8928629711926, 0);
+      points[1] = new cesium.PlotPoint3D(90.3419566246079, 54.4258592161011, 0);
+      points[2] = new cesium.PlotPoint3D(99.9884446983602, 33.3627305537104, 0);
+      points[3] = new cesium.PlotPoint3D(
+        112.3419566246079,
+        54.1258592161011,
+        0
+      );
+      //创建标号
+      plottingLayer.createSymbol(0, 24, points);
+    },
+    draw_polygon() {
+      plottingLayer.removeAll();
+      var points = [];
+      points[0] = new cesium.PlotPoint3D(75.3616029975312, 48.7966690280813, 0);
+      points[1] = new cesium.PlotPoint3D(81.432156521036, 35.6457727434013, 0);
+      points[2] = new cesium.PlotPoint3D(102.429727232917, 36.6596802340062, 0);
+      points[3] = new cesium.PlotPoint3D(114.503081229812, 50.7762562321923, 0);
+      plottingLayer.createSymbol(0, 32, points);
     },
     loader() {
       //若本地没有标绘相关服务则可访问支持中心的iserver
@@ -165,81 +195,27 @@ export default {
         }
       }
       function InitPlot(viewer, serverUrl) {
-        if (!viewer&&!viewer.scene) {
+        if (!viewer && !viewer.scene) {
           return;
         }
         console.log(scene);
         plottingLayer = new Cesium.PlottingLayer(window.scene, "plottingLayer");
-        console.log(plottingLayer)
+        console.log(plottingLayer);
         scene.layers.add(plottingLayer);
 
-        plotEditControl = new cesium.PlotEditControl(window.scene, plottingLayer); //编辑控件
+        plotEditControl = new cesium.PlotEditControl(
+          window.scene,
+          plottingLayer
+        ); //编辑控件
         plotEditControl.activate();
 
         plotting = cesium.Plotting.getInstance(serverUrl, viewer.scene);
 
-         window.stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
-      }
-
-      function draw_dot() {
-        plottingLayer.removeAll();
-        var point = [
-          new cesium.PlotPoint3D(91.2289399584463, 44.2810161553334, 0)
-        ];
-        plottingLayer.createSymbol(421, 30502, point);
-      }
-
-      function draw_line() {
-        plottingLayer.removeAll();
-        var points = [];
-        points[0] = new cesium.PlotPoint3D(
-          79.6055940054417,
-          33.8928629711926,
-          0
+        window.stylePanel = new StylePanel(
+          "stylePanel",
+          plotEditControl,
+          plotting
         );
-        points[1] = new cesium.PlotPoint3D(
-          90.3419566246079,
-          54.4258592161011,
-          0
-        );
-        points[2] = new cesium.PlotPoint3D(
-          99.9884446983602,
-          33.3627305537104,
-          0
-        );
-        points[3] = new cesium.PlotPoint3D(
-          112.3419566246079,
-          54.1258592161011,
-          0
-        );
-        //创建标号
-        plottingLayer.createSymbol(0, 24, points);
-      }
-
-      function draw_polygon() {
-        plottingLayer.removeAll();
-        var points = [];
-        points[0] = new cesium.PlotPoint3D(
-          75.3616029975312,
-          48.7966690280813,
-          0
-        );
-        points[1] = new cesium.PlotPoint3D(
-          81.432156521036,
-          35.6457727434013,
-          0
-        );
-        points[2] = new cesium.PlotPoint3D(
-          102.429727232917,
-          36.6596802340062,
-          0
-        );
-        points[3] = new cesium.PlotPoint3D(
-          114.503081229812,
-          50.7762562321923,
-          0
-        );
-        plottingLayer.createSymbol(0, 32, points);
       }
 
       //删除指定标号
