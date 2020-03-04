@@ -190,17 +190,7 @@ export default {
       stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
       window.stylePanel = stylePanel;
     },
-    loader() {
-      //若本地没有标绘相关服务则可访问支持中心的iserver
-      // let host = document.location.toString().match('/file:\/\//') ? 'http://localhost:8090' : 'http://' + document.location.host;
-      viewer = new Cesium.Viewer("CesiumContainer");
-      scene = viewer.scene;
-      window.scene = scene;
-      //globe : Globe 获取地球对象。
-      scene.globe.depthTestAgainstTerrain = false;
-      serverUrl =
-        "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
-      this.InitPlot(viewer, serverUrl);
+    openMAP() {
       try {
         //添加S3M图层服务
         let promise = scene.open(
@@ -248,32 +238,23 @@ export default {
           widget.showErrorPanel(title, undefined, e);
         }
       }
+    },
+    loader() {
+      //若本地没有标绘相关服务则可访问支持中心的iserver
+      viewer = new Cesium.Viewer("CesiumContainer");
+      scene = viewer.scene;
+      window.scene = scene;
+      //globe : Globe 获取地球对象。
+      scene.globe.depthTestAgainstTerrain = false;
+      serverUrl =
+        "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
+      this.InitPlot(viewer, serverUrl);
+      this.openMAP();
       let clampMode = 0;
-      let handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
-      handler.setInputAction(function(e) {
-        console.log(scene.camera, scene.Cartesian3);
-        //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
-        //viewer.entities.removeAll();
-        //获取点击位置笛卡尔坐标
-        let positions = scene.pickPosition(e.position);
-        //将笛卡尔坐标转化为经纬度坐标
-        let cartographic = Cesium.Cartographic.fromCartesian(positions);
-        let x = Cesium.Math.toDegrees(cartographic.longitude);
-        let y = Cesium.Math.toDegrees(cartographic.latitude);
-        let z = cartographic.height;
-        if (z < 0) {
-          z = 0;
-        }
-        console.log(x, y, z);
-      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      this.handler();
       this.handlerDis(clampMode);
       this.handlerArea(clampMode);
       this.handlerHeight(clampMode);
-
-      //删除指定标号
-      function deleteSeleGeo() {
-        plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);
-      }
 
       // //“Delete”按键删除选中标号
       // $(document).keydown(function(event) {
@@ -343,6 +324,25 @@ export default {
         }
       });
     },
+    handler() {
+      let handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+      handler.setInputAction(function(e) {
+        console.log(scene.camera, scene.Cartesian3);
+        //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
+        //viewer.entities.removeAll();
+        //获取点击位置笛卡尔坐标
+        let positions = scene.pickPosition(e.position);
+        //将笛卡尔坐标转化为经纬度坐标
+        let cartographic = Cesium.Cartographic.fromCartesian(positions);
+        let x = Cesium.Math.toDegrees(cartographic.longitude);
+        let y = Cesium.Math.toDegrees(cartographic.latitude);
+        let z = cartographic.height;
+        if (z < 0) {
+          z = 0;
+        }
+        console.log(x, y, z);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    },
     handlerDis(clampMode) {
       //初始化测量距离
       handlerDis = new Cesium.MeasureHandler(
@@ -370,6 +370,9 @@ export default {
           $("body").removeClass("measureCur");
         }
       });
+    }, //删除指定标号
+    deleteSeleGeo() {
+      plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);
     }
   }
 };
