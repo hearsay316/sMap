@@ -75,9 +75,7 @@
 
 <script>
 import Cesium from "Cesium";
-
-console.log(scene);
-var cesium, scene, viewer, serverUrl, plotting;
+var cesium, viewer, serverUrl, plotting;
 var plottingLayer;
 var plotEditControl;
 cesium = Cesium;
@@ -87,9 +85,8 @@ export default {
     return {};
   },
   mounted() {
-    setTimeout(() => {
-      this.load();
-    }, 2000);
+      console.log()
+      this.loader();
   },
   methods: {
     draw_text() {
@@ -109,14 +106,14 @@ export default {
     clearLayers() {
       plottingLayer.removeAll();
     },
-    load() {
+    loader() {
       //若本地没有标绘相关服务则可访问支持中心的iserver
       // var host = document.location.toString().match('/file:\/\//') ? 'http://localhost:8090' : 'http://' + document.location.host;
       var host = "http://support.supermap.com.cn:8090";
       viewer = new Cesium.Viewer("cesiumContainer");
-      scene = viewer.scene;
+      window.scene = viewer.scene;
       //globe : Globe 获取地球对象。
-      scene.globe.depthTestAgainstTerrain = false;
+      window.scene.globe.depthTestAgainstTerrain = false;
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       InitPlot(viewer, serverUrl);
@@ -168,19 +165,20 @@ export default {
         }
       }
       function InitPlot(viewer, serverUrl) {
-        if (!viewer) {
+        if (!viewer&&!viewer.scene) {
           return;
         }
         console.log(scene);
-        plottingLayer = new Cesium.PlottingLayer(viewer.scene, "plottingLayer");
+        plottingLayer = new Cesium.PlottingLayer(window.scene, "plottingLayer");
+        console.log(plottingLayer)
         scene.layers.add(plottingLayer);
 
-        // plotEditControl = new cesium.PlotEditControl(viewer.scene, plottingLayer); //编辑控件
-        // plotEditControl.activate();
+        plotEditControl = new cesium.PlotEditControl(window.scene, plottingLayer); //编辑控件
+        plotEditControl.activate();
 
         plotting = cesium.Plotting.getInstance(serverUrl, viewer.scene);
 
-        //  stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
+         window.stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
       }
 
       function draw_dot() {

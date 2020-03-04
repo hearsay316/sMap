@@ -137,6 +137,22 @@ const routes = [
       import(
         /* webpackChunkName: "ParticleWater" */ "../views/plot_dynamicPlot.vue"
       )
+  },
+  {
+    path: "/plot_dynamicPlot_icon",
+    name: "plot_dynamicPlot_icon",
+    meta: {
+      title: "动态标绘图标",
+      icon:
+          "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+        import(
+            /* webpackChunkName: "ParticleWater" */ "../views/plot_dynamicPlot_icon.vue"
+            )
   }
 ];
 
