@@ -93,13 +93,14 @@ let viewer,
   plotEditControl,
   handlerDis,
   handlerArea,
-  handlerHeight,scene,stylePanel;
+  handlerHeight,
+  scene,
+  stylePanel;
 
 export default {
   name: "plot_dynamicPlot",
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {
     this.loader();
@@ -174,6 +175,21 @@ export default {
       points[3] = new Cesium.PlotPoint3D(114.503081229812, 50.7762562321923, 0);
       plottingLayer.createSymbol(0, 32, points);
     },
+    InitPlot(viewer, serverUrl) {
+      if (!viewer && !viewer.scene) {
+        return;
+      }
+      plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
+      scene.layers.add(plottingLayer);
+
+      plotEditControl = new Cesium.PlotEditControl(window.scene, plottingLayer); //编辑控件
+      plotEditControl.activate();
+
+      plotting = Cesium.Plotting.getInstance(serverUrl, scene);
+
+      stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
+      window.stylePanel = stylePanel;
+    },
     loader() {
       //若本地没有标绘相关服务则可访问支持中心的iserver
       // let host = document.location.toString().match('/file:\/\//') ? 'http://localhost:8090' : 'http://' + document.location.host;
@@ -184,7 +200,7 @@ export default {
       scene.globe.depthTestAgainstTerrain = false;
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
-      InitPlot(viewer, serverUrl);
+      this.InitPlot(viewer, serverUrl);
       try {
         //添加S3M图层服务
         let promise = scene.open(
@@ -250,55 +266,23 @@ export default {
         }
         console.log(x, y, z);
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-      function InitPlot(viewer, serverUrl) {
-        if (!viewer && !viewer.scene) {
-          return;
-        }
-        plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
-        scene.layers.add(plottingLayer);
+      this.handlerDis(clampMode);
+      this.handlerArea(clampMode);
+      this.handlerHeight(clampMode);
 
-        plotEditControl = new Cesium.PlotEditControl(
-          window.scene,
-          plottingLayer
-        ); //编辑控件
-        plotEditControl.activate();
-
-        plotting = Cesium.Plotting.getInstance(serverUrl, scene);
-
-        stylePanel = new StylePanel(
-          "stylePanel",
-          plotEditControl,
-          plotting
-        );
-        window.stylePanel = stylePanel;
+      //删除指定标号
+      function deleteSeleGeo() {
+        plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);
       }
-      //初始化测量距离
-      handlerDis = new Cesium.MeasureHandler(
-        viewer,
-        Cesium.MeasureMode.Distance,
-        clampMode
-      );
-      //注册测距功能事件
-      handlerDis.measureEvt.addEventListener(function(result) {
-        console.log(result);
-        let dis = Number(result.distance);
-        let distance =
-          dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
-        handlerDis.disLabel.text = "距离:" + distance;
-      });
-      handlerDis.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
 
+      // //“Delete”按键删除选中标号
+      // $(document).keydown(function(event) {
+      //   if (event.keyCode === 46) {
+      //     deleteSeleGeo();
+      //   }
+      // });
+    },
+    handlerArea(clampMode) {
       //初始化测量面积
       handlerArea = new Cesium.MeasureHandler(
         viewer,
@@ -325,7 +309,8 @@ export default {
           $("body").removeClass("measureCur");
         }
       });
-
+    },
+    handlerHeight(clampMode) {
       //初始化测量高度
       handlerHeight = new Cesium.MeasureHandler(viewer, Cesium.MeasureMode.DVH);
       handlerHeight.measureEvt.addEventListener(function(result) {
@@ -357,17 +342,34 @@ export default {
           $("body").removeClass("measureCur");
         }
       });
-      //删除指定标号
-      function deleteSeleGeo() {
-        plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);
-      }
-
-      // //“Delete”按键删除选中标号
-      // $(document).keydown(function(event) {
-      //   if (event.keyCode === 46) {
-      //     deleteSeleGeo();
-      //   }
-      // });
+    },
+    handlerDis(clampMode) {
+      //初始化测量距离
+      handlerDis = new Cesium.MeasureHandler(
+        viewer,
+        Cesium.MeasureMode.Distance,
+        clampMode
+      );
+      //注册测距功能事件
+      handlerDis.measureEvt.addEventListener(function(result) {
+        console.log(result);
+        let dis = Number(result.distance);
+        let distance =
+          dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
+        handlerDis.disLabel.text = "距离:" + distance;
+      });
+      handlerDis.activeEvt.addEventListener(function(isActive) {
+        if (isActive == true) {
+          viewer.enableCursorStyle = false;
+          viewer._element.style.cursor = "";
+          $("body")
+            .removeClass("measureCur")
+            .addClass("measureCur");
+        } else {
+          viewer.enableCursorStyle = true;
+          $("body").removeClass("measureCur");
+        }
+      });
     }
   }
 };
