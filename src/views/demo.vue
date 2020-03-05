@@ -84,17 +84,20 @@ let positionXYZ = [
   {
     x: 102.06943685862204,
     y: 24.969427388802274,
-    z: 1571.2370406630653
+    z: 1571.2370406630653,
+    name:"cart1"
   },
   {
     x: 102.06946361643989,
     y: 24.96939567838009,
-    z: 1571.213370078212
+    z: 1571.213370078212,
+    name:"cart2"
   },
   {
     x: 102.06953602518084,
     y: 24.969451096085642,
-    z: 1571.356784142299
+    z: 1571.356784142299,
+    name:"cart3"
   }
 ];
 let WaterParticleSystems = [];
@@ -290,9 +293,8 @@ export default {
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
         position: position,
-        id:12233,
-        userId:"xxxx",
-        aaaaaa:"aaaaaaaaaaaaaaaaaaaaaaaaa"
+        name:"99999999999",
+        id:"id"
       });
       let viewModel = {
         emissionRate: 200,
@@ -306,7 +308,6 @@ export default {
       };
       FireParticleSystem = scene.primitives.add(
         new Cesium.ParticleSystem({
-          id:"xxxxxxxx",
           // 粒子的图片
           image:
             "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fire.png",
@@ -339,11 +340,9 @@ export default {
           // 粒子的释放方向
           emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(45.0)),
           // 是否以米为单位
-          sizeInMeters: true,
-          AAA:"xxxxxx"
+          sizeInMeters: true
         })
       );
-      FireEntity.xxxxxx = "火";
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         FireParticleSystem.modelMatrix = computeModelMatrix(FireEntity, time);
         // Account for any changes to the emitter model matrix.
@@ -380,9 +379,10 @@ export default {
       vm.Status.isMapFire = false;
       vm.Status.isMapCart = true;
       positionXYZ.forEach(xyz => {
-        let { x, y, z } = xyz;
+        let { x, y, z ,name} = xyz;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
         let cart = viewer.entities.add({
+          name:name,
           model: {
             uri:
               "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -398,6 +398,7 @@ export default {
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
+        name:"5555",
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -526,15 +527,16 @@ export default {
       var title = document.getElementById("title");
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
-      viewer.selectedEntityChanged.addEventListener(function(entity,a) {
-        console.log("ddddddddddddd",a, entity,FireEntity);
-        console.log(viewer.selectedEntity);
-        vm.$confirm("灭火成功,演示完毕", "提示", {
-          type: "success",
-          showCancelButton: false,
-          showConfirmButton: false,
-          showClose: false
-        });
+      viewer.selectedEntityChanged.addEventListener(function(entity) {
+        if(entity){
+          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            showClose: false
+          });
+        }
+
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
@@ -552,7 +554,9 @@ export default {
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
-        console.log(scene.camera, scene.Cartesian3);
+        var pick = viewer.scene.pick(e.position);
+       // console.log(pick)
+        //console.log(scene.camera, scene.Cartesian3);
         //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
         //viewer.entities.removeAll();
         //获取点击位置笛卡尔坐标
