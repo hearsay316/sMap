@@ -103,6 +103,15 @@
           动态绘图
         </button>
       </div>
+      <div class="demo3-menu-item-Resource-deployment">
+        <button
+                @click="ResourceDeployment"
+                type="button"
+                class="button"
+        >
+          资源部署
+        </button>
+      </div>
     </div>
     <div
       id="menu"
@@ -126,6 +135,20 @@
             style="width: 290px;overflow: hidden"
           ></div>
         </div>
+      </div>
+    </div>
+    <div class="resource-deployment-Panel">
+      <div class="resource-deployment-Panel-title">
+        模型库
+      </div>
+      <div>
+        <input type="range" v-model="range" id="rotate" min="0" max="60" value="27" style="background: linear-gradient(to right, rgb(5, 156, 250), white 45%, white);">
+      </div>
+      <div class="resource-deployment-Panel-imgs">
+        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943576682.jpg" alt=""></div>
+        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943574824.jpg" alt=""></div>
+        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943567046.jpg" alt=""></div>
+        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943568933.jpg" alt=""></div>
       </div>
     </div>
   </div>
@@ -188,8 +211,20 @@ export default {
       return this.S3Move.isMapFire + this.S3Move.isMapCart === 2;
     }
   },
+  watch:{
+    range: {
+      handler: function(val, oldVal) {
+        // eslint-disable-next-line no-console
+        console.log(val, oldVal);
+        let value = Number(val);
+        this.rotate(value);
+      },
+      deep: true
+    }
+  },
   data() {
     return {
+      range:0,
       demo3MenuHeight: false,
       demo3MenuArea: false,
       demo3MenuDistance: false,
@@ -220,6 +255,22 @@ export default {
     this.onload();
   },
   methods: {
+    resourceDeploymentPanelImg(){
+      console.log("点击添加")
+      this.Status.isMapCart=!this.Status.isMapCart;
+    },
+    ResourceDeployment(){
+
+    },
+    rotate (value){
+      var rotationValue = Cesium.Math.toRadians(value);
+      if (viewer.selectedEntity) {
+        console.log(cart,cart.orientation)
+      //  var instance = viewer.selectedEntity.primitive;
+       // var index = viewer.selectedEntity.id;
+      //  instance.updateRotation(new Cesium.HeadingPitchRoll(0, 0, rotationValue), index);
+      }
+    },
     DynamicDrawing() {
       this.demo3MenuPanel = !this.demo3MenuPanel;
       if (this.demo3MenuPanel) {
@@ -770,17 +821,29 @@ export default {
               dataSetName: "New_Region",
               keyWord: "SmID"
             });
+
+            //  -20183889.354184173,
+            // 22645826.766457584,
+            //         3223367.6070640916
+            /*
+            * x: -1208997.92439027
+y: 5655760.227195323
+z: 2693548.99315424
+            * */
             //设置相机视角
             scene.camera.setView({
               destination: new Cesium.Cartesian3(
-                -20183889.354184173,
-                22645826.766457584,
-                3223367.6070640916
+                      -1208997.92439027,
+                      5655760.22719532,
+                      2693548.99315424
               ),
               orientation: {
-                heading: 5.662887035643514,
-                pitch: -1.4213836938199456,
-                roll: 9.769962616701378e-14
+                // heading: 5.662887035643514,
+                // pitch: -1.4213836938199456,
+                // roll: 9.769962616701378e-14
+                heading: 2.0654134497388776,
+                pitch: -0.8748266534458269,
+                roll: 6.283185307179238
               }
             });
           },
@@ -807,12 +870,12 @@ export default {
       var myimg = document.getElementById("myimg");
       viewer.selectedEntityChanged.addEventListener(function(entity) {
         if (entity && viewer.selectedEntity.name) {
-          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
-            type: "success",
-            showCancelButton: false,
-            showConfirmButton: false,
-            showClose: false
-          });
+          // vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+          //   type: "success",
+          //   showCancelButton: false,
+          //   showConfirmButton: false,
+          //   showClose: false
+          // });
         }
       });
       //注册鼠标点击事件
@@ -839,6 +902,10 @@ export default {
         if (z < 0) {
           z = 0;
         }
+        if(vm.Status.isMapCart){
+          vm.HandleS3MountedMapCart();
+        }
+
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
   }
@@ -891,4 +958,27 @@ export default {
 .bgcolor {
   background: #00e5e5;
 }
+  .resource-deployment-Panel{
+    position: absolute;
+    width: 260px;
+    top:0;
+    left: 8px;
+    bottom: 0;
+    margin: auto;
+    border-radius: 18px;
+    height: 70%;
+    background: #fff;
+  }
+  .resource-deployment-Panel-title{
+    font-size: 19px;
+    color: rgb(6, 106, 117);
+    padding: 15px;
+    font-family: 'FranchiseRegular','Arial Narrow',Arial,sans-serif;
+    font-weight: bold;
+    text-align: center;
+  }
+  .resource-deployment-Panel-imgs{
+    padding: 8px;
+    width: 95%;
+  }
 </style>
