@@ -104,11 +104,7 @@
         </button>
       </div>
       <div class="demo3-menu-item-Resource-deployment">
-        <button
-                @click="ResourceDeployment"
-                type="button"
-                class="button"
-        >
+        <button @click="ResourceDeployment" type="button" class="button">
           资源部署
         </button>
       </div>
@@ -141,19 +137,73 @@
       <div class="resource-deployment-Panel-title">
         模型库
       </div>
-      <div>
-        <input type="range" v-model="range" id="rotate" min="0" max="60" value="27" style="background: linear-gradient(to right, rgb(5, 156, 250), white 45%, white);">
-      </div>
+      <div></div>
       <div class="resource-deployment-Panel-imgs">
-        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943576682.jpg" alt=""></div>
-        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943574824.jpg" alt=""></div>
-        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943567046.jpg" alt=""></div>
-        <div @click="resourceDeploymentPanelImg()"><img src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943568933.jpg" alt=""></div>
+        <div @click="resourceDeploymentPanelImg()">
+          <img
+            :class="{ filterImg: isFilterImg }"
+            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943576682.jpg"
+          />
+        </div>
+        <div @click="resourceDeploymentPanelImg()">
+          <img
+            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943574824.jpg"
+            alt=""
+          />
+        </div>
+        <div @click="resourceDeploymentPanelImg()">
+          <img
+            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943567046.jpg"
+            alt=""
+          />
+        </div>
+        <div @click="resourceDeploymentPanelImg()">
+          <img
+            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943568933.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
+    <div class="resource-deployment-load-Panel">
+      <div class="resource-deployment-Panel-title">
+        资源控制面板
+      </div>
+      <input
+        v-if="isCarts.length > 0"
+        type="range"
+        class="resource-deployment-load-Panel-input"
+        v-model="range"
+        id="rotate"
+        min="0"
+        max="60"
+        value="27"
+        style="background: linear-gradient(to right, rgb(5, 156, 250), white 45%, white);"
+      />
+      <div>
+        <el-select v-model="value" @change="changeOptions" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div v-if="value">
+        <div v-for="(cart, index) in this[`KZCart${value-0+1}s`]" :key="index">
+          <el-button :type="cart==1?'primary':'info'"  @click="KZCartButton(`KZCart${value-0+1}s`,cart,index)">小车{{index}}--{{cart}}</el-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
+<!--102.06809762026568 24.9721263451542 1571.471189746621
+demo3.vue?451f:725 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:738 102.06811838231309 24.972102091365738 1571.2889547200648
+demo3.vue?451f:725 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:738 102.06812534710087 24.972084769728927 1573.755346612378-->
 <script>
 import Cesium from "Cesium";
 
@@ -182,7 +232,95 @@ let MapFireXYZ = {
   y: 24.969712733889363,
   z: 1577.620664980985
 };
+/*
+demo3.vue?451f:824 102.06808795138754 24.972126138655273 1572.7586330095774
+demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:824 102.06798368951745 24.972073180003964 1569.0458515728437
+demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:824 102.06799461392491 24.972041509745793 1569.0229629726516
+demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:824 102.06801208294657 24.972015349455816 1569.0147105774925
+demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:824 102.06802698664997 24.971990682467418 1569.0054715987264
+demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:824 102.06805475898443 24.97195666722821 1568.9933569846417
+* */
+let KZCart2 = [
+  {
+    x: 102.06808795138754,
+    y: 24.972126138655273,
+    z: 1572.7586330095774,
+    name: "KZCart2"
+  },
+  {
+    x: 102.06798368951745,
+    y: 24.972073180003964,
+    z: 1569.0458515728437,
+    name: "KZCart2"
+  },
+  {
+    x: 102.06801208294657,
+    y: 24.972015349455816,
+    z: 1569.0147105774925,
+    name: "KZCart2"
+  },
+  { //102.06802698664997 24.971990682467418 1569.0054715987264
+    x: 102.06802698664997,
+    y: 24.971990682467418,
+    z: 1569.0054715987264,
+    name: "KZCart2"
+  },
+  { //102.06805475898443 24.97195666722821 1568.9933569846417
+    x: 102.06805475898443,
+    y: 24.97195666722821,
+    z: 1568.9933569846417,
+    name: "KZCart2"
+  }
+];
+// 102.0679125361005 24.97206527844217 1568.9861170667511
+// demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+// demo3.vue?451f:824 102.06793214484642 24.972034807171955 1568.9536088247205
+// demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+// demo3.vue?451f:824 102.0679429458357 24.972019687921975 1568.945574376193
+// demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+// demo3.vue?451f:824 102.0679540278873 24.97200173365304 1568.9452939022958
+// demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+// demo3.vue?451f:824 102.0679658151694 24.9719870792948 1568.9181762498888
+let KZCart3 = [
+{
+  x:102.0679125361005, y:24.97206527844217, z:1568.9861170667511, name: "KZCart2"
+},{
+    x:102.06793214484642, y:24.972019687921975, z:1568.945574376193, name: "KZCart2"
+  },{
+    x:102.0679429458357, y:24.972034807171955, z:1568.9536088247205, name: "KZCart2"
+  },{
+    x:102.0679540278873, y:24.97200173365304, z:1568.9452939022958, name: "KZCart2"
+  }
+]
+let KZCart1 = [
+  {
+    x: 102.06809762026568,
+    y: 24.9721263451542,
+    z: 1571.471189746621,
+    name: "KZCart1-1"
+  },
+  {
+    x: 102.06811838231309,
+    y: 24.972102091365738,
+    z: 1571.2889547200648,
+    name: "KZCart2"
+  },
+  {
+    x: 102.06812534710087,
+    y: 24.972084769728927,
+    z: 1573.755346612378,
+    name: "KZCart3"
+  }
+];
+let KZ={KZCart1s : [],KZCart2s :[],KZCart3s:[]}
 let carts = [];
+let isCarts = [];
+let watchArr = ["KZCart1", "KZCart2", "KZCart3"];
 let positionXYZ = [
   {
     x: 102.06943685862204,
@@ -211,7 +349,7 @@ export default {
       return this.S3Move.isMapFire + this.S3Move.isMapCart === 2;
     }
   },
-  watch:{
+  watch: {
     range: {
       handler: function(val, oldVal) {
         // eslint-disable-next-line no-console
@@ -220,11 +358,34 @@ export default {
         this.rotate(value);
       },
       deep: true
+    },
+    value: {
+      handler: function(val, oldVal) {
+        this.watchValueCart(val);
+      },
+      deep: true
     }
   },
   data() {
     return {
-      range:0,
+      options: [
+        {
+          value: "0",
+          label: "小车类型1"
+        },
+        {
+          value: "1",
+          label: "小车类型2"
+        },
+        {
+          value: "2",
+          label: "小车类型3"
+        },
+      ],
+      value: "",
+      KZCart1s : [],KZCart2s : [],KZCart3s :[],
+      isFilterImg: true,
+      range: 0,
       demo3MenuHeight: false,
       demo3MenuArea: false,
       demo3MenuDistance: false,
@@ -248,30 +409,113 @@ export default {
       },
       MapCartXYZ: [],
       MapWaterXYZ: [],
-      demo3MenuPanelIndex: -1
+      demo3MenuPanelIndex: -1,
+      isCarts: []
     };
   },
   mounted() {
     this.onload();
   },
-  methods: {
-    resourceDeploymentPanelImg(){
-      console.log("点击添加")
-      this.Status.isMapCart=!this.Status.isMapCart;
-    },
-    ResourceDeployment(){
 
+  methods: {
+    KZCartButton(array,cart,index){
+      console.log(array,cart,index)
+      let arr = [...this[array]];
+      if(arr[index] ==1 ){
+        arr[index]= 0;
+        console.log(arr)
+      }else {
+        arr[index]= 1
+      }
+      this[array] = arr;
+      KZ[array][index].show = !KZ[array][index].show;
     },
-    rotate (value){
-     let entity = cart ;
-        if(!Cesium.defined(entity.currentPosition)){
-            var position = entity.position;
-           // var time = position._composite.intervals._intervals[0].stop;
-            entity.currentPosition = position.getValue({dayNumber: 2457518,
-              secondsOfDay: 75352.37397817126});
-        }
-        entity.orientation = Cesium.Transforms.headingPitchRollQuaternion(entity.currentPosition, new Cesium.HeadingPitchRoll(value/10, 0, 0));
-        console.log(entity.orientation,entity.currentPosition)
+    KZCart2() {
+      KZCart2.forEach(xyz => {
+        let { x, y, z, name } = xyz;
+        let position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        let cart = viewer.entities.add({
+          name: name,
+          model: {
+            uri:
+                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 32,
+            maximumScale: 0.5
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position
+        });
+        KZ.KZCart2s.push(cart);
+        this.KZCart2s.push(1);
+      });
+    },
+    KZCart3() {
+      KZCart3.forEach(xyz => {
+        let { x, y, z, name } = xyz;
+        let position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        let cart = viewer.entities.add({
+          name: name,
+          model: {
+            uri:
+                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 32,
+            maximumScale: 0.5
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position
+        });
+        KZ.KZCart3s.push(cart);
+        this.KZCart3s.push(1);
+
+      });
+    },
+    KZCart1() {
+      KZCart1.forEach(xyz => {
+        let { x, y, z, name } = xyz;
+        let position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        let cart = viewer.entities.add({
+          name: name,
+          model: {
+            uri:
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 32,
+            maximumScale: 0.5
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position
+        });
+        KZ.KZCart1s.push(cart);
+        this.KZCart1s.push(1);
+      });
+    },
+    watchValueCart(value) {
+      viewer.entities.removeAll();
+      this[watchArr[value]]();
+    },
+    changeOptions(value) {
+      console.log(111, value);
+    },
+    resourceDeploymentPanelImg() {
+      console.log("点击添加");
+      this.Status.isMapCart = !this.Status.isMapCart;
+      this.isFilterImg = !this.isFilterImg;
+    },
+    ResourceDeployment() {},
+    rotate(value) {
+      let entity = cart;
+      if (!Cesium.defined(entity.currentPosition)) {
+        var position = entity.position;
+        // var time = position._composite.intervals._intervals[0].stop;
+        entity.currentPosition = position.getValue({
+          dayNumber: 2457518,
+          secondsOfDay: 75352.37397817126
+        });
+      }
+      entity.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+        entity.currentPosition,
+        new Cesium.HeadingPitchRoll(value / 10, 0, 0)
+      );
+      console.log(entity.orientation, entity.currentPosition);
     },
     DynamicDrawing() {
       this.demo3MenuPanel = !this.demo3MenuPanel;
@@ -573,6 +817,7 @@ export default {
       });
     },
     HandleS3MountedMapCart() {
+      let vm = this;
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
         name: "5555",
@@ -584,7 +829,8 @@ export default {
         viewFrom: new Cesium.Cartesian3(x, y, z),
         position: position
       });
-      carts.push(cart);
+      isCarts.push(cart);
+      vm.isCarts.push(1);
     },
     HandleClickS3Fire() {
       try {
@@ -610,7 +856,6 @@ export default {
     },
     HandleClickS3Move() {
       let vm = this;
-
       try {
         if (scene.camera) {
           scene.camera.setView({
@@ -835,9 +1080,9 @@ z: 2693548.99315424
             //设置相机视角
             scene.camera.setView({
               destination: new Cesium.Cartesian3(
-                      -1208997.92439027,
-                      5655760.22719532,
-                      2693548.99315424
+                -1208997.92439027,
+                5655760.22719532,
+                2693548.99315424
               ),
               orientation: {
                 // heading: 5.662887035643514,
@@ -904,10 +1149,9 @@ z: 2693548.99315424
         if (z < 0) {
           z = 0;
         }
-        if(vm.Status.isMapCart){
+        if (vm.Status.isMapCart) {
           vm.HandleS3MountedMapCart();
         }
-
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
   }
@@ -960,27 +1204,44 @@ z: 2693548.99315424
 .bgcolor {
   background: #00e5e5;
 }
-  .resource-deployment-Panel{
-    position: absolute;
-    width: 260px;
-    top:0;
-    left: 8px;
-    bottom: 0;
-    margin: auto;
-    border-radius: 18px;
-    height: 70%;
-    background: #fff;
-  }
-  .resource-deployment-Panel-title{
-    font-size: 19px;
-    color: rgb(6, 106, 117);
-    padding: 15px;
-    font-family: 'FranchiseRegular','Arial Narrow',Arial,sans-serif;
-    font-weight: bold;
-    text-align: center;
-  }
-  .resource-deployment-Panel-imgs{
-    padding: 8px;
-    width: 95%;
-  }
+.resource-deployment-load-Panel {
+  position: absolute;
+  width: 260px;
+  top: 170px;
+  right: 8px;
+  bottom: 0;
+  margin: auto;
+  border-radius: 18px;
+  height: 70%;
+  background: #fff;
+}
+.resource-deployment-Panel {
+  position: absolute;
+  width: 260px;
+  top: 0;
+  left: 8px;
+  bottom: 0;
+  margin: auto;
+  border-radius: 18px;
+  height: 70%;
+  background: #fff;
+}
+.resource-deployment-Panel-title {
+  font-size: 19px;
+  color: rgb(6, 106, 117);
+  padding: 15px;
+  font-family: "FranchiseRegular", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+.resource-deployment-load-Panel-input {
+  width: 100%;
+}
+.resource-deployment-Panel-imgs {
+  padding: 8px;
+  width: 95%;
+}
+.filterImg {
+  filter: grayscale(100%);
+}
 </style>
