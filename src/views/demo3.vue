@@ -263,13 +263,15 @@ export default {
 
     },
     rotate (value){
-      var rotationValue = Cesium.Math.toRadians(value);
-      if (viewer.selectedEntity) {
-        console.log(cart,cart.orientation)
-      //  var instance = viewer.selectedEntity.primitive;
-       // var index = viewer.selectedEntity.id;
-      //  instance.updateRotation(new Cesium.HeadingPitchRoll(0, 0, rotationValue), index);
-      }
+     let entity = cart ;
+        if(!Cesium.defined(entity.currentPosition)){
+            var position = entity.position;
+           // var time = position._composite.intervals._intervals[0].stop;
+            entity.currentPosition = position.getValue({dayNumber: 2457518,
+              secondsOfDay: 75352.37397817126});
+        }
+        entity.orientation = Cesium.Transforms.headingPitchRollQuaternion(entity.currentPosition, new Cesium.HeadingPitchRoll(value/10, 0, 0));
+        console.log(entity.orientation,entity.currentPosition)
     },
     DynamicDrawing() {
       this.demo3MenuPanel = !this.demo3MenuPanel;
