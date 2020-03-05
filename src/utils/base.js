@@ -5,8 +5,9 @@ export function initStats() {
     state.setMode(0);
     state.domElement.style.position = "absolute";
     state.domElement.style.left = "inherit";
+    state.domElement.style.bottom = "0";
     state.domElement.style.right = "0px";
-    state.domElement.style.top = "0";
+    state.domElement.style.top = "inherit";
     state.domElement.style.width = "100px";
     state.domElement.style.zIndex = 999999;
     document.body.appendChild(state.domElement);

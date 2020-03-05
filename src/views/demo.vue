@@ -289,7 +289,10 @@ export default {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
-        position: position
+        position: position,
+        id:12233,
+        userId:"xxxx",
+        aaaaaa:"aaaaaaaaaaaaaaaaaaaaaaaaa"
       });
       let viewModel = {
         emissionRate: 200,
@@ -303,6 +306,7 @@ export default {
       };
       FireParticleSystem = scene.primitives.add(
         new Cesium.ParticleSystem({
+          id:"xxxxxxxx",
           // 粒子的图片
           image:
             "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fire.png",
@@ -335,10 +339,11 @@ export default {
           // 粒子的释放方向
           emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(45.0)),
           // 是否以米为单位
-          sizeInMeters: true
+          sizeInMeters: true,
+          AAA:"xxxxxx"
         })
       );
-
+      FireEntity.xxxxxx = "火";
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         FireParticleSystem.modelMatrix = computeModelMatrix(FireEntity, time);
         // Account for any changes to the emitter model matrix.
@@ -521,6 +526,16 @@ export default {
       var title = document.getElementById("title");
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
+      viewer.selectedEntityChanged.addEventListener(function(entity,a) {
+        console.log("ddddddddddddd",a, entity,FireEntity);
+        console.log(viewer.selectedEntity);
+        vm.$confirm("灭火成功,演示完毕", "提示", {
+          type: "success",
+          showCancelButton: false,
+          showConfirmButton: false,
+          showClose: false
+        });
+      });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
         console.log(feature, scene.camera, scene.Cartesian3); //Z: "1579.0816898133812"

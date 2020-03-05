@@ -1,7 +1,7 @@
 // vue.config.js
 const UploadSshPlugin = require('./plugins/uploadSshPlugin')
 module.exports = {
-  publicPath: "./",
+  publicPath: process.env.VUE_APP_ENV === 'production' ? 'http://cdn.j6375x.cn/cdn/webgl/' + process.env.VER : '.',
   // 选项...
   devServer: {
     before(app) {

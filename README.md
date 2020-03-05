@@ -30,3 +30,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
        heading: 5.662887035643514
        pitch: -1.4213836938199456
        roll: 9.769962616701378e-14
+
+
+1 测距 侧面 
+2 态势分析 箭头绘制  
+3 资源部署  (不需要详情) 
+4 多种资源显示隐藏 (点击位置) 
+5 流程 
