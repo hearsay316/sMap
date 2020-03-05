@@ -191,9 +191,17 @@
           </el-option>
         </el-select>
       </div>
-      <div v-if="value">
-        <div v-for="(cart, index) in this[`KZCart${value-0+1}s`]" :key="index">
-          <el-button :type="cart==1?'primary':'info'"  @click="KZCartButton(`KZCart${value-0+1}s`,cart,index)">小车{{index}}--{{cart}}</el-button>
+      <div v-if="value" class="KZCart">
+        <div
+                class="KZCart-button"
+          v-for="(cart, index) in this[`KZCart${value - 0 + 1}s`]"
+          :key="index"
+        >
+          <el-button
+            :type="cart == 1 ? 'primary' : 'info'"
+            @click="KZCartButton(`KZCart${value - 0 + 1}s`, cart, index)"
+            >小车{{ index }}--{{ cart }}</el-button
+          >
         </div>
       </div>
     </div>
@@ -264,13 +272,15 @@ let KZCart2 = [
     z: 1569.0147105774925,
     name: "KZCart2"
   },
-  { //102.06802698664997 24.971990682467418 1569.0054715987264
+  {
+    //102.06802698664997 24.971990682467418 1569.0054715987264
     x: 102.06802698664997,
     y: 24.971990682467418,
     z: 1569.0054715987264,
     name: "KZCart2"
   },
-  { //102.06805475898443 24.97195666722821 1568.9933569846417
+  {
+    //102.06805475898443 24.97195666722821 1568.9933569846417
     x: 102.06805475898443,
     y: 24.97195666722821,
     z: 1568.9933569846417,
@@ -287,16 +297,31 @@ let KZCart2 = [
 // demo3.vue?451f:811 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
 // demo3.vue?451f:824 102.0679658151694 24.9719870792948 1568.9181762498888
 let KZCart3 = [
-{
-  x:102.0679125361005, y:24.97206527844217, z:1568.9861170667511, name: "KZCart2"
-},{
-    x:102.06793214484642, y:24.972019687921975, z:1568.945574376193, name: "KZCart2"
-  },{
-    x:102.0679429458357, y:24.972034807171955, z:1568.9536088247205, name: "KZCart2"
-  },{
-    x:102.0679540278873, y:24.97200173365304, z:1568.9452939022958, name: "KZCart2"
+  {
+    x: 102.0679125361005,
+    y: 24.97206527844217,
+    z: 1568.9861170667511,
+    name: "KZCart2"
+  },
+  {
+    x: 102.06793214484642,
+    y: 24.972019687921975,
+    z: 1568.945574376193,
+    name: "KZCart2"
+  },
+  {
+    x: 102.0679429458357,
+    y: 24.972034807171955,
+    z: 1568.9536088247205,
+    name: "KZCart2"
+  },
+  {
+    x: 102.0679540278873,
+    y: 24.97200173365304,
+    z: 1568.9452939022958,
+    name: "KZCart2"
   }
-]
+];
 let KZCart1 = [
   {
     x: 102.06809762026568,
@@ -317,7 +342,7 @@ let KZCart1 = [
     name: "KZCart3"
   }
 ];
-let KZ={KZCart1s : [],KZCart2s :[],KZCart3s:[]}
+let KZ = { KZCart1s: [], KZCart2s: [], KZCart3s: [] };
 let carts = [];
 let isCarts = [];
 let watchArr = ["KZCart1", "KZCart2", "KZCart3"];
@@ -380,10 +405,12 @@ export default {
         {
           value: "2",
           label: "小车类型3"
-        },
+        }
       ],
       value: "",
-      KZCart1s : [],KZCart2s : [],KZCart3s :[],
+      KZCart1s: [],
+      KZCart2s: [],
+      KZCart3s: [],
       isFilterImg: true,
       range: 0,
       demo3MenuHeight: false,
@@ -416,21 +443,24 @@ export default {
   mounted() {
     this.onload();
   },
-
   methods: {
-    KZCartButton(array,cart,index){
-      console.log(array,cart,index)
+    KZCartButton(array, cart, index) {
       let arr = [...this[array]];
-      if(arr[index] ==1 ){
-        arr[index]= 0;
-        console.log(arr)
-      }else {
-        arr[index]= 1
+      console.log(array, cart, index);
+      console.log(this[array])
+      console.log(arr)
+      if (arr[index] == 1) {
+        arr[index] = 0;
+        console.log(arr);
+      } else {
+        arr[index] = 1;
       }
       this[array] = arr;
       KZ[array][index].show = !KZ[array][index].show;
     },
     KZCart2() {
+      this.KZCart2s=[];
+      KZ.KZCart2s = [];
       KZCart2.forEach(xyz => {
         let { x, y, z, name } = xyz;
         let position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -438,7 +468,7 @@ export default {
           name: name,
           model: {
             uri:
-                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
             minimumPixelSize: 32,
             maximumScale: 0.5
           },
@@ -450,6 +480,8 @@ export default {
       });
     },
     KZCart3() {
+      this.KZCart3s=[];
+      KZ.KZCart3s = [];
       KZCart3.forEach(xyz => {
         let { x, y, z, name } = xyz;
         let position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -457,7 +489,7 @@ export default {
           name: name,
           model: {
             uri:
-                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
             minimumPixelSize: 32,
             maximumScale: 0.5
           },
@@ -466,10 +498,11 @@ export default {
         });
         KZ.KZCart3s.push(cart);
         this.KZCart3s.push(1);
-
       });
     },
     KZCart1() {
+      this.KZCart1s = [];
+      KZ.KZCart1s = [];
       KZCart1.forEach(xyz => {
         let { x, y, z, name } = xyz;
         let position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -489,6 +522,7 @@ export default {
       });
     },
     watchValueCart(value) {
+      console.log(value,watchArr[value],this[watchArr[value]])
       viewer.entities.removeAll();
       this[watchArr[value]]();
     },
@@ -1209,10 +1243,8 @@ z: 2693548.99315424
   width: 260px;
   top: 170px;
   right: 8px;
-  bottom: 0;
-  margin: auto;
+  padding-bottom: 15px;
   border-radius: 18px;
-  height: 70%;
   background: #fff;
 }
 .resource-deployment-Panel {
@@ -1244,4 +1276,15 @@ z: 2693548.99315424
 .filterImg {
   filter: grayscale(100%);
 }
+.KZCart{
+  display: flex;
+  flex-wrap:wrap;
+  margin-top: 15px;
+ }
+
+.KZCart-button{
+  width: 50%;
+  padding: 8px;
+  box-sizing: border-box;
+  }
 </style>
