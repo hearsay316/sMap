@@ -561,15 +561,27 @@ export default {
       console.log(111, value);
     },
     resourceDeploymentPanelImg3() {
+      this.Status.isMapCartPanel3 = false;
+      this.isFilterImg3 = true
+      this.Status.isMapCartPanel = false;
+      this.isFilterImg = true
       this.Status.isMapCartPanel3 = !this.Status.isMapCartPanel3;
       this.isFilterImg3 = !this.isFilterImg3;
     },
     resourceDeploymentPanelImg2() {
+      this.Status.isMapCartPanel3 = false;
+      this.isFilterImg3 = true
+      this.Status.isMapCartPanel = false;
+      this.isFilterImg = true
       this.Status.isMapCartPanel2 = !this.Status.isMapCartPanel2;
       this.isFilterImg2 = !this.isFilterImg2;
     },
     resourceDeploymentPanelImg() {
       console.log("点击添加");
+      this.Status.isMapCartPanel3 = false;
+      this.isFilterImg3 = true
+      this.Status.isMapCartPanel2 = false;
+      this.isFilterImg2 = true
       this.Status.isMapCartPanel = !this.Status.isMapCartPanel;
       this.isFilterImg = !this.isFilterImg;
     },
