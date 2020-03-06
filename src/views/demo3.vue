@@ -547,20 +547,26 @@ export default {
       this.demo3MenuItemResourceDeployment = !this.demo3MenuItemResourceDeployment;
     },
     rotate(value) {
-      let entity = cart;
-      if (!Cesium.defined(entity.currentPosition)) {
-        var position = entity.position;
-        // var time = position._composite.intervals._intervals[0].stop;
-        entity.currentPosition = position.getValue({
-          dayNumber: 2457518,
-          secondsOfDay: 75352.37397817126
-        });
+
+      if(viewer.selectedEntity){
+        let entity = viewer.selectedEntity;
+        if (!Cesium.defined(entity.currentPosition)) {
+          var position = entity.position;
+          // var time = position._composite.intervals._intervals[0].stop;
+          entity.currentPosition = position.getValue({
+            dayNumber: 2457518,
+            secondsOfDay: 75352.37397817126
+          });
+        }
+        console.log(value ,26);
+        entity.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+                entity.currentPosition,
+                new Cesium.HeadingPitchRoll(value / 10, 0, 0)
+        );
+      //  localStorage.setItem("lastname", JSON.stringify(entity.orientation));
+        console.log(entity.orientation, entity.currentPosition);
       }
-      entity.orientation = Cesium.Transforms.headingPitchRollQuaternion(
-        entity.currentPosition,
-        new Cesium.HeadingPitchRoll(value / 10, 0, 0)
-      );
-      console.log(entity.orientation, entity.currentPosition);
+
     },
     DynamicDrawing() {
       this.demo3MenuPanel = !this.demo3MenuPanel;
@@ -871,7 +877,25 @@ export default {
           minimumPixelSize: 32
         },
         viewFrom: new Cesium.Cartesian3(x, y, z),
-        position: position
+        position: position,
+        orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                position,
+                new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+        ),
+        /*
+        *{_value: l, _hasClone: true, _hasEquals: true, _definitionChanged: r}
+definitionChanged: (...)
+_value: l {x: -0.5186734681549661, y: 0.14102695535992066, z: 0.3864889252604746, w: 0.7494768455029238}
+_hasClone: true
+_hasEquals: true
+_definitionChanged: r
+numberOfListeners: (...)
+_listeners: []
+_scopes: []
+_toRemove: []
+_insideRaiseEvent: false
+__proto__: Object
+__proto__: Object */
       });
       isCarts.push(cart);
       vm.isCarts.push(1);
@@ -1200,6 +1224,8 @@ z: 2693548.99315424
       handler.setInputAction(function (e) {
         vm.Status.isMapCartPanel = false;
         vm.isFilterImg = true;
+        vm.demo3Menu = true;
+        vm.demo3MenuItem = false;
       },Cesium.ScreenSpaceEventType.RIGHT_CLICK)
     }
   }
