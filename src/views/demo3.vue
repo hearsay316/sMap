@@ -104,8 +104,11 @@
         </button>
       </div>
       <div class="demo3-menu-item-Resource-deployment">
-        <button @click="ResourceDeployment" type="button" class="button">
+        <button @click="ResourceDeployment" type="button" :class="{ black: !demo3MenuItemResourceDeployment }" class="button">
           资源部署
+        </button>
+        <button @click="resourceDeploymentLoadPanelFuc" type="button" :class="{ black: !resourceDeploymentLoadPanel }" class="button">
+          资源控制面板
         </button>
       </div>
     </div>
@@ -133,7 +136,7 @@
         </div>
       </div>
     </div>
-    <div class="resource-deployment-Panel">
+    <div class="resource-deployment-Panel" v-if="demo3MenuItemResourceDeployment">
       <div class="resource-deployment-Panel-title">
         模型库
       </div>
@@ -165,7 +168,7 @@
         </div>
       </div>
     </div>
-    <div class="resource-deployment-load-Panel">
+    <div class="resource-deployment-load-Panel" v-if="resourceDeploymentLoadPanel" >
       <div class="resource-deployment-Panel-title">
         资源控制面板
       </div>
@@ -258,33 +261,33 @@ let KZCart2 = [
     x: 102.06808795138754,
     y: 24.972126138655273,
     z: 1572.7586330095774,
-    name: "KZCart2"
+    name: "KZCart2-1"
   },
   {
     x: 102.06798368951745,
     y: 24.972073180003964,
     z: 1569.0458515728437,
-    name: "KZCart2"
+    name: "KZCart2-2"
   },
   {
     x: 102.06801208294657,
     y: 24.972015349455816,
     z: 1569.0147105774925,
-    name: "KZCart2"
+    name: "KZCart2-3"
   },
   {
     //102.06802698664997 24.971990682467418 1569.0054715987264
     x: 102.06802698664997,
     y: 24.971990682467418,
     z: 1569.0054715987264,
-    name: "KZCart2"
+    name: "KZCart2-4"
   },
   {
     //102.06805475898443 24.97195666722821 1568.9933569846417
     x: 102.06805475898443,
     y: 24.97195666722821,
     z: 1568.9933569846417,
-    name: "KZCart2"
+    name: "KZCart2-5"
   }
 ];
 // 102.0679125361005 24.97206527844217 1568.9861170667511
@@ -301,25 +304,25 @@ let KZCart3 = [
     x: 102.0679125361005,
     y: 24.97206527844217,
     z: 1568.9861170667511,
-    name: "KZCart2"
+    name: "KZCart3-1"
   },
   {
     x: 102.06793214484642,
     y: 24.972019687921975,
     z: 1568.945574376193,
-    name: "KZCart2"
+    name: "KZCart3-2"
   },
   {
     x: 102.0679429458357,
     y: 24.972034807171955,
     z: 1568.9536088247205,
-    name: "KZCart2"
+    name: "KZCart3-3"
   },
   {
     x: 102.0679540278873,
     y: 24.97200173365304,
     z: 1568.9452939022958,
-    name: "KZCart2"
+    name: "KZCart3-3"
   }
 ];
 let KZCart1 = [
@@ -333,13 +336,13 @@ let KZCart1 = [
     x: 102.06811838231309,
     y: 24.972102091365738,
     z: 1571.2889547200648,
-    name: "KZCart2"
+    name: "KZCart1-2"
   },
   {
     x: 102.06812534710087,
     y: 24.972084769728927,
     z: 1573.755346612378,
-    name: "KZCart3"
+    name: "KZCart1-2"
   }
 ];
 let KZ = { KZCart1s: [], KZCart2s: [], KZCart3s: [] };
@@ -393,6 +396,8 @@ export default {
   },
   data() {
     return {
+      resourceDeploymentLoadPanel:false,
+      demo3MenuItemResourceDeployment:false,
       options: [
         {
           value: "0",
@@ -427,7 +432,8 @@ export default {
       Status: {
         isMapFire: false,
         isMapCart: false,
-        isMapSystem: true
+        isMapSystem: true,
+        isMapCartPanel:false,
       },
       MapFireXYZ: {
         x: 102.07025202712828,
@@ -531,10 +537,15 @@ export default {
     },
     resourceDeploymentPanelImg() {
       console.log("点击添加");
-      this.Status.isMapCart = !this.Status.isMapCart;
+      this.Status.isMapCartPanel = !this.Status.isMapCartPanel;
       this.isFilterImg = !this.isFilterImg;
     },
-    ResourceDeployment() {},
+    resourceDeploymentLoadPanelFuc(){
+      this.resourceDeploymentLoadPanel = !this.resourceDeploymentLoadPanel;
+    },
+    ResourceDeployment() {
+      this.demo3MenuItemResourceDeployment = !this.demo3MenuItemResourceDeployment;
+    },
     rotate(value) {
       let entity = cart;
       if (!Cesium.defined(entity.currentPosition)) {
@@ -854,7 +865,6 @@ export default {
       let vm = this;
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
-        name: "5555",
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -1151,12 +1161,12 @@ z: 2693548.99315424
       var myimg = document.getElementById("myimg");
       viewer.selectedEntityChanged.addEventListener(function(entity) {
         if (entity && viewer.selectedEntity.name) {
-          // vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
-          //   type: "success",
-          //   showCancelButton: false,
-          //   showConfirmButton: false,
-          //   showClose: false
-          // });
+          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            showClose: false
+          });
         }
       });
       //注册鼠标点击事件
@@ -1183,10 +1193,14 @@ z: 2693548.99315424
         if (z < 0) {
           z = 0;
         }
-        if (vm.Status.isMapCart) {
+        if (vm.Status.isMapCartPanel) {
           vm.HandleS3MountedMapCart();
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      handler.setInputAction(function (e) {
+        vm.Status.isMapCartPanel = false;
+        vm.isFilterImg = true;
+      },Cesium.ScreenSpaceEventType.RIGHT_CLICK)
     }
   }
 };
