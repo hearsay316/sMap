@@ -87,5 +87,35 @@ export function setView(scene, position,angle) {
     }else {
         throw new error("setView 参数不对")
     }
+}
+// 
+export function handlerDis() {
 
+}
+// 注册单体鼠标点击事件
+export function xxx(viewer,fuc) {
+    viewer.pickEvent.addEventListener((feature) =>{
+        fuc(feature)
+    });
+}
+
+// LEFT_CLICK canvas 点击事件
+export function CesiumClickLeft(scene,func) {
+    const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+    handler.setInputAction(function(e) {
+        func(e)
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+}
+// RIGHT_CLICK canvas 点击事件
+/**
+ * 
+ * @param scene
+ * @param func
+ * @constructor
+ */
+export function CesiumClickRight(scene,func){
+  const  handler =  new Cesium.ScreenSpaceEventHandler(scene.canvas);
+    handler.setInputAction(function(e) {
+        func(e)
+    },Cesium.ScreenSpaceEventType.RIGHT_CLICK)
 }
