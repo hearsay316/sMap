@@ -142,29 +142,14 @@
       </div>
       <div></div>
       <div class="resource-deployment-Panel-imgs">
-        <div @click="resourceDeploymentPanelImg()">
-          <img
-            :class="{ filterImg: isFilterImg }"
-            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943576682.jpg"
-          />
+        <div @click="resourceDeploymentPanelImg()" :class="{panelImg1:!isFilterImg}" >
+         小车1
         </div>
-        <div @click="resourceDeploymentPanelImg()">
-          <img
-            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943574824.jpg"
-            alt=""
-          />
+        <div @click="resourceDeploymentPanelImg2()" :class="{panelImg1:!isFilterImg2}" >
+          小车2
         </div>
-        <div @click="resourceDeploymentPanelImg()">
-          <img
-            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943567046.jpg"
-            alt=""
-          />
-        </div>
-        <div @click="resourceDeploymentPanelImg()">
-          <img
-            src="https://dss2.bdstatic.com/8_V1bjqh_Q23odCf/pacific/1943568933.jpg"
-            alt=""
-          />
+        <div @click="resourceDeploymentPanelImg3()" :class="{panelImg1:!isFilterImg3}">
+          小车3
         </div>
       </div>
     </div>
@@ -417,6 +402,8 @@ export default {
       KZCart2s: [],
       KZCart3s: [],
       isFilterImg: true,
+      isFilterImg2:true,
+      isFilterImg3:true,
       range: 0,
       demo3MenuHeight: false,
       demo3MenuArea: false,
@@ -434,6 +421,8 @@ export default {
         isMapCart: false,
         isMapSystem: true,
         isMapCartPanel:false,
+        isMapCartPanel2:false,
+        isMapCartPanel3:false,
       },
       MapFireXYZ: {
         x: 102.07025202712828,
@@ -479,7 +468,11 @@ export default {
             maximumScale: 0.5
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
-          position: position
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                  position,
+                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          )
         });
         KZ.KZCart2s.push(cart);
         this.KZCart2s.push(1);
@@ -500,7 +493,11 @@ export default {
             maximumScale: 0.5
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
-          position: position
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                  position,
+                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          )
         });
         KZ.KZCart3s.push(cart);
         this.KZCart3s.push(1);
@@ -521,19 +518,30 @@ export default {
             maximumScale: 0.5
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
-          position: position
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                  position,
+                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          )
         });
         KZ.KZCart1s.push(cart);
         this.KZCart1s.push(1);
       });
     },
     watchValueCart(value) {
-      console.log(value,watchArr[value],this[watchArr[value]])
-      viewer.entities.removeAll();
+     viewer.entities.removeAll();
       this[watchArr[value]]();
     },
     changeOptions(value) {
       console.log(111, value);
+    },
+    resourceDeploymentPanelImg3(){
+      this.Status.isMapCartPanel3 = !this.Status.isMapCartPanel3;
+      this.isFilterImg3 = !this.isFilterImg3;
+    },
+    resourceDeploymentPanelImg2(){
+      this.Status.isMapCartPanel2 = !this.Status.isMapCartPanel2;
+      this.isFilterImg2 = !this.isFilterImg2;
     },
     resourceDeploymentPanelImg() {
       console.log("点击添加");
@@ -545,6 +553,8 @@ export default {
     },
     ResourceDeployment() {
       this.demo3MenuItemResourceDeployment = !this.demo3MenuItemResourceDeployment;
+      this.demo3MenuPanel = false;
+        this.demo3MenuPanelIndex = -1;
     },
     rotate(value) {
 
@@ -569,6 +579,7 @@ export default {
 
     },
     DynamicDrawing() {
+      this.demo3MenuItemResourceDeployment = false
       this.demo3MenuPanel = !this.demo3MenuPanel;
       if (this.demo3MenuPanel) {
         this.demo3MenuPanelIndex = 89;
@@ -866,6 +877,91 @@ export default {
         });
         carts.push(cart);
       });
+    },
+    HandleS3MountedMapCart3(){
+      let vm = this;
+      /*
+    102.06811287312502 24.97216506413337 1569.1730185409224
+demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:1012 102.06814093688459 24.972130263176506 1569.1964102705317
+demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
+    */
+      let userX = 102.06814093688459 - 102.06811287312502;
+      let userY = 24.972130263176506 - 24.97216506413337;
+      let userZ = 1569.1964102705317 - 1569.1730185409224;
+      let arr = [{
+        x: x - userX,
+        y: y - userY,
+        z: z - userZ
+      }, {
+        x, y, z
+      },{
+        x: x + userX,
+        y: y + userY,
+        z: z + userZ
+      }
+      ]
+      arr.forEach((item)=>{
+        let {x,y,z} = item
+        var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        cart = viewer.entities.add({
+          model: {
+            uri:
+                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 32
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                  position,
+                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          ),
+        });
+        isCarts.push(cart);
+        vm.isCarts.push(1);
+      })
+    },
+    HandleS3MountedMapCart2() {
+      let vm = this;
+      /*
+    102.06811287312502 24.97216506413337 1569.1730185409224
+demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:1012 102.06814093688459 24.972130263176506 1569.1964102705317
+demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
+    */
+      let userX = 102.06814093688459 - 102.06811287312502;
+      let userY = 24.972130263176506 - 24.97216506413337;
+      let userZ = 1569.1964102705317 - 1569.1730185409224;
+      let arr = [{
+        x: x - userX,
+        y: y - userY,
+        z: z - userZ
+      }, {
+        x, y, z
+      }
+      ]
+      arr.forEach((item)=>{
+        let {x,y,z} = item
+        var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        cart = viewer.entities.add({
+          model: {
+            uri:
+                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+            minimumPixelSize: 32
+          },
+          viewFrom: new Cesium.Cartesian3(x, y, z),
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                  position,
+                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          ),
+        });
+        isCarts.push(cart);
+        vm.isCarts.push(1);
+      })
+
     },
     HandleS3MountedMapCart() {
       let vm = this;
@@ -1195,16 +1291,22 @@ z: 2693548.99315424
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
-        console.log(feature, scene.camera, scene.Cartesian3);
-        var titlei = Cesium.defaultValue(feature.Z, "");
-        var description = Cesium.defaultValue(feature.USERID, "");
-        console.log(title, description);
-        title.innerText = titlei;
-        des.innerText = description;
-        myimg.src =
-          "http://localhost:8090/iserver/iClient/for3D/webgl/zh/examples/images/" +
-          title +
-          ".jpg";
+        vm.$confirm(`这个是房屋详情XXXX`, "提示", {
+          type: "success",
+          showCancelButton: false,
+          showConfirmButton: false,
+          showClose: false
+        });
+        // console.log(feature, scene.camera, scene.Cartesian3);
+        // var titlei = Cesium.defaultValue(feature.Z, "");
+        // var description = Cesium.defaultValue(feature.USERID, "");
+        // console.log(title, description);
+        // title.innerText = titlei;
+        // des.innerText = description;
+        // myimg.src =
+        //   "http://localhost:8090/iserver/iClient/for3D/webgl/zh/examples/images/" +
+        //   title +
+        //   ".jpg";
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
@@ -1220,12 +1322,20 @@ z: 2693548.99315424
         if (vm.Status.isMapCartPanel) {
           vm.HandleS3MountedMapCart();
         }
+        if (vm.Status.isMapCartPanel2) {
+          vm.HandleS3MountedMapCart2();
+        }
+        if (vm.Status.isMapCartPanel3) {
+          vm.HandleS3MountedMapCart3();
+        }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       handler.setInputAction(function (e) {
         vm.Status.isMapCartPanel = false;
         vm.isFilterImg = true;
-        vm.demo3Menu = true;
-        vm.demo3MenuItem = false;
+        vm.Status.isMapCartPanel2 = false;
+        vm.isFilterImg2 = true;
+        vm.Status.isMapCartPanel3 = false;
+        vm.isFilterImg3 = true;
       },Cesium.ScreenSpaceEventType.RIGHT_CLICK)
     }
   }
@@ -1290,13 +1400,11 @@ z: 2693548.99315424
 .resource-deployment-Panel {
   position: absolute;
   width: 260px;
-  top: 0;
+  top: 200px;
   left: 8px;
-  bottom: 0;
-  margin: auto;
-  border-radius: 18px;
-  height: 70%;
+  border-radius: 7px;
   background: #fff;
+  padding-bottom: 10px;
 }
 .resource-deployment-Panel-title {
   font-size: 19px;
@@ -1310,8 +1418,23 @@ z: 2693548.99315424
   width: 100%;
 }
 .resource-deployment-Panel-imgs {
-  padding: 8px;
-  width: 95%;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.resource-deployment-Panel-imgs >div{
+  font-size: 19px;
+  color: rgb(6, 106, 117);
+  padding: 15px;
+  font-family: "FranchiseRegular", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px solid rgb(6, 106, 117);
+  border-left: 1px solid rgb(6, 106, 117);
+  border-right: 1px solid rgb(6, 106, 117);
+}
+.resource-deployment-Panel-imgs >div:last-of-type{
+  border-bottom: 1px solid rgb(6, 106, 117);
 }
 .filterImg {
   filter: grayscale(100%);
@@ -1321,7 +1444,9 @@ z: 2693548.99315424
   flex-wrap:wrap;
   margin-top: 15px;
  }
-
+.panelImg1{
+  background: #0e90d2;
+}
 .KZCart-button{
   width: 50%;
   padding: 8px;
