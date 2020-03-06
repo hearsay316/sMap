@@ -30,13 +30,13 @@
       />
       <h2 id="title"></h2>
       <p id="des" class="word"></p>
-<!--      <audio controls="controls">-->
-<!--        <source-->
-<!--          src="http://support.supermap.com.cn:8090/iserver/iClient/for3D/webgl/zh/examples/media/song.mp3"-->
-<!--          type="audio/mpeg"-->
-<!--        />-->
-<!--        Your browser does not support the audio tag.-->
-<!--      </audio>-->
+      <!--      <audio controls="controls">-->
+      <!--        <source-->
+      <!--          src="http://support.supermap.com.cn:8090/iserver/iClient/for3D/webgl/zh/examples/media/song.mp3"-->
+      <!--          type="audio/mpeg"-->
+      <!--        />-->
+      <!--        Your browser does not support the audio tag.-->
+      <!--      </audio>-->
     </blockquote>
     <div class="S3-move">
       <el-button
@@ -104,10 +104,20 @@
         </button>
       </div>
       <div class="demo3-menu-item-Resource-deployment">
-        <button @click="ResourceDeployment" type="button" :class="{ black: !demo3MenuItemResourceDeployment }" class="button">
+        <button
+          @click="ResourceDeployment"
+          type="button"
+          :class="{ black: !demo3MenuItemResourceDeployment }"
+          class="button"
+        >
           资源部署
         </button>
-        <button @click="resourceDeploymentLoadPanelFuc" type="button" :class="{ black: !resourceDeploymentLoadPanel }" class="button">
+        <button
+          @click="resourceDeploymentLoadPanelFuc"
+          type="button"
+          :class="{ black: !resourceDeploymentLoadPanel }"
+          class="button"
+        >
           资源控制面板
         </button>
       </div>
@@ -136,24 +146,39 @@
         </div>
       </div>
     </div>
-    <div class="resource-deployment-Panel" v-if="demo3MenuItemResourceDeployment">
+    <div
+      class="resource-deployment-Panel"
+      v-if="demo3MenuItemResourceDeployment"
+    >
       <div class="resource-deployment-Panel-title">
         模型库
       </div>
       <div></div>
       <div class="resource-deployment-Panel-imgs">
-        <div @click="resourceDeploymentPanelImg()" :class="{panelImg1:!isFilterImg}" >
-         小车1
+        <div
+          @click="resourceDeploymentPanelImg()"
+          :class="{ panelImg1: !isFilterImg }"
+        >
+          小车1
         </div>
-        <div @click="resourceDeploymentPanelImg2()" :class="{panelImg1:!isFilterImg2}" >
+        <div
+          @click="resourceDeploymentPanelImg2()"
+          :class="{ panelImg1: !isFilterImg2 }"
+        >
           小车2
         </div>
-        <div @click="resourceDeploymentPanelImg3()" :class="{panelImg1:!isFilterImg3}">
+        <div
+          @click="resourceDeploymentPanelImg3()"
+          :class="{ panelImg1: !isFilterImg3 }"
+        >
           小车3
         </div>
       </div>
     </div>
-    <div class="resource-deployment-load-Panel" v-if="resourceDeploymentLoadPanel" >
+    <div
+      class="resource-deployment-load-Panel"
+      v-if="resourceDeploymentLoadPanel"
+    >
       <div class="resource-deployment-Panel-title">
         资源控制面板
       </div>
@@ -181,7 +206,7 @@
       </div>
       <div v-if="value" class="KZCart">
         <div
-                class="KZCart-button"
+          class="KZCart-button"
           v-for="(cart, index) in this[`KZCart${value - 0 + 1}s`]"
           :key="index"
         >
@@ -381,8 +406,8 @@ export default {
   },
   data() {
     return {
-      resourceDeploymentLoadPanel:false,
-      demo3MenuItemResourceDeployment:false,
+      resourceDeploymentLoadPanel: false,
+      demo3MenuItemResourceDeployment: false,
       options: [
         {
           value: "0",
@@ -402,8 +427,8 @@ export default {
       KZCart2s: [],
       KZCart3s: [],
       isFilterImg: true,
-      isFilterImg2:true,
-      isFilterImg3:true,
+      isFilterImg2: true,
+      isFilterImg3: true,
       range: 0,
       demo3MenuHeight: false,
       demo3MenuArea: false,
@@ -420,9 +445,9 @@ export default {
         isMapFire: false,
         isMapCart: false,
         isMapSystem: true,
-        isMapCartPanel:false,
-        isMapCartPanel2:false,
-        isMapCartPanel3:false,
+        isMapCartPanel: false,
+        isMapCartPanel2: false,
+        isMapCartPanel3: false
       },
       MapFireXYZ: {
         x: 102.07025202712828,
@@ -442,8 +467,8 @@ export default {
     KZCartButton(array, cart, index) {
       let arr = [...this[array]];
       console.log(array, cart, index);
-      console.log(this[array])
-      console.log(arr)
+      console.log(this[array]);
+      console.log(arr);
       if (arr[index] == 1) {
         arr[index] = 0;
         console.log(arr);
@@ -454,7 +479,7 @@ export default {
       KZ[array][index].show = !KZ[array][index].show;
     },
     KZCart2() {
-      this.KZCart2s=[];
+      this.KZCart2s = [];
       KZ.KZCart2s = [];
       KZCart2.forEach(xyz => {
         let { x, y, z, name } = xyz;
@@ -470,8 +495,8 @@ export default {
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position,
           orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                  position,
-                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
           )
         });
         KZ.KZCart2s.push(cart);
@@ -479,7 +504,7 @@ export default {
       });
     },
     KZCart3() {
-      this.KZCart3s=[];
+      this.KZCart3s = [];
       KZ.KZCart3s = [];
       KZCart3.forEach(xyz => {
         let { x, y, z, name } = xyz;
@@ -495,8 +520,8 @@ export default {
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position,
           orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                  position,
-                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
           )
         });
         KZ.KZCart3s.push(cart);
@@ -520,8 +545,8 @@ export default {
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position,
           orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                  position,
-                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
           )
         });
         KZ.KZCart1s.push(cart);
@@ -529,17 +554,17 @@ export default {
       });
     },
     watchValueCart(value) {
-     viewer.entities.removeAll();
+      viewer.entities.removeAll();
       this[watchArr[value]]();
     },
     changeOptions(value) {
       console.log(111, value);
     },
-    resourceDeploymentPanelImg3(){
+    resourceDeploymentPanelImg3() {
       this.Status.isMapCartPanel3 = !this.Status.isMapCartPanel3;
       this.isFilterImg3 = !this.isFilterImg3;
     },
-    resourceDeploymentPanelImg2(){
+    resourceDeploymentPanelImg2() {
       this.Status.isMapCartPanel2 = !this.Status.isMapCartPanel2;
       this.isFilterImg2 = !this.isFilterImg2;
     },
@@ -548,17 +573,17 @@ export default {
       this.Status.isMapCartPanel = !this.Status.isMapCartPanel;
       this.isFilterImg = !this.isFilterImg;
     },
-    resourceDeploymentLoadPanelFuc(){
+    resourceDeploymentLoadPanelFuc() {
       this.resourceDeploymentLoadPanel = !this.resourceDeploymentLoadPanel;
     },
     ResourceDeployment() {
-      this.demo3MenuItemResourceDeployment = !this.demo3MenuItemResourceDeployment;
+      this.demo3MenuItemResourceDeployment = !this
+        .demo3MenuItemResourceDeployment;
       this.demo3MenuPanel = false;
-        this.demo3MenuPanelIndex = -1;
+      this.demo3MenuPanelIndex = -1;
     },
     rotate(value) {
-
-      if(viewer.selectedEntity){
+      if (viewer.selectedEntity) {
         let entity = viewer.selectedEntity;
         if (!Cesium.defined(entity.currentPosition)) {
           var position = entity.position;
@@ -568,18 +593,17 @@ export default {
             secondsOfDay: 75352.37397817126
           });
         }
-        console.log(value ,26);
+        console.log(value, 26);
         entity.orientation = Cesium.Transforms.headingPitchRollQuaternion(
-                entity.currentPosition,
-                new Cesium.HeadingPitchRoll(value / 10, 0, 0)
+          entity.currentPosition,
+          new Cesium.HeadingPitchRoll(value / 10, 0, 0)
         );
-      //  localStorage.setItem("lastname", JSON.stringify(entity.orientation));
+        //  localStorage.setItem("lastname", JSON.stringify(entity.orientation));
         console.log(entity.orientation, entity.currentPosition);
       }
-
     },
     DynamicDrawing() {
-      this.demo3MenuItemResourceDeployment = false
+      this.demo3MenuItemResourceDeployment = false;
       this.demo3MenuPanel = !this.demo3MenuPanel;
       if (this.demo3MenuPanel) {
         this.demo3MenuPanelIndex = 89;
@@ -878,7 +902,7 @@ export default {
         carts.push(cart);
       });
     },
-    HandleS3MountedMapCart3(){
+    HandleS3MountedMapCart3() {
       let vm = this;
       /*
     102.06811287312502 24.97216506413337 1569.1730185409224
@@ -890,37 +914,42 @@ demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
       let userX = 102.06814093688459 - 102.06811287312502;
       let userY = 24.972130263176506 - 24.97216506413337;
       let userZ = 1569.1964102705317 - 1569.1730185409224;
-      let arr = [{
-        x: x - userX,
-        y: y - userY,
-        z: z - userZ
-      }, {
-        x, y, z
-      },{
-        x: x + userX,
-        y: y + userY,
-        z: z + userZ
-      }
-      ]
-      arr.forEach((item)=>{
-        let {x,y,z} = item
+      let arr = [
+        {
+          x: x - userX,
+          y: y - userY,
+          z: z - userZ
+        },
+        {
+          x,
+          y,
+          z
+        },
+        {
+          x: x + userX,
+          y: y + userY,
+          z: z + userZ
+        }
+      ];
+      arr.forEach(item => {
+        let { x, y, z } = item;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
         cart = viewer.entities.add({
           model: {
             uri:
-                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
             minimumPixelSize: 32
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position,
           orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                  position,
-                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
-          ),
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          )
         });
         isCarts.push(cart);
         vm.isCarts.push(1);
-      })
+      });
     },
     HandleS3MountedMapCart2() {
       let vm = this;
@@ -934,34 +963,37 @@ demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
       let userX = 102.06814093688459 - 102.06811287312502;
       let userY = 24.972130263176506 - 24.97216506413337;
       let userZ = 1569.1964102705317 - 1569.1730185409224;
-      let arr = [{
-        x: x - userX,
-        y: y - userY,
-        z: z - userZ
-      }, {
-        x, y, z
-      }
-      ]
-      arr.forEach((item)=>{
-        let {x,y,z} = item
+      let arr = [
+        {
+          x: x - userX,
+          y: y - userY,
+          z: z - userZ
+        },
+        {
+          x,
+          y,
+          z
+        }
+      ];
+      arr.forEach(item => {
+        let { x, y, z } = item;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
         cart = viewer.entities.add({
           model: {
             uri:
-                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+              "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
             minimumPixelSize: 32
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position,
           orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                  position,
-                  new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
-          ),
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+          )
         });
         isCarts.push(cart);
         vm.isCarts.push(1);
-      })
-
+      });
     },
     HandleS3MountedMapCart() {
       let vm = this;
@@ -975,9 +1007,9 @@ demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
         viewFrom: new Cesium.Cartesian3(x, y, z),
         position: position,
         orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                position,
-                new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
-        ),
+          position,
+          new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+        )
         /*
         *{_value: l, _hasClone: true, _hasEquals: true, _definitionChanged: r}
 definitionChanged: (...)
@@ -1303,10 +1335,10 @@ z: 2693548.99315424
         console.log(title, description);
         title.innerText = titlei;
         des.innerText = "这个房子";
-      //   myimg.src =
-      //     "http://localhost:8090/iserver/iClient/for3D/webgl/zh/examples/images/" +
-      //     title +
-      //     ".jpg";
+        //   myimg.src =
+        //     "http://localhost:8090/iserver/iClient/for3D/webgl/zh/examples/images/" +
+        //     title +
+        //     ".jpg";
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
@@ -1329,14 +1361,14 @@ z: 2693548.99315424
           vm.HandleS3MountedMapCart3();
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-      handler.setInputAction(function (e) {
+      handler.setInputAction(function(e) {
         vm.Status.isMapCartPanel = false;
         vm.isFilterImg = true;
         vm.Status.isMapCartPanel2 = false;
         vm.isFilterImg2 = true;
         vm.Status.isMapCartPanel3 = false;
         vm.isFilterImg3 = true;
-      },Cesium.ScreenSpaceEventType.RIGHT_CLICK)
+      }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
     }
   }
 };
@@ -1422,7 +1454,7 @@ z: 2693548.99315424
   width: 100%;
   box-sizing: border-box;
 }
-.resource-deployment-Panel-imgs >div{
+.resource-deployment-Panel-imgs > div {
   font-size: 19px;
   color: rgb(6, 106, 117);
   padding: 15px;
@@ -1433,23 +1465,23 @@ z: 2693548.99315424
   border-left: 1px solid rgb(6, 106, 117);
   border-right: 1px solid rgb(6, 106, 117);
 }
-.resource-deployment-Panel-imgs >div:last-of-type{
+.resource-deployment-Panel-imgs > div:last-of-type {
   border-bottom: 1px solid rgb(6, 106, 117);
 }
 .filterImg {
   filter: grayscale(100%);
 }
-.KZCart{
+.KZCart {
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   margin-top: 15px;
- }
-.panelImg1{
+}
+.panelImg1 {
   background: #0e90d2;
 }
-.KZCart-button{
+.KZCart-button {
   width: 50%;
   padding: 8px;
   box-sizing: border-box;
-  }
+}
 </style>

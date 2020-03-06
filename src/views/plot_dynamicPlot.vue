@@ -214,6 +214,8 @@
 
 <script>
 import Cesium from "Cesium";
+import {createCesium, setView} from "../config/Configuration";
+
 let viewer,
   serverUrl,
   plotting,
@@ -347,10 +349,19 @@ export default {
         Cesium.when(
           promise,
           function(layers) {
+            console.log(layers)
             if (!scene.pickPositionSupported) {
               alert("不支持深度拾取,属性查询功能无法使用！");
             }
-            layer = scene.layers.find("Config");
+            // 视角坐标检测 设置相机视角
+            // setView(scene,{x: -20183889.354184173,
+            //   y: 22645826.766457584,
+            //   z: 3223367.6070640916},{
+            //   heading: 5.662887035643514,
+            //   pitch: -1.4213836938199456,
+            //   roll: 9.769962616701378e-14
+            // })
+           let layer = scene.layers.find("Config");
             //设置属性查询参数
             layer.setQueryParameter({
               url:
@@ -358,19 +369,6 @@ export default {
               dataSourceName: "testMap",
               dataSetName: "New_Region",
               keyWord: "SmID"
-            });
-            //设置相机视角
-            scene.camera.setView({
-              destination: new Cesium.Cartesian3(
-                -20183889.354184173,
-                22645826.766457584,
-                3223367.6070640916
-              ),
-              orientation: {
-                heading: 5.662887035643514,
-                pitch: -1.4213836938199456,
-                roll: 9.769962616701378e-14
-              }
             });
           },
           function(e) {
@@ -389,7 +387,8 @@ export default {
     },
     loader() {
       //若本地没有标绘相关服务则可访问支持中心的iserver
-      viewer = new Cesium.Viewer("CesiumContainer");
+      viewer = createCesium("CesiumContainer");
+      //new Cesium.Viewer("CesiumContainer");
       scene = viewer.scene;
       window.scene = scene;
       //globe : Globe 获取地球对象。
