@@ -30,13 +30,13 @@
       />
       <h2 id="title"></h2>
       <p id="des" class="word"></p>
-      <audio controls="controls">
-        <source
-          src="http://support.supermap.com.cn:8090/iserver/iClient/for3D/webgl/zh/examples/media/song.mp3"
-          type="audio/mpeg"
-        />
-        Your browser does not support the audio tag.
-      </audio>
+<!--      <audio controls="controls">-->
+<!--        <source-->
+<!--          src="http://support.supermap.com.cn:8090/iserver/iClient/for3D/webgl/zh/examples/media/song.mp3"-->
+<!--          type="audio/mpeg"-->
+<!--        />-->
+<!--        Your browser does not support the audio tag.-->
+<!--      </audio>-->
     </blockquote>
     <div class="S3-move">
       <el-button
@@ -1291,22 +1291,22 @@ z: 2693548.99315424
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
-        vm.$confirm(`这个是房屋详情XXXX`, "提示", {
-          type: "success",
-          showCancelButton: false,
-          showConfirmButton: false,
-          showClose: false
-        });
+        // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
+        //   type: "success",
+        //   showCancelButton: false,
+        //   showConfirmButton: false,
+        //   showClose: false
+        // });
         // console.log(feature, scene.camera, scene.Cartesian3);
-        // var titlei = Cesium.defaultValue(feature.Z, "");
-        // var description = Cesium.defaultValue(feature.USERID, "");
-        // console.log(title, description);
-        // title.innerText = titlei;
-        // des.innerText = description;
-        // myimg.src =
-        //   "http://localhost:8090/iserver/iClient/for3D/webgl/zh/examples/images/" +
-        //   title +
-        //   ".jpg";
+        var titlei = Cesium.defaultValue(feature.Z, "");
+        var description = Cesium.defaultValue(feature.USERID, "");
+        console.log(title, description);
+        title.innerText = titlei;
+        des.innerText = "这个房子";
+      //   myimg.src =
+      //     "http://localhost:8090/iserver/iClient/for3D/webgl/zh/examples/images/" +
+      //     title +
+      //     ".jpg";
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
