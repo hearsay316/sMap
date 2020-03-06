@@ -15,7 +15,6 @@ export default {
   methods: {
     load() {
       var viewer = new Cesium.Viewer("cesiumContainer");
-
       //Set the random number seed for consistent results.
       Cesium.Math.setRandomNumberSeed(3);
 

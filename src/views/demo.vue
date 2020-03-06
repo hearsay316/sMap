@@ -84,17 +84,20 @@ let positionXYZ = [
   {
     x: 102.06943685862204,
     y: 24.969427388802274,
-    z: 1571.2370406630653
+    z: 1571.2370406630653,
+    name:"cart1"
   },
   {
     x: 102.06946361643989,
     y: 24.96939567838009,
-    z: 1571.213370078212
+    z: 1571.213370078212,
+    name:"cart2"
   },
   {
     x: 102.06953602518084,
     y: 24.969451096085642,
-    z: 1571.356784142299
+    z: 1571.356784142299,
+    name:"cart3"
   }
 ];
 let WaterParticleSystems = [];
@@ -289,7 +292,9 @@ export default {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
-        position: position
+        position: position,
+        name:"99999999999",
+        id:"id"
       });
       let viewModel = {
         emissionRate: 200,
@@ -338,7 +343,6 @@ export default {
           sizeInMeters: true
         })
       );
-
       viewer.scene.preUpdate.addEventListener(function(scene, time) {
         FireParticleSystem.modelMatrix = computeModelMatrix(FireEntity, time);
         // Account for any changes to the emitter model matrix.
@@ -375,9 +379,10 @@ export default {
       vm.Status.isMapFire = false;
       vm.Status.isMapCart = true;
       positionXYZ.forEach(xyz => {
-        let { x, y, z } = xyz;
+        let { x, y, z ,name} = xyz;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
         let cart = viewer.entities.add({
+          name:name,
           model: {
             uri:
               "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -393,6 +398,7 @@ export default {
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
+        name:"5555",
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -521,6 +527,17 @@ export default {
       var title = document.getElementById("title");
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
+      viewer.selectedEntityChanged.addEventListener(function(entity) {
+        if(entity){
+          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            showClose: false
+          });
+        }
+
+      });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
         console.log(feature, scene.camera, scene.Cartesian3); //Z: "1579.0816898133812"
@@ -537,7 +554,9 @@ export default {
       });
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
-        console.log(scene.camera, scene.Cartesian3);
+        var pick = viewer.scene.pick(e.position);
+       // console.log(pick)
+        //console.log(scene.camera, scene.Cartesian3);
         //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
         //viewer.entities.removeAll();
         //获取点击位置笛卡尔坐标

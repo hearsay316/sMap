@@ -23,10 +23,17 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### 地图的欸之参数
+### 地图的的之参数
        -20183889.354184173,
         22645826.766457584,
         3223367.6070640916
        heading: 5.662887035643514
        pitch: -1.4213836938199456
        roll: 9.769962616701378e-14
+
+
+1 测距 侧面 
+2 态势分析 箭头绘制  
+3 资源部署  (不需要详情) 
+4 多种资源显示隐藏 (点击详情) 
+5 流程 
