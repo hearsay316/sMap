@@ -561,8 +561,8 @@ export default {
       console.log(111, value);
     },
     resourceDeploymentPanelImg3() {
-      this.Status.isMapCartPanel3 = false;
-      this.isFilterImg3 = true
+      this.Status.isMapCartPanel2 = false;
+      this.isFilterImg2 = true
       this.Status.isMapCartPanel = false;
       this.isFilterImg = true
       this.Status.isMapCartPanel3 = !this.Status.isMapCartPanel3;
