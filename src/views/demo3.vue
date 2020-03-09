@@ -1242,7 +1242,7 @@ __proto__: Object */
       var infoboxContainer = document.getElementById("bubble");
       //初始化viewer部件
       viewer = new Cesium.Viewer("cesiumContainer");
-      viewer.customInfobox = infoboxContainer;
+    //  viewer.customInfobox = infoboxContainer;
       scene = viewer.scene;
       window.scene = scene;
       //globe : Globe 获取地球对象。
@@ -1335,6 +1335,7 @@ z: 2693548.99315424
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
+        console.log(feature)
         // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
         //   type: "success",
         //   showCancelButton: false,

@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div id="app"  >
+    <router-view  />
   </div>
 </template>
 <script>
@@ -8,6 +8,18 @@ import { initStats } from "./utils/base";
 export default {
   mounted() {
     initStats();
+    // this.$nextTick(()=>{
+    //   this.toggleFullScreen();
+    // })
+  },
+  methods: {
+    toggleFullScreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+      } else {
+        document.documentElement.requestFullscreen()
+      }
+    }
   }
 };
 </script>
