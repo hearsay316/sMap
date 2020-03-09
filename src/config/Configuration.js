@@ -3,14 +3,101 @@ import Cesium from "Cesium";
 /**
  *
  * @param idName
- * @returns {Cesium.Viewer}
+ * @returns {Cesium.Viewer}  idName div  id的值
  */
 export function createCesium(idName) {
   const viewer = new Cesium.Viewer(idName);
-  const scene = viewer.scene;
+  //const scene = viewer.scene;
   return viewer;
 }
 
+/**
+ *
+ * @param viewer  视图
+ * @param MapFireXYZ 火的坐标 创建火元素
+ * @param primitivesConfig 配置参数
+ */
+export function viewerMountedFire(viewer,MapFireXYZ,primitivesConfig) {
+  let { x, y, z } = MapFireXYZ;
+  var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+  console.log(viewer.entities);
+  const FireEntity = viewer.entities.add({
+    position: position,
+    name:"99999999999",
+    id:"id"
+  });
+  let viewModel = {
+    emissionRate: 200,
+    minimumParticleLife: 1.5,
+    maximumParticleLife: 1.8,
+    minimumSpeed: 7.0,
+    maximumSpeed: 9.0,
+    startScale: 3.0,
+    endScale: 1.5,
+    particleSize: 1
+  };
+  FireParticleSystem = scene.primitives.add(
+      new Cesium.ParticleSystem({
+        // 粒子的图片
+        image:
+            "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fire.png",
+        // 起始颜色
+        startColor: new Cesium.Color(1, 1, 1, 1),
+        // 结束颜色
+        endColor: new Cesium.Color(1, 0, 0, 0),
+        // 开始大小比例
+        startScale: viewModel.startScale,
+        // 结束大小比例
+        endScale: viewModel.endScale,
+        // 最小生命周期
+        minimumParticleLife: viewModel.minimumParticleLife,
+        // 最大生命周期
+        maximumParticleLife: viewModel.maximumParticleLife,
+        // 最小速度
+        minimumSpeed: viewModel.minimumSpeed,
+        // 最大速度
+        maximumSpeed: viewModel.maximumSpeed,
+        // 粒子大小
+        imageSize: new Cesium.Cartesian2(
+            viewModel.particleSize,
+            viewModel.particleSize
+        ),
+        // 粒子数量
+        emissionRate: viewModel.emissionRate,
+        lifetime: 16,
+        // 循环是否开启
+        loop: true,
+        // 粒子的释放方向
+        emitter: new Cesium.ConeEmitter(Cesium.Math.toRadians(45.0)),
+        // 是否以米为单位
+        sizeInMeters: true,
+        ...primitivesConfig
+      })
+  );
+  viewer.scene.preUpdate.addEventListener(function(scene, time) {
+    FireParticleSystem.modelMatrix = computeModelMatrix(FireEntity, time);
+    // Account for any changes to the emitter model matrix.
+    FireParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
+  });
+
+
+
+}
+export function viewerEntitiesAdd(viewer,{x,y,z},obj) {
+  var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+  let ent = viewer.entities.add({
+    model: {
+      uri:
+          "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+      minimumPixelSize: 32,
+      maximumScale: 0.5
+    },
+    viewFrom: new Cesium.Cartesian3(x, y, z),
+    position: position,
+    ...obj
+  });
+  return ent;
+}
 /**
  *
  * @param scene
@@ -20,11 +107,7 @@ export function createCesium(idName) {
  * @param dataSetName
  * @param keyWord
  */
-export function layer(
-  scene,
-  Config,
-  { url, dataSourceName, dataSetName, keyWord }
-) {
+export function layer(scene, Config, { url, dataSourceName, dataSetName, keyWord }) {
   layer = scene.layers.find(Config);
   //设置属性查询参数
   layer.setQueryParameter({
@@ -147,7 +230,7 @@ export function CesiumClickLeft(scene, func) {
 /**
  *
  * @param scene
- * @param func  RIGHT_CLICK canvas 点击事件
+ * @param func  RIGHT_CLICK canvas 右鼠标点击事件
  * @constructor
  */
 export function CesiumClickRight(scene, func) {
@@ -155,4 +238,24 @@ export function CesiumClickRight(scene, func) {
   handler.setInputAction(function(e) {
     func(e);
   }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+}
+
+
+function computeModelMatrix(entity, time) {
+  return entity.computeModelMatrix(time, new Cesium.Matrix4());
+}
+// 改变粒子系统的位置
+function computeEmitterModelMatrix() {
+  let emitterModelMatrix = new Cesium.Matrix4();
+  let translation = new Cesium.Cartesian3();
+  let rotation = new Cesium.Quaternion();
+  let hpr = new Cesium.HeadingPitchRoll();
+  let trs = new Cesium.TranslationRotationScale();
+  hpr = Cesium.HeadingPitchRoll.fromDegrees(0.0, 0.0, 0.0, hpr);
+  trs.translation = Cesium.Cartesian3.fromElements(-2, 0, 2, translation);
+  trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
+  return Cesium.Matrix4.fromTranslationRotationScale(
+      trs,
+      emitterModelMatrix
+  );
 }

@@ -433,7 +433,6 @@ export default {
     },
     HandleClickS3Move() {
       let vm = this;
-
       try {
         if (scene.camera) {
           scene.camera.setView({
