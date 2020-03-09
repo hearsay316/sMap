@@ -1,29 +1,25 @@
 import Cesium from "Cesium";
+
+/**
+ *
+ * @param idName
+ * @returns {Cesium.Viewer}
+ */
 export function createCesium(idName) {
   const viewer = new Cesium.Viewer(idName);
   const scene = viewer.scene;
   return viewer;
 }
-/*
-*   layer = scene.layers.find("Config");
-                    //设置属性查询参数
-                    layer.setQueryParameter({
-                        url:
-                            "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
-                        dataSourceName: "testMap",
-                        dataSetName: "New_Region",
-                        keyWord: "SmID"
-                    });
-*
-*
-* */
-/*
-*   url:
-            "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
-        dataSourceName: "testMap",
-        dataSetName: "New_Region",
-        keyWord: "SmID"
-* */
+
+/**
+ *
+ * @param scene
+ * @param Config
+ * @param url
+ * @param dataSourceName
+ * @param dataSetName
+ * @param keyWord
+ */
 export function layer(
   scene,
   Config,
@@ -38,6 +34,13 @@ export function layer(
     keyWord
   });
 }
+
+/**
+ *
+ * @param scene
+ * @param url
+ * @returns {Promise<unknown>}
+ */
 export function openMap(scene, url) {
   return new Promise((resolve, reject) => {
     try {
@@ -79,18 +82,7 @@ export function openMap(scene, url) {
     }
   });
 }
-/*
-*
-*  -20183889.354184173,
-            22645826.766457584,
-            3223367.6070640916
-* */
-/*
-*
-* heading: 5.662887035643514,
-            pitch: -1.4213836938199456,
-            roll: 9.769962616701378e-14
-* */
+
 /**
  * 设置相机视角
  * @param scene
@@ -116,40 +108,26 @@ export function setView(scene, position, angle) {
   }
 }
 
+
 /**
  *
  * @param viewer
- * @param measureEvt
- * @param activeEvt
- * @returns {Cesium.MeasureHandler}
+ * @param fuc   注册单体鼠标点击事件
  * @constructor
  */
-export function CesiumHandlerDis(viewer,measureEvt,activeEvt) {
-  let clampMode = 0;
-  //初始化测量距离
-  const handlerDis = new Cesium.MeasureHandler(
-      viewer,
-      Cesium.MeasureMode.Distance,
-      clampMode
-  );
-  //注册测距功能事件
-  handlerDis.measureEvt.addEventListener(function(result) {
-    measureEvt(result,handlerDis)
-  });
-  handlerDis.activeEvt.addEventListener(function(isActive) {
-    activeEvt(isActive,handlerDis)
-
-  });
-  return handlerDis;
-}
-// 注册单体鼠标点击事件
 export function CesiumClicklayer(viewer, fuc) {
   viewer.pickEvent.addEventListener(feature => {
     fuc(feature);
   });
 }
 
-// LEFT_CLICK canvas 点击事件
+
+/**
+ *
+ * @param scene
+ * @param func  LEFT_CLICK canvas 点击事件
+ * @constructor
+ */
 export function CesiumClickLeft(scene, func) {
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function(e) {
@@ -165,11 +143,11 @@ export function CesiumClickLeft(scene, func) {
     func(e,{x, y, z});
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
-// RIGHT_CLICK canvas 点击事件
+
 /**
  *
  * @param scene
- * @param func
+ * @param func  RIGHT_CLICK canvas 点击事件
  * @constructor
  */
 export function CesiumClickRight(scene, func) {

@@ -2,7 +2,7 @@
   <div class="index">
     <template v-for="(item, index) of router">
       <div class="index-item" v-if="item.path !== $route.path" :key="index">
-        <router-link class="index-item-title" :to="{ path: item.path }">{{
+        <router-link class="index-item-title" @click.native="toggleFullScreen" :to="{ path: item.path }">{{
           item.meta.title
         }}</router-link>
         <img :src="item.meta.icon" :alt="item.meta.title" />
@@ -22,6 +22,11 @@ export default {
     router() {
       // eslint-disable-next-line no-console
       return this.$router.options.routes;
+    }
+  },
+  methods:{
+    toggleFullScreen() {
+      document.documentElement.requestFullscreen()
     }
   }
 };

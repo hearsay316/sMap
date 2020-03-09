@@ -214,7 +214,8 @@
 
 <script>
 import Cesium from "Cesium";
-import {CesiumClicklayer, CesiumClickLeft, createCesium, openMap, setView ,CesiumHandlerDis} from "../config/Configuration";
+import {CesiumClicklayer, CesiumClickLeft, createCesium, openMap, setView } from "../config/Configuration";
+import {CesiumHandlerDis} from "../config/Measuring";
 let viewer,
   serverUrl,
   plotting,
@@ -373,19 +374,7 @@ export default {
           // });
           console.log(feature,123456)
         })
-        // setView(
-        //         scene,
-        //         {
-        //           x: -20183889.354184173,
-        //           y: 22645826.766457584,
-        //           z: 3223367.6070640916
-        //         },
-        //         {
-        //           heading: 5.662887035643514,
-        //           pitch: -1.4213836938199456,
-        //           roll: 9.769962616701378e-14
-        //         }
-        // );
+
       })
       let clampMode = 0;
       handlerDis = CesiumHandlerDis(viewer,(result,handlerDis)=>{

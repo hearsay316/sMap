@@ -1,5 +1,5 @@
 <template>
-  <div id="app"  >
+  <div id="app" ref="app"  >
     <router-view  />
   </div>
 </template>
@@ -11,16 +11,8 @@ export default {
     // this.$nextTick(()=>{
     //   this.toggleFullScreen();
     // })
-  },
-  methods: {
-    toggleFullScreen() {
-      if (document.fullscreenElement) {
-        document.exitFullscreen()
-      } else {
-        document.documentElement.requestFullscreen()
-      }
-    }
   }
+
 };
 </script>
 <style lang="stylus">
