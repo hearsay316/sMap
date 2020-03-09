@@ -697,16 +697,6 @@ export default {
         --index;
       }, 0);
     },
-    HandleS3Create(eventStatus) {
-      Object.keys(this.Status).forEach(item => {
-        console.log(item === eventStatus, item, eventStatus);
-        if (item === eventStatus) {
-          this.Status[eventStatus] = !this.Status[eventStatus];
-        } else {
-          this.Status[item] = false;
-        }
-      });
-    },
     HandleS3MountedWater(cart) {
       let vm = this;
       var emitterModelMatrix = new Cesium.Matrix4();

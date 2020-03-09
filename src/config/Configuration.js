@@ -252,3 +252,60 @@ function computeEmitterModelMatrix() {
   trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
   return Cesium.Matrix4.fromTranslationRotationScale(trs, emitterModelMatrix);
 }
+export function MountedMapCart(viewer,positionXYZ,length) {
+    let {x,y,z} = position;
+    /*
+  102.06811287312502 24.97216506413337 1569.1730185409224
+demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:1012 102.06814093688459 24.972130263176506 1569.1964102705317
+demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
+  */
+    const userX = 0.000028063759572205527;
+    const userY = -0.00003480095686470008;
+    const userZ = 0.02339172960932956;
+    const arrA = [];
+    for (let i = 0; i < length; i++) {
+        arrA.push({
+            x:i*userX + x,
+            y:i*userY + y,
+            z:i*userZ + z,
+        })
+    }
+    // let arr = [
+    //     {
+    //         x: x - userX,
+    //         y: y - userY,
+    //         z: z - userZ
+    //     },
+    //     {
+    //         x,
+    //         y,
+    //         z
+    //     },
+    //     {
+    //         x: x + userX,
+    //         y: y + userY,
+    //         z: z + userZ
+    //     }
+    // ];
+
+    arrA.forEach(item => {
+        let { x, y, z } = item;
+        var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+        cart = viewer.entities.add({
+            model: {
+                uri:
+                    "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+                minimumPixelSize: 32
+            },
+            viewFrom: new Cesium.Cartesian3(x, y, z),
+            position: position,
+            orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                position,
+                new Cesium.HeadingPitchRoll(26 / 10, 0, 0)
+            )
+        });
+        isCarts.push(cart);
+    });
+}
