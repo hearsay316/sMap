@@ -214,8 +214,18 @@
 
 <script>
 import Cesium from "Cesium";
-import {CesiumClicklayer, CesiumClickLeft, createCesium, openMap, setView } from "../config/Configuration";
-import {CesiumHandlerArea, CesiumHandlerDis, CesiumHandlerHeight} from "../config/Measuring";
+import {
+  CesiumClicklayer,
+  CesiumClickLeft,
+  createCesium,
+  openMap,
+  setView
+} from "../config/Configuration";
+import {
+  CesiumHandlerArea,
+  CesiumHandlerDis,
+  CesiumHandlerHeight
+} from "../config/Measuring";
 let viewer,
   serverUrl,
   plotting,
@@ -352,30 +362,39 @@ export default {
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       this.InitPlot(viewer, serverUrl);
-      openMap(scene,"http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace").then(res=>{
-        setView(scene,{x: -1209275.2260815133,
-          y: 5655635.755705864,
-          z: 2693069.1959136804},{
-          heading: 1.0893126058187814,
-          pitch: -0.4725302663268325,
-          roll: 4.884981308350689e-14
-        })
-        CesiumClickLeft(scene, (e,{x,y,z}) =>{
+      openMap(
+        scene,
+        "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
+      ).then(res => {
+        setView(
+          scene,
+          {
+            x: -1209275.2260815133,
+            y: 5655635.755705864,
+            z: 2693069.1959136804
+          },
+          {
+            heading: 1.0893126058187814,
+            pitch: -0.4725302663268325,
+            roll: 4.884981308350689e-14
+          }
+        );
+        CesiumClickLeft(scene, (e, { x, y, z }) => {
           console.log(x, y, z);
-        })
-        CesiumClicklayer(viewer,function (feature) {
+        });
+        CesiumClicklayer(viewer, function(feature) {
           // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
           //   type: "success",
           //   showCancelButton: false,
           //   showConfirmButton: false,
           //   showClose: false
           // });
-          console.log(feature,123456)
-        })
-      })
-      handlerDis = CesiumHandlerDis(viewer)  // handlerDis activate();是调用开始  clear()清除
-      handlerHeight = CesiumHandlerHeight(viewer)
-      handlerArea = CesiumHandlerArea(viewer)
+          console.log(feature, 123456);
+        });
+      });
+      handlerDis = CesiumHandlerDis(viewer); // handlerDis activate();是调用开始  clear()清除
+      handlerHeight = CesiumHandlerHeight(viewer);
+      handlerArea = CesiumHandlerArea(viewer);
 
       // //“Delete”按键删除选中标号
       // $(document).keydown(function(event) {

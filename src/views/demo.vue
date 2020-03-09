@@ -86,19 +86,19 @@ let positionXYZ = [
     x: 102.06943685862204,
     y: 24.969427388802274,
     z: 1571.2370406630653,
-    name:"cart1"
+    name: "cart1"
   },
   {
     x: 102.06946361643989,
     y: 24.96939567838009,
     z: 1571.213370078212,
-    name:"cart2"
+    name: "cart2"
   },
   {
     x: 102.06953602518084,
     y: 24.969451096085642,
     z: 1571.356784142299,
-    name:"cart3"
+    name: "cart3"
   }
 ];
 let WaterParticleSystems = [];
@@ -294,8 +294,8 @@ export default {
       console.log(viewer.entities);
       FireEntity = viewer.entities.add({
         position: position,
-        name:"99999999999",
-        id:"id"
+        name: "99999999999",
+        id: "id"
       });
       let viewModel = {
         emissionRate: 200,
@@ -380,10 +380,10 @@ export default {
       vm.Status.isMapFire = false;
       vm.Status.isMapCart = true;
       positionXYZ.forEach(xyz => {
-        let { x, y, z ,name} = xyz;
+        let { x, y, z, name } = xyz;
         var position = Cesium.Cartesian3.fromDegrees(x, y, z);
         let cart = viewer.entities.add({
-          name:name,
+          name: name,
           model: {
             uri:
               "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -399,7 +399,7 @@ export default {
     HandleS3MountedMapCart() {
       var position = Cesium.Cartesian3.fromDegrees(x, y, z);
       cart = viewer.entities.add({
-        name:"5555",
+        name: "5555",
         model: {
           uri:
             "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -528,7 +528,7 @@ export default {
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
       viewer.selectedEntityChanged.addEventListener(function(entity) {
-        if(entity){
+        if (entity) {
           vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
             type: "success",
             showCancelButton: false,
@@ -536,7 +536,6 @@ export default {
             showClose: false
           });
         }
-
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
@@ -555,7 +554,7 @@ export default {
       var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
       handler.setInputAction(function(e) {
         var pick = viewer.scene.pick(e.position);
-       // console.log(pick)
+        // console.log(pick)
         //console.log(scene.camera, scene.Cartesian3);
         //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
         //viewer.entities.removeAll();
@@ -591,8 +590,5 @@ export default {
   position: absolute;
   background: #fff;
   padding: 8px;
-}
-.bgcolor {
-  background: #00e5e5;
 }
 </style>

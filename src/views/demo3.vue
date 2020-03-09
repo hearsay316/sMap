@@ -563,26 +563,26 @@ export default {
     },
     resourceDeploymentPanelImg3() {
       this.Status.isMapCartPanel2 = false;
-      this.isFilterImg2 = true
+      this.isFilterImg2 = true;
       this.Status.isMapCartPanel = false;
-      this.isFilterImg = true
+      this.isFilterImg = true;
       this.Status.isMapCartPanel3 = !this.Status.isMapCartPanel3;
       this.isFilterImg3 = !this.isFilterImg3;
     },
     resourceDeploymentPanelImg2() {
       this.Status.isMapCartPanel3 = false;
-      this.isFilterImg3 = true
+      this.isFilterImg3 = true;
       this.Status.isMapCartPanel = false;
-      this.isFilterImg = true
+      this.isFilterImg = true;
       this.Status.isMapCartPanel2 = !this.Status.isMapCartPanel2;
       this.isFilterImg2 = !this.isFilterImg2;
     },
     resourceDeploymentPanelImg() {
       console.log("点击添加");
       this.Status.isMapCartPanel3 = false;
-      this.isFilterImg3 = true
+      this.isFilterImg3 = true;
       this.Status.isMapCartPanel2 = false;
-      this.isFilterImg2 = true
+      this.isFilterImg2 = true;
       this.Status.isMapCartPanel = !this.Status.isMapCartPanel;
       this.isFilterImg = !this.isFilterImg;
     },
@@ -916,8 +916,9 @@ export default {
           viewFrom: new Cesium.Cartesian3(x, y, z),
           position: position,
           orientation: Cesium.Transforms.headingPitchRollQuaternion(
-                  position,
-                  new Cesium.HeadingPitchRoll(60 / 10, 0, 0))
+            position,
+            new Cesium.HeadingPitchRoll(60 / 10, 0, 0)
+          )
         });
         carts.push(cart);
       });
@@ -1250,7 +1251,7 @@ __proto__: Object */
       var infoboxContainer = document.getElementById("bubble");
       //初始化viewer部件
       viewer = new Cesium.Viewer("cesiumContainer");
-    //  viewer.customInfobox = infoboxContainer;
+      //  viewer.customInfobox = infoboxContainer;
       scene = viewer.scene;
       window.scene = scene;
       //globe : Globe 获取地球对象。
@@ -1340,11 +1341,11 @@ z: 2693548.99315424
         //     showClose: false
         //   });
         // }
-        console.log(entity)
+        console.log(entity);
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
-        console.log(feature)
+        console.log(feature);
         // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
         //   type: "success",
         //   showCancelButton: false,
