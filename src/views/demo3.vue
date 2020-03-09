@@ -653,6 +653,10 @@ export default {
       this.demo3Menu = false;
       this.demo3MenuItem = true;
     },
+    /*orientation: Cesium.Transforms.headingPitchRollQuaternion(
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)  HandleS3Deploy
+          )*/
     HandleS3CreateFireFighting() {
       let vm = this;
       let { x, y, z } = MapFireXYZ;
@@ -910,7 +914,10 @@ export default {
             maximumScale: 0.5
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
-          position: position
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+                  position,
+                  new Cesium.HeadingPitchRoll(60 / 10, 0, 0))
         });
         carts.push(cart);
       });
