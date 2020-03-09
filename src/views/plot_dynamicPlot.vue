@@ -214,8 +214,7 @@
 
 <script>
 import Cesium from "Cesium";
-import {createCesium, setView} from "../config/Configuration";
-
+import {createCesium, openMap,setView} from "../config/Configuration";
 let viewer,
   serverUrl,
   plotting,
@@ -226,6 +225,7 @@ let viewer,
   handlerHeight,
   scene,
   stylePanel;
+console.log(openMap)
 
 export default {
   name: "plot_dynamicPlot",
@@ -340,51 +340,52 @@ export default {
       stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
       window.stylePanel = stylePanel;
     },
-    openMAP() {
-      try {
-        //添加S3M图层服务
-        let promise = scene.open(
-          "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
-        );
-        Cesium.when(
-          promise,
-          function(layers) {
-            console.log(layers)
-            if (!scene.pickPositionSupported) {
-              alert("不支持深度拾取,属性查询功能无法使用！");
-            }
-            // 视角坐标检测 设置相机视角
-            // setView(scene,{x: -20183889.354184173,
-            //   y: 22645826.766457584,
-            //   z: 3223367.6070640916},{
-            //   heading: 5.662887035643514,
-            //   pitch: -1.4213836938199456,
-            //   roll: 9.769962616701378e-14
-            // })
-           let layer = scene.layers.find("Config");
-            //设置属性查询参数
-            layer.setQueryParameter({
-              url:
-                "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
-              dataSourceName: "testMap",
-              dataSetName: "New_Region",
-              keyWord: "SmID"
-            });
-          },
-          function(e) {
-            if (widget._showRenderLoopErrors) {
-              let title = "渲染时发生错误，已停止渲染。";
-              widget.showErrorPanel(title, undefined, e);
-            }
-          }
-        );
-      } catch (e) {
-        if (widget._showRenderLoopErrors) {
-          let title = "渲染时发生错误，已停止渲染.";
-          widget.showErrorPanel(title, undefined, e);
-        }
-      }
-    },
+    // openMAP() {
+    //   try {
+    //     //添加S3M图层服务
+    //     let promise = scene.open(
+    //       "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
+    //     );
+    //     Cesium.when(
+    //       promise,
+    //       function(layers) {
+    //         console.log(layers)
+    //         if (!scene.pickPositionSupported) {
+    //           alert("不支持深度拾取,属性查询功能无法使用！");
+    //         }
+    //         // 视角坐标检测 设置相机视角
+    //         // setView(scene,{x: -20183889.354184173,
+    //         //   y: 22645826.766457584,
+    //         //   z: 3223367.6070640916},{
+    //         //   heading: 5.662887035643514,
+    //         //   pitch: -1.4213836938199456,
+    //         //   roll: 9.769962616701378e-14
+    //         // })
+    //        let layer = scene.layers.find("Config");
+    //         //设置属性查询参数
+    //         layer.setQueryParameter({
+    //           url:
+    //             "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
+    //           dataSourceName: "testMap",
+    //           dataSetName: "New_Region",
+    //           keyWord: "SmID"
+    //         });
+    //       },
+    //       function(e) {
+    //         if (widget._showRenderLoopErrors) {
+    //           let title = "渲染时发生错误，已停止渲染。";
+    //           widget.showErrorPanel(title, undefined, e);
+    //         }
+    //       }
+    //     );
+    //   } catch (e) {
+    //     if (widget._showRenderLoopErrors) {
+    //       let title = "渲染时发生错误，已停止渲染.";
+    //       widget.showErrorPanel(title, undefined, e);
+    //     }
+    //   }
+    // },
+
     loader() {
       //若本地没有标绘相关服务则可访问支持中心的iserver
       viewer = createCesium("CesiumContainer");
@@ -396,7 +397,9 @@ export default {
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       this.InitPlot(viewer, serverUrl);
-      this.openMAP();
+      openMap(scene,"http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace").then(res=>{
+        console.log("zheng")
+      })
       let clampMode = 0;
       this.handler();
       this.handlerDis(clampMode);
