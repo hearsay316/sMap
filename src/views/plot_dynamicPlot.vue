@@ -241,7 +241,6 @@ export default {
       handlerArea && handlerArea.deactivate();
       handlerHeight && handlerHeight.deactivate();
     },
-
     distance() {
       this.deactiveAll();
       handlerDis && handlerDis.activate();
