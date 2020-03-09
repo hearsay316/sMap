@@ -215,7 +215,7 @@
 <script>
 import Cesium from "Cesium";
 import {CesiumClicklayer, CesiumClickLeft, createCesium, openMap, setView } from "../config/Configuration";
-import {CesiumHandlerDis} from "../config/Measuring";
+import {CesiumHandlerArea, CesiumHandlerDis, CesiumHandlerHeight} from "../config/Measuring";
 let viewer,
   serverUrl,
   plotting,
@@ -226,7 +226,6 @@ let viewer,
   handlerHeight,
   scene,
   stylePanel;
-console.log(openMap)
 
 export default {
   name: "plot_dynamicPlot",
@@ -374,126 +373,17 @@ export default {
           // });
           console.log(feature,123456)
         })
+      })
+      handlerDis = CesiumHandlerDis(viewer)  // handlerDis activate();是调用开始  clear()清除
+      handlerHeight = CesiumHandlerHeight(viewer)
+      handlerArea = CesiumHandlerArea(viewer)
 
-      })
-      let clampMode = 0;
-      handlerDis = CesiumHandlerDis(viewer,(result,handlerDis)=>{
-        console.log(result);
-        let dis = Number(result.distance);
-        let distance =
-                dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
-        handlerDis.disLabel.text = "距离:" + distance;
-      },(isActive,handlerDis)=>{
-        if (isActive == true) {
-          // viewer.enableCursorStyle鼠标在绘制的时候变为十字
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-                  .removeClass("measureCur")
-                  .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      })
-      //this.handlerDis(clampMode);
-      this.handlerArea(clampMode);
-      this.handlerHeight(clampMode);
       // //“Delete”按键删除选中标号
       // $(document).keydown(function(event) {
       //   if (event.keyCode === 46) {
       //     deleteSeleGeo();
       //   }
       // });
-    },
-    handlerArea(clampMode) {
-      //初始化测量面积
-      handlerArea = new Cesium.MeasureHandler(
-        viewer,
-        Cesium.MeasureMode.Area,
-        clampMode
-      );
-      handlerArea.measureEvt.addEventListener(function(result) {
-        let mj = Number(result.area);
-        let area =
-          mj > 1000000
-            ? (mj / 1000000).toFixed(2) + "km²"
-            : mj.toFixed(2) + "㎡";
-        handlerArea.areaLabel.text = "面积:" + area;
-      });
-      handlerArea.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
-    },
-    handlerHeight(clampMode) {
-      //初始化测量高度
-      handlerHeight = new Cesium.MeasureHandler(viewer, Cesium.MeasureMode.DVH);
-      handlerHeight.measureEvt.addEventListener(function(result) {
-        let distance =
-          result.distance > 1000
-            ? (result.distance / 1000).toFixed(2) + "km"
-            : result.distance + "m";
-        let vHeight =
-          result.verticalHeight > 1000
-            ? (result.verticalHeight / 1000).toFixed(2) + "km"
-            : result.verticalHeight + "m";
-        let hDistance =
-          result.horizontalDistance > 1000
-            ? (result.horizontalDistance / 1000).toFixed(2) + "km"
-            : result.horizontalDistance + "m";
-        handlerHeight.disLabel.text = "空间距离:" + distance;
-        handlerHeight.vLabel.text = "垂直高度:" + vHeight;
-        handlerHeight.hLabel.text = "水平距离:" + hDistance;
-      });
-      handlerHeight.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
-    },
-    handlerDis(clampMode) {
-      //初始化测量距离
-      handlerDis = new Cesium.MeasureHandler(
-        viewer,
-        Cesium.MeasureMode.Distance,
-        clampMode
-      );
-      //注册测距功能事件
-      handlerDis.measureEvt.addEventListener(function(result) {
-        console.log(result);
-        let dis = Number(result.distance);
-        let distance =
-          dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
-        handlerDis.disLabel.text = "距离:" + distance;
-      });
-      handlerDis.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
     }, //删除指定标号
     deleteSeleGeo() {
       plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);

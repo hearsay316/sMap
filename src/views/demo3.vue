@@ -1324,14 +1324,15 @@ z: 2693548.99315424
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
       viewer.selectedEntityChanged.addEventListener(function(entity) {
-        if (entity && viewer.selectedEntity.name) {
-          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
-            type: "success",
-            showCancelButton: false,
-            showConfirmButton: false,
-            showClose: false
-          });
-        }
+        // if (entity && viewer.selectedEntity.name) {
+        //   vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+        //     type: "success",
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     showClose: false
+        //   });
+        // }
+        console.log(entity)
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
