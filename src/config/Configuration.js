@@ -98,24 +98,25 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
 /**
  *
  * @param scene
- * @param Config
- * @param url
- * @param dataSourceName
- * @param dataSetName
- * @param keyWord
+ * @param Config  设置单体查询的方法
+ * @param obj
  */
 export function layer(
   scene,
   Config,
-  { url, dataSourceName, dataSetName, keyWord }
+  obj
 ) {
-  layer = scene.layers.find(Config);
+ let openLayer = scene.layers.find(Config);
   //设置属性查询参数
-  layer.setQueryParameter({
-    url,
-    dataSourceName,
-    dataSetName,
-    keyWord
+    /*  options  	Object	对象具有以下属性：
+    Name	         Type	Default	Description
+    url	             String		    optional数据服务url。
+    dataSourceName	 String		    optional数据源名称。
+    dataSetName	     String		    optional数据集名称。
+    isMerge	         Boolean	    optional该图层是否为合并数据集的，如果是则不用指定数据集名称。
+    hasGeometry	     Boolean  false	optional属性查询返回结果是否包含几何信息。*/
+  openLayer.setQueryParameter({
+    ...obj
   });
 }
 
