@@ -126,9 +126,11 @@ export function layer(
  * @param Config
  * @param positionXYZ
  * @param Angle
+ * @param mountedOpenMap
+ * @param errorOpenMap
  * @returns {Promise<unknown>}
  */
-export function openMap(scene, url, Config, positionXYZ, Angle, mounteOpenMap) {
+export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,errorOpenMap) {
   return new Promise((resolve, reject) => {
     try {
       //添加S3M图层服务
@@ -161,10 +163,11 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mounteOpenMap) {
               roll
             }
           );
-          mounteOpenMap && mounteOpenMap(layers);
+          mountedOpenMap && mountedOpenMap(layers);
           resolve(layers);
         },
         function(e) {
+          errorOpenMap&&errorOpenMap(e);
           if (widget._showRenderLoopErrors) {
             let title = "渲染时发生错误，已停止渲染。";
             reject(title);
@@ -173,6 +176,7 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mounteOpenMap) {
         }
       );
     } catch (e) {
+      errorOpenMap&&errorOpenMap();
       if (widget._showRenderLoopErrors) {
         let title = "渲染时发生错误，已停止渲染.";
         widget.showErrorPanel(title, undefined, e);

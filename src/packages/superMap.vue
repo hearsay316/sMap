@@ -16,7 +16,8 @@ export default {
     Angle: Object,
     mountedWebgl: Function,
     createWebgl: Function,
-    mounteOpenMap: Function
+    mountedOpenMap: Function,
+    errorOpenMap:Function
   },
   async mounted() {
     this.createWebgl && this.createWebgl();
@@ -30,7 +31,8 @@ export default {
       this.Config,
       this.positionXYZ,
       this.Angle,
-      this.mounteOpenMap
+      this.mountedOpenMap,
+        this.errorOpenMap
     );
   },
   methods: {

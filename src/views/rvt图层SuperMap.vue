@@ -6,7 +6,8 @@
     :Config="Config"
     :positionXYZ="positionXYZ"
     :Angle="Angle"
-    :mounteOpenMap="mounteOpenMap"
+    :mountedOpenMap="mountedOpenMap"
+    :errorOpenMap = "errorOpenMap"
   ></superMap>
 </template>
 
@@ -35,8 +36,9 @@ export default {
     mountedWebgl(viewer) {
       console.log(viewer, 666);
     },
-    mounteOpenMap() {},
-    createWebgl() {}
+    mountedOpenMap() {},
+    createWebgl() {},
+    errorOpenMap(e){}
   }
 };
 </script>
