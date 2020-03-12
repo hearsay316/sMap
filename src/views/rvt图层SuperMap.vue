@@ -1,11 +1,11 @@
 <template>
   <superMap
     :url="url"
-    :createWebgl="createWebgl"
-    :mountedWebgl="mountedWebgl"
     :Config="Config"
     :positionXYZ="positionXYZ"
     :Angle="Angle"
+    :createWebgl="createWebgl"
+    :mountedWebgl="mountedWebgl"
     :mountedOpenMap="mountedOpenMap"
     :errorOpenMap = "errorOpenMap"
   ></superMap>
@@ -16,8 +16,8 @@ export default {
   name: "rvt图层SuperMap.vue",
   data() {
     return {
-      url:
-        "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace",
+      url: //http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace
+        "http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace",
       positionXYZ: {
         x: -1209550.6137063126,
         y: 5655779.937735093,

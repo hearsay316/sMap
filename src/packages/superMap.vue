@@ -26,7 +26,7 @@ export default {
     this.mountedWebgl && this.mountedWebgl(viewer);
     let scene = viewer.scene;
     await this.openMap(
-      scene,
+        viewer,
       this.url,
       this.Config,
       this.positionXYZ,

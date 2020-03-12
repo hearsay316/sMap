@@ -109,7 +109,7 @@ export function layer(
   Config,
   { url, dataSourceName, dataSetName, keyWord }
 ) {
-  layer = scene.layers.find(Config);
+ let layer = scene.layers.find(Config);
   //设置属性查询参数
   layer.setQueryParameter({
     url,
@@ -121,7 +121,7 @@ export function layer(
 
 /**
  *
- * @param scene
+ * @param viewer
  * @param url
  * @param Config
  * @param positionXYZ
@@ -130,7 +130,8 @@ export function layer(
  * @param errorOpenMap
  * @returns {Promise<unknown>}
  */
-export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,errorOpenMap) {
+export function openMap(viewer, url, Config, positionXYZ, Angle, mountedOpenMap ,errorOpenMap) {
+  let scene = viewer.scene;
   return new Promise((resolve, reject) => {
     try {
       //添加S3M图层服务
@@ -150,8 +151,7 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
           //   dataSetName: "New_Region",
           //   keyWord: "SmID"
           // });
-          var layer = scene.layers.find(Config);
-          const sceneLayer = layer;
+         // var layer = scene.layers.find(Config);
           let { x, y, z } = positionXYZ;
           let { heading, pitch, roll } = Angle;
           setView(
@@ -163,7 +163,7 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
               roll
             }
           );
-          mountedOpenMap && mountedOpenMap(layers);
+          mountedOpenMap && mountedOpenMap(viewer);
           resolve(layers);
         },
         function(e) {
@@ -215,7 +215,6 @@ export function setView(scene, position, angle) {
         roll
       }
     });
-    console.log(55555555555555555555);
   } else {
     throw new error("setView 参数不对");
   }
