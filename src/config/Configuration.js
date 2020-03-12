@@ -128,13 +128,7 @@ export function layer(
  * @param Angle
  * @returns {Promise<unknown>}
  */
-export function openMap(
-  scene,
-  url,
-  Config,
-  positionXYZ,
-  Angle
-) {
+export function openMap(scene, url, Config, positionXYZ, Angle, mounteOpenMap) {
   return new Promise((resolve, reject) => {
     try {
       //添加S3M图层服务
@@ -156,10 +150,8 @@ export function openMap(
           // });
           var layer = scene.layers.find(Config);
           const sceneLayer = layer;
-          let {x,y,z} = positionXYZ;
-          let { heading,
-              pitch,
-              roll} = Angle;
+          let { x, y, z } = positionXYZ;
+          let { heading, pitch, roll } = Angle;
           setView(
             scene,
             { x, y, z },
@@ -169,7 +161,7 @@ export function openMap(
               roll
             }
           );
-
+          mounteOpenMap && mounteOpenMap(layers);
           resolve(layers);
         },
         function(e) {

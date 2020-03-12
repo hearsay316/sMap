@@ -1,6 +1,6 @@
 <template>
-  <div id="app" ref="app"  >
-    <router-view  />
+  <div id="app" ref="app">
+    <router-view />
   </div>
 </template>
 <script>
@@ -12,7 +12,6 @@ export default {
     //   this.toggleFullScreen();
     // })
   }
-
 };
 </script>
 <style lang="stylus">

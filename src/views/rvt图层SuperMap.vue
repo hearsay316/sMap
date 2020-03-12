@@ -1,14 +1,18 @@
 <template>
-  <div class="rvt">
-    <div id="cesiumContainer"></div>
-  </div>
+  <superMap
+    :url="url"
+    :createWebbgl="createWebbgl"
+    :mountedWebgl="mountedWebgl"
+    :Config="Config"
+    :positionXYZ="positionXYZ"
+    :Angle="Angle"
+    :mounteOpenMap="mounteOpenMap"
+  ></superMap>
 </template>
 
 <script>
-let viewer, scene;
-import * as map from "../config/Configuration";
 export default {
-  name: "rvt图层",
+  name: "rvt图层SuperMap.vue",
   data() {
     return {
       url:
@@ -26,19 +30,13 @@ export default {
       }
     };
   },
-  async mounted() {
-    viewer = this.createCesium("cesiumContainer");
-    scene = viewer.scene;
-    await this.openMap(
-      scene,
-      this.url,
-      this.Config,
-      this.positionXYZ,
-      this.Angle
-    );
-  },
+  mounted() {},
   methods: {
-    ...map
+    mountedWebgl(viewer) {
+      console.log(viewer, 666);
+    },
+    mounteOpenMap() {},
+    createWebgl() {}
   }
 };
 </script>

@@ -2,12 +2,9 @@
   <div class="index">
     <template v-for="(item, index) of router">
       <div class="index-item" v-if="item.path !== $route.path" :key="index">
-        <router-link
-          class="index-item-title"
-          @click.native="toggleFullScreen"
-          :to="{ path: item.path }"
-          >{{ item.meta.title }}</router-link
-        >
+        <router-link class="index-item-title" :to="{ path: item.path }">{{
+          item.meta.title
+        }}</router-link>
         <img :src="item.meta.icon" :alt="item.meta.title" />
       </div>
     </template>
@@ -28,9 +25,9 @@ export default {
     }
   },
   methods: {
-    toggleFullScreen() {
-     // document.documentElement.requestFullscreen();
-    }
+    // toggleFullScreen() {
+    //   // document.documentElement.requestFullscreen();
+    // }
   }
 };
 </script>

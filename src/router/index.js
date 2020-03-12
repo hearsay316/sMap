@@ -174,13 +174,29 @@ const routes = [
     meta: {
       title: "rvt图层",
       icon:
-          "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
     },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-        import(/* webpackChunkName: "ParticleWater" */ "../views/rvt图层.vue")
+      import(/* webpackChunkName: "ParticleWater" */ "../views/rvt图层.vue")
+  },
+  {
+    path: "/rvtSuperMap",
+    name: "rvt图层SuperMap",
+    meta: {
+      title: "rvt图层SuperMap",
+      icon:
+        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "ParticleWater" */ "../views/rvt图层SuperMap.vue"
+      )
   }
 ];
 
