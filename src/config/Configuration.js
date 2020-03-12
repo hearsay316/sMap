@@ -125,7 +125,7 @@ export function layer(
  * @param url
  * @returns {Promise<unknown>}
  */
-export function openMap(scene, url) {
+export function openMap(scene, url,Config) {
   return new Promise((resolve, reject) => {
     try {
       //添加S3M图层服务
@@ -138,13 +138,25 @@ export function openMap(scene, url) {
           }
           // scene.layers获取当前场景的三维切片缓存图层集合。
 
-          layer(scene, "Config", {
-            url:
-              "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
-            dataSourceName: "testMap",
-            dataSetName: "New_Region",
-            keyWord: "SmID"
-          });
+          // layer(scene, "Test", {
+          //   url:
+          //     "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
+          //   dataSourceName: "testMap",
+          //   dataSetName: "New_Region",
+          //   keyWord: "SmID"
+          // });
+            var layer = scene.layers.find(Config);
+            sceneLayer = layer;
+            //设置相机位置，定位至模型
+            scene.camera.setView({
+                //将经度、纬度、高度的坐标转换为笛卡尔坐标
+                destination : new Cesium.Cartesian3(-2653915.6463913363,3571045.726807149,4570293.566342328),
+                orientation : {
+                    heading : 2.1953426301495345,
+                    pitch : -0.33632707158103625,
+                    roll : 6.283185307179586
+                }
+            });
           resolve(layers);
         },
         function(e) {

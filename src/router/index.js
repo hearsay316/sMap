@@ -167,6 +167,20 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "ParticleWater" */ "../views/demo3.vue")
+  },
+  {
+    path: "/rvt",
+    name: "rvt图层",
+    meta: {
+      title: "rvt图层",
+      icon:
+          "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+        import(/* webpackChunkName: "ParticleWater" */ "../views/rvt图层.vue")
   }
 ];
 
