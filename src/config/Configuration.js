@@ -228,7 +228,7 @@ export function setView(scene, position, angle) {
  * @param fuc   注册单体鼠标点击事件
  * @constructor
  */
-export function CesiumClicklayer(viewer, fuc) {
+export function CesiumClickLayer(viewer, fuc) {
   viewer.pickEvent.addEventListener(feature => {
     fuc(feature);
   });
