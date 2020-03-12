@@ -30,7 +30,17 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
        heading: 5.662887035643514
        pitch: -1.4213836938199456
        roll: 9.769962616701378e-14
+###添加代理
+# git clone http://...
+git config --global http.proxy 'socks5://127.0.0.1:10809'
+# git clone https://...
+git config --global https.proxy 'socks5://127.0.0.1:10809'
+# git clone git://...
+git config --global core.gitproxy 'socks5://127.0.0.1:10809'
+###取消
+git config --global --unset http.proxy
 
+git config --global --unset https.proxy
 
 1 测距 侧面 
 2 态势分析 箭头绘制  
