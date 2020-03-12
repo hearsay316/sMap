@@ -1,7 +1,7 @@
 <template>
   <superMap
     :url="url"
-    :createWebbgl="createWebbgl"
+    :createWebgl="createWebgl"
     :mountedWebgl="mountedWebgl"
     :Config="Config"
     :positionXYZ="positionXYZ"
