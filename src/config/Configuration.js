@@ -277,7 +277,16 @@ export function CesiumClickLeft(scene, func) {
 export function CesiumClickRight(scene, func) {
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function(e) {
-    func(e);
+    let positions = scene.pickPosition(e.position);
+    //将笛卡尔坐标转化为经纬度坐标
+    let cartographic = Cesium.Cartographic.fromCartesian(positions);
+    let x = Cesium.Math.toDegrees(cartographic.longitude);
+    let y = Cesium.Math.toDegrees(cartographic.latitude);
+    let z = cartographic.height;
+    if (z < 0) {
+      z = 0;
+    }
+    func(e,{x,y,z});
   }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
 }
 
