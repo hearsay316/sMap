@@ -214,8 +214,18 @@
 
 <script>
 import Cesium from "Cesium";
-import {createCesium, setView} from "../config/Configuration";
-
+import {
+  CesiumClickLayer,
+  CesiumClickLeft,
+  createCesium,
+  openMap,
+  setView
+} from "../config/Configuration";
+import {
+  CesiumHandlerArea,
+  CesiumHandlerDis,
+  CesiumHandlerHeight
+} from "../config/Measuring";
 let viewer,
   serverUrl,
   plotting,
@@ -241,7 +251,6 @@ export default {
       handlerArea && handlerArea.deactivate();
       handlerHeight && handlerHeight.deactivate();
     },
-
     distance() {
       this.deactiveAll();
       handlerDis && handlerDis.activate();
@@ -340,52 +349,9 @@ export default {
       stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
       window.stylePanel = stylePanel;
     },
-    openMAP() {
-      try {
-        //添加S3M图层服务
-        let promise = scene.open(
-          "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
-        );
-        Cesium.when(
-          promise,
-          function(layers) {
-            console.log(layers)
-            if (!scene.pickPositionSupported) {
-              alert("不支持深度拾取,属性查询功能无法使用！");
-            }
-            // 视角坐标检测 设置相机视角
-            // setView(scene,{x: -20183889.354184173,
-            //   y: 22645826.766457584,
-            //   z: 3223367.6070640916},{
-            //   heading: 5.662887035643514,
-            //   pitch: -1.4213836938199456,
-            //   roll: 9.769962616701378e-14
-            // })
-           let layer = scene.layers.find("Config");
-            //设置属性查询参数
-            layer.setQueryParameter({
-              url:
-                "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
-              dataSourceName: "testMap",
-              dataSetName: "New_Region",
-              keyWord: "SmID"
-            });
-          },
-          function(e) {
-            if (widget._showRenderLoopErrors) {
-              let title = "渲染时发生错误，已停止渲染。";
-              widget.showErrorPanel(title, undefined, e);
-            }
-          }
-        );
-      } catch (e) {
-        if (widget._showRenderLoopErrors) {
-          let title = "渲染时发生错误，已停止渲染.";
-          widget.showErrorPanel(title, undefined, e);
-        }
-      }
-    },
+
     loader() {
+      let vm = this;
       //若本地没有标绘相关服务则可访问支持中心的iserver
       viewer = createCesium("CesiumContainer");
       //new Cesium.Viewer("CesiumContainer");
@@ -396,126 +362,47 @@ export default {
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       this.InitPlot(viewer, serverUrl);
-      this.openMAP();
-      let clampMode = 0;
-      this.handler();
-      this.handlerDis(clampMode);
-      this.handlerArea(clampMode);
-      this.handlerHeight(clampMode);
+      openMap({
+        viewer,
+        url:
+          "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
+      }).then(res => {
+        setView(
+          scene,
+          {
+            x: -1209275.2260815133,
+            y: 5655635.755705864,
+            z: 2693069.1959136804
+          },
+          {
+            heading: 1.0893126058187814,
+            pitch: -0.4725302663268325,
+            roll: 4.884981308350689e-14
+          }
+        );
+        CesiumClickLeft(scene, (e, { x, y, z }) => {
+          console.log(x, y, z);
+        });
+        CesiumClickLayer(viewer, function(feature) {
+          // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
+          //   type: "success",
+          //   showCancelButton: false,
+          //   showConfirmButton: false,
+          //   showClose: false
+          // });
+          console.log(feature, 123456);
+        });
+      });
+      handlerDis = CesiumHandlerDis(viewer); // handlerDis activate();是调用开始  clear()清除
+      handlerHeight = CesiumHandlerHeight(viewer);
+      handlerArea = CesiumHandlerArea(viewer);
+
       // //“Delete”按键删除选中标号
       // $(document).keydown(function(event) {
       //   if (event.keyCode === 46) {
       //     deleteSeleGeo();
       //   }
       // });
-    },
-    handlerArea(clampMode) {
-      //初始化测量面积
-      handlerArea = new Cesium.MeasureHandler(
-        viewer,
-        Cesium.MeasureMode.Area,
-        clampMode
-      );
-      handlerArea.measureEvt.addEventListener(function(result) {
-        let mj = Number(result.area);
-        let area =
-          mj > 1000000
-            ? (mj / 1000000).toFixed(2) + "km²"
-            : mj.toFixed(2) + "㎡";
-        handlerArea.areaLabel.text = "面积:" + area;
-      });
-      handlerArea.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
-    },
-    handlerHeight(clampMode) {
-      //初始化测量高度
-      handlerHeight = new Cesium.MeasureHandler(viewer, Cesium.MeasureMode.DVH);
-      handlerHeight.measureEvt.addEventListener(function(result) {
-        let distance =
-          result.distance > 1000
-            ? (result.distance / 1000).toFixed(2) + "km"
-            : result.distance + "m";
-        let vHeight =
-          result.verticalHeight > 1000
-            ? (result.verticalHeight / 1000).toFixed(2) + "km"
-            : result.verticalHeight + "m";
-        let hDistance =
-          result.horizontalDistance > 1000
-            ? (result.horizontalDistance / 1000).toFixed(2) + "km"
-            : result.horizontalDistance + "m";
-        handlerHeight.disLabel.text = "空间距离:" + distance;
-        handlerHeight.vLabel.text = "垂直高度:" + vHeight;
-        handlerHeight.hLabel.text = "水平距离:" + hDistance;
-      });
-      handlerHeight.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
-    },
-    handler() {
-      let handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
-      handler.setInputAction(function(e) {
-        console.log(scene.camera, scene.Cartesian3);
-        //首先移除之前添加的点 需要if 一下 在添加小车的时候不能删除点
-        //viewer.entities.removeAll();
-        //获取点击位置笛卡尔坐标
-        let positions = scene.pickPosition(e.position);
-        //将笛卡尔坐标转化为经纬度坐标
-        let cartographic = Cesium.Cartographic.fromCartesian(positions);
-        let x = Cesium.Math.toDegrees(cartographic.longitude);
-        let y = Cesium.Math.toDegrees(cartographic.latitude);
-        let z = cartographic.height;
-        if (z < 0) {
-          z = 0;
-        }
-        console.log(x, y, z);
-      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-    },
-    handlerDis(clampMode) {
-      //初始化测量距离
-      handlerDis = new Cesium.MeasureHandler(
-        viewer,
-        Cesium.MeasureMode.Distance,
-        clampMode
-      );
-      //注册测距功能事件
-      handlerDis.measureEvt.addEventListener(function(result) {
-        console.log(result);
-        let dis = Number(result.distance);
-        let distance =
-          dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
-        handlerDis.disLabel.text = "距离:" + distance;
-      });
-      handlerDis.activeEvt.addEventListener(function(isActive) {
-        if (isActive == true) {
-          viewer.enableCursorStyle = false;
-          viewer._element.style.cursor = "";
-          $("body")
-            .removeClass("measureCur")
-            .addClass("measureCur");
-        } else {
-          viewer.enableCursorStyle = true;
-          $("body").removeClass("measureCur");
-        }
-      });
     }, //删除指定标号
     deleteSeleGeo() {
       plottingLayer.removeGeoGraphicObject(plottingLayer.selectedFeature);
@@ -551,4 +438,5 @@ export default {
 .propertygrid {
   overflow: auto;
 }
+
 </style>

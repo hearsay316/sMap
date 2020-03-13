@@ -23,6 +23,11 @@ export default {
       // eslint-disable-next-line no-console
       return this.$router.options.routes;
     }
+  },
+  methods: {
+    // toggleFullScreen() {
+    //   // document.documentElement.requestFullscreen();
+    // }
   }
 };
 </script>
