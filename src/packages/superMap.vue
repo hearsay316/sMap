@@ -21,7 +21,8 @@ export default {
     mountedOpenMap: Function,
     errorOpenMap: Function,
     RegCesiumClickLayer: Function,
-    RegCesiumClickLeft: Function
+    RegCesiumClickLeft: Function,
+    RegCesiumClickRight: Function
   },
   async mounted() {
     this.createWebgl && this.createWebgl(this);
@@ -45,6 +46,8 @@ export default {
       });
     this.RegCesiumClickLeft &&
       this.CesiumClickLeft(scene, this.RegCesiumClickLeft);
+    this.RegCesiumClickRight &&
+      this.CesiumClickRight(scene, this.RegCesiumClickRight);
   },
   methods: {
     ...map

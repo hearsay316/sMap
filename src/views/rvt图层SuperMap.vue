@@ -10,6 +10,7 @@
     :errorOpenMap="errorOpenMap"
     :RegCesiumClickLayer="RegCesiumClickLayer"
     :RegCesiumClickLeft="RegCesiumClickLeft"
+    :RegCesiumClickRight="RegCesiumClickRight"
   >
     <template v-slot:bubble>这个是卡槽{{ layerTitle }}</template>
   </superMap>
@@ -55,8 +56,12 @@ export default {
   mounted() {},
   methods: {
     RegCesiumClickLeft(e, position) {
-      console.log("555", e, position);
+      console.log("Left", e, position);
     },
+    RegCesiumClickRight(e, position) {
+      console.log("Right", e, position);
+    },
+
     mountedWebgl(viewer) {
       console.log(viewer, 666);
     },
