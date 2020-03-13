@@ -17,24 +17,27 @@ export default {
     mountedWebgl: Function,
     createWebgl: Function,
     mountedOpenMap: Function,
-    errorOpenMap:Function
+    errorOpenMap: Function,
+    mountedCesiumClickLayer: Function
   },
   async mounted() {
     this.createWebgl && this.createWebgl();
     let viewer = this.createCesium("superMap");
     this.mountedWebgl && this.mountedWebgl(viewer);
     const scene = viewer.scene;
-    await this.openMap(
-            {
-              viewer,
-              url:this.url,
-              Config:this.Config,
-              positionXYZ:this.positionXYZ,
-              Angle:this.Angle,
-              mountedOpenMap:this.mountedOpenMap,
-              errorOpenMap:this.errorOpenMap
-            }
-    );
+    await this.openMap({
+      viewer,
+      url: this.url,
+      Config: this.Config,
+      positionXYZ: this.positionXYZ,
+      Angle: this.Angle,
+      mountedOpenMap: this.mountedOpenMap,
+      errorOpenMap: this.errorOpenMap
+    });
+    this.Config &&
+      this.CesiumClickLayer(viewer, feature => {
+        this.mountedCesiumClickLayer && this.mountedCesiumClickLayer(feature);
+      });
   },
   methods: {
     ...map
@@ -43,7 +46,8 @@ export default {
 </script>
 
 <style scoped>
-  .superMap,#superMap{
-    height: 100%;
-  }
+.superMap,
+#superMap {
+  height: 100%;
+}
 </style>

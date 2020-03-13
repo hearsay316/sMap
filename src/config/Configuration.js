@@ -82,7 +82,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
 }
 export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);
-  let ent = viewer.entities.add({
+  let entitie = viewer.entities.add({
     model: {
       uri:
         "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
@@ -93,13 +93,12 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
     position: position,
     ...obj
   });
-  return ent;
+  return entitie;
 }
 /**
  *
  * @param layers
  * @param Config
- * @param obj
  */
 export function observeLayer(layers, Config) {
   let { name, setQueryParameter } = Config;

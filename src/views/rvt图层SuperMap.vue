@@ -8,6 +8,7 @@
     :mountedWebgl="mountedWebgl"
     :mountedOpenMap="mountedOpenMap"
     :errorOpenMap="errorOpenMap"
+    :mountedCesiumClickLayer="mountedCesiumClickLayer"
   ></superMap>
 </template>
 
@@ -52,7 +53,10 @@ export default {
     },
     mountedOpenMap() {},
     createWebgl() {},
-    errorOpenMap(e) {}
+    errorOpenMap(e) {},
+    mountedCesiumClickLayer(feature){
+      console.log(feature)
+    },
   }
 };
 </script>
