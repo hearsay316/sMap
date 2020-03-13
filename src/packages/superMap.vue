@@ -20,7 +20,8 @@ export default {
     createWebgl: Function,
     mountedOpenMap: Function,
     errorOpenMap: Function,
-    mountedCesiumClickLayer: Function
+    RegCesiumClickLayer: Function,
+    RegCesiumClickLeft: Function
   },
   async mounted() {
     this.createWebgl && this.createWebgl(this);
@@ -40,8 +41,10 @@ export default {
     });
     this.Config &&
       this.CesiumClickLayer(viewer, feature => {
-        this.mountedCesiumClickLayer && this.mountedCesiumClickLayer(feature);
+        this.RegCesiumClickLayer && this.RegCesiumClickLayer(feature);
       });
+    this.RegCesiumClickLeft &&
+      this.CesiumClickLeft(scene, this.RegCesiumClickLeft);
   },
   methods: {
     ...map

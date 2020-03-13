@@ -8,9 +8,10 @@
     :mountedWebgl="mountedWebgl"
     :mountedOpenMap="mountedOpenMap"
     :errorOpenMap="errorOpenMap"
-    :mountedCesiumClickLayer="mountedCesiumClickLayer"
+    :RegCesiumClickLayer="RegCesiumClickLayer"
+    :RegCesiumClickLeft="RegCesiumClickLeft"
   >
-    <template v-slot:bubble> 这个是卡槽{{ layerTitle }} </template>
+    <template v-slot:bubble>这个是卡槽{{ layerTitle }}</template>
   </superMap>
 </template>
 
@@ -53,6 +54,9 @@ export default {
   },
   mounted() {},
   methods: {
+    RegCesiumClickLeft(e, position) {
+      console.log("555", e, position);
+    },
     mountedWebgl(viewer) {
       console.log(viewer, 666);
     },
@@ -61,7 +65,7 @@ export default {
       // vm是 superMap的this
     },
     errorOpenMap(e) {},
-    mountedCesiumClickLayer(feature) {
+    RegCesiumClickLayer(feature) {
       this.layerTitle = feature.SMID;
       console.log(feature);
       // this.$message("这个是" + JSON.stringify(feature));

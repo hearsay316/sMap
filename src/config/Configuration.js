@@ -7,7 +7,6 @@ import Cesium from "Cesium";
  */
 export function createCesium(idName) {
   const viewer = new Cesium.Viewer(idName);
-  //const scene = viewer.scene;
   return viewer;
 }
 
