@@ -1,6 +1,9 @@
 <template>
   <div class="superMap">
     <div id="superMap"></div>
+    <div id="bubble" class="bubble">
+      <slot name="bubble"></slot>
+    </div>
   </div>
 </template>
 
@@ -9,7 +12,6 @@ import * as map from "../config/Configuration";
 export default {
   name: "superMap",
   props: {
-    // :url="url" :Config="Config" :positionXYZ="positionXYZ" :Angle="Angle"
     url: String,
     Config: Object,
     positionXYZ: Object,
@@ -21,8 +23,10 @@ export default {
     mountedCesiumClickLayer: Function
   },
   async mounted() {
-    this.createWebgl && this.createWebgl();
+    this.createWebgl && this.createWebgl(this);
+    console.log(this.version);
     let viewer = this.createCesium("superMap");
+    viewer.customInfobox = document.querySelector("#bubble");
     this.mountedWebgl && this.mountedWebgl(viewer);
     const scene = viewer.scene;
     await this.openMap({
@@ -49,5 +53,11 @@ export default {
 .superMap,
 #superMap {
   height: 100%;
+}
+#bubble {
+  position: absolute;
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 3px;
 }
 </style>

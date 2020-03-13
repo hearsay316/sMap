@@ -438,5 +438,4 @@ export default {
 .propertygrid {
   overflow: auto;
 }
-
 </style>

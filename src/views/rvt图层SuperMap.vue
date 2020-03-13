@@ -1,15 +1,17 @@
 <template>
   <superMap
     :url="url"
-    :Config="Config"
-    :positionXYZ="positionXYZ"
     :Angle="Angle"
+    :positionXYZ="positionXYZ"
+    :Config="Config"
     :createWebgl="createWebgl"
     :mountedWebgl="mountedWebgl"
     :mountedOpenMap="mountedOpenMap"
     :errorOpenMap="errorOpenMap"
     :mountedCesiumClickLayer="mountedCesiumClickLayer"
-  ></superMap>
+  >
+    <template v-slot:bubble> 这个是卡槽{{ layerTitle }} </template>
+  </superMap>
 </template>
 
 <script>
@@ -17,6 +19,7 @@ export default {
   name: "rvt图层SuperMap.vue",
   data() {
     return {
+      layerTitle: "",
       url: "http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace",
       positionXYZ: {
         x: -1209550.6137063126,
@@ -26,9 +29,10 @@ export default {
       Config: {
         name: "Test4",
         setQueryParameter: {
-          url:"http://47.103.125.18:8090/iserver/services/data-ditie/rest/data",
-          isMerge:true,
-          dataSourceName:"Test4"
+          url:
+            "http://47.103.125.18:8090/iserver/services/data-ditie/rest/data",
+          isMerge: true,
+          dataSourceName: "Test4"
         }
         // setQueryParameter 设置属性查询参数
         //      Name	        Type	  Default    Description
@@ -40,6 +44,7 @@ export default {
         //      hasGeometry	    Boolean	    false	 optional属性查询返回结果是否包含几何信息。
       },
       Angle: {
+        // 位置放置角度
         heading: 5.470688272479366,
         pitch: -0.8606068847349784,
         roll: 7.638334409421077e-14
@@ -51,12 +56,16 @@ export default {
     mountedWebgl(viewer) {
       console.log(viewer, 666);
     },
-    mountedOpenMap() {},
-    createWebgl() {},
-    errorOpenMap(e) {},
-    mountedCesiumClickLayer(feature){
-      console.log(feature)
+    mountedOpenMap(viewer, layers) {},
+    createWebgl(vm) {
+      // vm是 superMap的this
     },
+    errorOpenMap(e) {},
+    mountedCesiumClickLayer(feature) {
+      this.layerTitle = feature.SMID;
+      console.log(feature);
+      // this.$message("这个是" + JSON.stringify(feature));
+    }
   }
 };
 </script>

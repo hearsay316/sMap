@@ -1,3 +1,4 @@
+
 // vue.config.js
 const UploadSshPlugin = require('./plugins/uploadSshPlugin')
 module.exports = {
