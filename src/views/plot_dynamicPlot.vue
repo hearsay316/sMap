@@ -215,7 +215,7 @@
 <script>
 import Cesium from "Cesium";
 import {
-  CesiumClicklayer,
+  CesiumClickLayer,
   CesiumClickLeft,
   createCesium,
   openMap,
@@ -382,7 +382,7 @@ export default {
         CesiumClickLeft(scene, (e, { x, y, z }) => {
           console.log(x, y, z);
         });
-        CesiumClicklayer(viewer, function(feature) {
+        CesiumClickLayer(viewer, function(feature) {
           // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
           //   type: "success",
           //   showCancelButton: false,
