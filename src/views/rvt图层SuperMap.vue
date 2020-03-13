@@ -23,8 +23,20 @@ export default {
         z: 2693085.689269533
       },
       Config: {
-        name: "",
-        setQueryParameter: {}
+        name: "Test4",
+        setQueryParameter: {
+          url:"http://47.103.125.18:8090/iserver/services/data-ditie/rest/data",
+          isMerge:true,
+          dataSourceName:"Test4"
+        }
+        // setQueryParameter 设置属性查询参数
+        //      Name	        Type	  Default    Description
+        //      options	        Object	             对象具有以下属性
+        //      url	String		optional             数据服务url。
+        //      dataSourceName	String		         optional数据源名称。
+        //      dataSetName	    String		         optional数据集名称。
+        //      isMerge	        Boolean		         optional该图层是否为合并数据集的，如果是则不用指定数据集名称。
+        //      hasGeometry	    Boolean	    false	 optional属性查询返回结果是否包含几何信息。
       },
       Angle: {
         heading: 5.470688272479366,

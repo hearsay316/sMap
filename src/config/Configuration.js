@@ -103,7 +103,11 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
  */
 export function observeLayer(layers, Config) {
   let { name, setQueryParameter } = Config;
-  const layer = layers.find(layer => layer === name);
+  const layer = layers.find(layer => layer.name === name);
+  let data = {
+    keyWord: "SmID",
+    ...setQueryParameter
+  };
   // setQueryParameter 设置属性查询参数
   //      Name	        Type	  Default    Description
   //      options	        Object	             对象具有以下属性：
@@ -113,10 +117,12 @@ export function observeLayer(layers, Config) {
   //      dataSetName	    String		         optional数据集名称。
   //      isMerge	        Boolean		         optional该图层是否为合并数据集的，如果是则不用指定数据集名称。
   //      hasGeometry	    Boolean	    false	 optional属性查询返回结果是否包含几何信息。
-  layer &&
-    layer.setQueryParameter({
-      ...setQueryParameter
-    });
+  try {
+    layer && layer.setQueryParameter(data);
+  } catch (e) {
+    console.log(e);
+  }
+  console.log(6666);
 }
 
 /**
@@ -157,11 +163,13 @@ export function openMap(obj) {
           //   dataSetName: "New_Region",
           //   keyWord: "SmID"
           // });
-          let { name, setQueryParameter } = Config;
+
+          let { name } = Config;
           name && observeLayer(layers, Config);
 
           // let layer = viewer.scene.layers.find(Config);
           // const sceneLayer = layer;
+          console.log(666555);
           let { x, y, z } = positionXYZ;
           let { heading, pitch, roll } = Angle;
           setView(
