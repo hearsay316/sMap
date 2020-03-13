@@ -122,7 +122,6 @@ export function observeLayer(layers, Config) {
   } catch (e) {
     console.log(e);
   }
-  console.log(6666);
 }
 
 /**
