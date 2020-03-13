@@ -26,16 +26,16 @@ export default {
       }
     };
   },
-  async mounted() {
+  async mounted(obj) {
     viewer = this.createCesium("cesiumContainer");
     scene = viewer.scene;
-    await this.openMap(
-      scene,
-      this.url,
-      this.Config,
-      this.positionXYZ,
-      this.Angle
-    );
+    await this.openMap({
+      viewer,
+      url: this.url,
+      Config: this.Config,
+      positionXYZ: this.positionXYZ,
+      Angle: this.Angle
+    });
   },
   methods: {
     ...map

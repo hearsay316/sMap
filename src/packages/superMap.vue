@@ -11,7 +11,7 @@ export default {
   props: {
     // :url="url" :Config="Config" :positionXYZ="positionXYZ" :Angle="Angle"
     url: String,
-    Config: String,
+    Config: Object,
     positionXYZ: Object,
     Angle: Object,
     mountedWebgl: Function,
@@ -22,17 +22,18 @@ export default {
   async mounted() {
     this.createWebgl && this.createWebgl();
     let viewer = this.createCesium("superMap");
-    console.log(viewer, 1111);
     this.mountedWebgl && this.mountedWebgl(viewer);
-    let scene = viewer.scene;
+    const scene = viewer.scene;
     await this.openMap(
-        viewer,
-      this.url,
-      this.Config,
-      this.positionXYZ,
-      this.Angle,
-      this.mountedOpenMap,
-        this.errorOpenMap
+            {
+              viewer,
+              url:this.url,
+              Config:this.Config,
+              positionXYZ:this.positionXYZ,
+              Angle:this.Angle,
+              mountedOpenMap:this.mountedOpenMap,
+              errorOpenMap:this.errorOpenMap
+            }
     );
   },
   methods: {
@@ -41,4 +42,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  .superMap,#superMap{
+    height: 100%;
+  }
+</style>

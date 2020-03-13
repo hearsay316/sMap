@@ -7,7 +7,7 @@
     :createWebgl="createWebgl"
     :mountedWebgl="mountedWebgl"
     :mountedOpenMap="mountedOpenMap"
-    :errorOpenMap = "errorOpenMap"
+    :errorOpenMap="errorOpenMap"
   ></superMap>
 </template>
 
@@ -16,14 +16,16 @@ export default {
   name: "rvt图层SuperMap.vue",
   data() {
     return {
-      url: //http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace
-        "http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace",
+      url: "http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace",
       positionXYZ: {
         x: -1209550.6137063126,
         y: 5655779.937735093,
         z: 2693085.689269533
       },
-      Config: "Config",
+      Config: {
+        name: "",
+        setQueryParameter: {}
+      },
       Angle: {
         heading: 5.470688272479366,
         pitch: -0.8606068847349784,
@@ -38,7 +40,7 @@ export default {
     },
     mountedOpenMap() {},
     createWebgl() {},
-    errorOpenMap(e){}
+    errorOpenMap(e) {}
   }
 };
 </script>

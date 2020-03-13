@@ -97,40 +97,45 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
 }
 /**
  *
- * @param scene
+ * @param layers
  * @param Config
- * @param url
- * @param dataSourceName
- * @param dataSetName
- * @param keyWord
+ * @param obj
  */
-export function layer(
-  scene,
-  Config,
-  { url, dataSourceName, dataSetName, keyWord }
-) {
-  layer = scene.layers.find(Config);
-  //设置属性查询参数
-  layer.setQueryParameter({
-    url,
-    dataSourceName,
-    dataSetName,
-    keyWord
-  });
+export function observeLayer(layers, Config) {
+  let { name, setQueryParameter } = Config;
+  const layer = layers.find(layer => layer === name);
+  // setQueryParameter 设置属性查询参数
+  //      Name	        Type	  Default    Description
+  //      options	        Object	             对象具有以下属性：
+  //      Name	        Type		         Description
+  //      url	String		optional             数据服务url。
+  //      dataSourceName	String		         optional数据源名称。
+  //      dataSetName	    String		         optional数据集名称。
+  //      isMerge	        Boolean		         optional该图层是否为合并数据集的，如果是则不用指定数据集名称。
+  //      hasGeometry	    Boolean	    false	 optional属性查询返回结果是否包含几何信息。
+  layer &&
+    layer.setQueryParameter({
+      ...setQueryParameter
+    });
 }
 
 /**
  *
- * @param scene
- * @param url
- * @param Config
- * @param positionXYZ
- * @param Angle
- * @param mountedOpenMap
- * @param errorOpenMap
  * @returns {Promise<unknown>}
+ * @param obj
  */
-export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,errorOpenMap) {
+export function openMap(obj) {
+  let {
+    viewer,
+    url,
+    Config,
+    positionXYZ,
+    Angle,
+    mountedOpenMap,
+    errorOpenMap
+  } = obj;
+  const scene = viewer.scene;
+  const widget = viewer.cesiumWidget;
   return new Promise((resolve, reject) => {
     try {
       //添加S3M图层服务
@@ -142,7 +147,9 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
             alert("不支持深度拾取,属性查询功能无法使用！");
           }
           // scene.layers获取当前场景的三维切片缓存图层集合。
-
+          //   layer = scene.layers.find(Config);
+          //   console.log(layers.find(layer => layer.name === Config));
+          //   console.log(layer,layers,layer===layers[0])
           // layer(scene, "Test", {
           //   url:
           //     "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
@@ -150,12 +157,15 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
           //   dataSetName: "New_Region",
           //   keyWord: "SmID"
           // });
-          var layer = scene.layers.find(Config);
-          const sceneLayer = layer;
+          let { name, setQueryParameter } = Config;
+          name && observeLayer(layers, Config);
+
+          // let layer = viewer.scene.layers.find(Config);
+          // const sceneLayer = layer;
           let { x, y, z } = positionXYZ;
           let { heading, pitch, roll } = Angle;
           setView(
-            scene,
+            viewer.scene,
             { x, y, z },
             {
               heading,
@@ -163,11 +173,11 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
               roll
             }
           );
-          mountedOpenMap && mountedOpenMap(layers);
+          mountedOpenMap && mountedOpenMap(viewer, layers);
           resolve(layers);
         },
         function(e) {
-          errorOpenMap&&errorOpenMap(e);
+          errorOpenMap && errorOpenMap(e);
           if (widget._showRenderLoopErrors) {
             let title = "渲染时发生错误，已停止渲染。";
             reject(title);
@@ -176,7 +186,7 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
         }
       );
     } catch (e) {
-      errorOpenMap&&errorOpenMap();
+      errorOpenMap && errorOpenMap();
       if (widget._showRenderLoopErrors) {
         let title = "渲染时发生错误，已停止渲染.";
         widget.showErrorPanel(title, undefined, e);
@@ -203,7 +213,6 @@ export function openMap(scene, url, Config, positionXYZ, Angle, mountedOpenMap ,
 //     }
 // });
 export function setView(scene, position, angle) {
-  console.log(angle, position);
   if (Object.keys(position).length === 3 && Object.keys(angle).length === 3) {
     let { heading, pitch, roll } = angle;
     let { x, y, z } = position;
@@ -215,7 +224,6 @@ export function setView(scene, position, angle) {
         roll
       }
     });
-    console.log(55555555555555555555);
   } else {
     throw new error("setView 参数不对");
   }
@@ -227,7 +235,7 @@ export function setView(scene, position, angle) {
  * @param fuc   注册单体鼠标点击事件
  * @constructor
  */
-export function CesiumClicklayer(viewer, fuc) {
+export function CesiumClickLayer(viewer, fuc) {
   viewer.pickEvent.addEventListener(feature => {
     fuc(feature);
   });
@@ -323,7 +331,7 @@ demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
 
   arrA.forEach(item => {
     let { x, y, z } = item;
-    var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+    const position = Cesium.Cartesian3.fromDegrees(x, y, z);
     cart = viewer.entities.add({
       model: {
         uri:

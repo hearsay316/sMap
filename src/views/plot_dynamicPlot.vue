@@ -362,10 +362,11 @@ export default {
       serverUrl =
         "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot";
       this.InitPlot(viewer, serverUrl);
-      openMap(
-        scene,
-        "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
-      ).then(res => {
+      openMap({
+        viewer,
+        url:
+          "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
+      }).then(res => {
         setView(
           scene,
           {
@@ -437,4 +438,5 @@ export default {
 .propertygrid {
   overflow: auto;
 }
+
 </style>
