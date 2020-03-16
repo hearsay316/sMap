@@ -1256,9 +1256,10 @@ __proto__: Object */
       this.$refs.loadingbar.remove();
       try {
         //http://47.103.125.18:8090/iserver/services/3D-tempWorkspace_1/rest/realspace
+        //http://47.103.125.18:8090/iserver/services/3D-userMap-2/rest/realspace/datas/Config.openrealspace
         //添加S3M图层服务
         var promise = scene.open(
-          "http://47.103.125.18:8090/iserver/services/3D-tempWorkspace_1/rest/realspace"
+          "http://47.103.125.18:8090/iserver/services/3D-userMap-2/rest/realspace"
         );
         Cesium.when(
           promise,
@@ -1324,25 +1325,26 @@ z: 2693548.99315424
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
       viewer.selectedEntityChanged.addEventListener(function(entity) {
-        // if (entity && viewer.selectedEntity.name) {
-        //   vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
-        //     type: "success",
-        //     showCancelButton: false,
-        //     showConfirmButton: false,
-        //     showClose: false
-        //   });
-        // }
+        if (entity && viewer.selectedEntity.name) {
+          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            showClose: false
+          });
+        }
         console.log(entity);
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
         console.log(feature);
-        // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
-        //   type: "success",
-        //   showCancelButton: false,
-        //   showConfirmButton: false,
-        //   showClose: false
-        // });
+        vm.$confirm(`这个是房屋详情XXXX`, "提示", {
+          type: "success",
+          showCancelButton: false,
+          showConfirmButton: false,
+          showClose: false
+        });
+        console.log(5555555555555555);
         // console.log(feature, scene.camera, scene.Cartesian3);
         var titlei = Cesium.defaultValue(feature.Z, "");
         var description = Cesium.defaultValue(feature.USERID, "");
