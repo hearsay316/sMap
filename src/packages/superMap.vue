@@ -2,7 +2,7 @@
   <div class="superMap">
     <div id="superMap"></div>
     <div id="bubble" class="bubble">
-      <slot name="bubble"></slot>
+      <slot></slot>
     </div>
   </div>
 </template>

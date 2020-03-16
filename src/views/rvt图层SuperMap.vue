@@ -12,7 +12,7 @@
     :RegCesiumClickLeft="RegCesiumClickLeft"
     :RegCesiumClickRight="RegCesiumClickRight"
   >
-    <template v-slot:bubble>这个是卡槽{{ layerTitle }}</template>
+    <div>这个是卡槽{{ layerTitle }}</div>
   </superMap>
 </template>
 

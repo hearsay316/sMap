@@ -286,7 +286,7 @@ export function CesiumClickRight(scene, func) {
     if (z < 0) {
       z = 0;
     }
-    func(e,{x,y,z});
+    func(e, { x, y, z });
   }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
 }
 
