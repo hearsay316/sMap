@@ -5,6 +5,7 @@
       <slot></slot>
     </div>
     <slot name="nav"></slot>
+    <slot name="popup"></slot>
   </div>
 </template>
 

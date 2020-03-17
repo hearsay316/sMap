@@ -19,17 +19,14 @@
         <div>房屋信息XXXXXXXXXXXXXXXXXXXX</div>
       </template>
       <template v-slot:nav>
-        <!--        <div class="newDome-nav">-->
-        <!--          <div @click="addFire">添加火</div>-->
-        <!--          <div>2</div>-->
-        <!--          <div>3</div>-->
-        <!--          <div>4</div>-->
-        <!--        </div>-->
         <superNav
           :baseUrl="baseUrl"
           :picUrl="picUrl"
           @handleClick="handleClick"
         ></superNav>
+      </template>
+      <template v-slot:popup>
+        <superPopup></superPopup>
       </template>
     </super-map>
   </div>
@@ -93,7 +90,8 @@ export default {
     }
   },
   components: {
-    superNav
+    superNav,
+    superPopup: () => import("../components/superPopup")
   }
 };
 </script>

@@ -11,12 +11,7 @@
       :key="item.name"
     >
       <img :src="!item.Active ? item.url : item.urlActive" :alt="item.name" />
-      <!--      <img v-if="!item.Active" :src="item.url" :alt="item.name" />-->
-      <!--      <img v-if="item.Active" :src="item.urlActive" :alt="item.name" />-->
     </div>
-    <!--    <div><img src="../assets/item-3.png" alt="" /></div>-->
-    <!--    <div><img src="../assets/item-4.png" alt="" /></div>-->
-    <!--    <div><img src="../assets/item-5.png" alt="" /></div>-->
   </div>
 </template>
 
