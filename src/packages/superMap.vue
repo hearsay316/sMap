@@ -4,6 +4,7 @@
     <div id="bubble" class="bubble">
       <slot></slot>
     </div>
+    <slot name="nav"></slot>
   </div>
 </template>
 
