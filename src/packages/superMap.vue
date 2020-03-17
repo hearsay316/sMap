@@ -26,7 +26,7 @@ export default {
   },
   async mounted() {
     this.createWebgl && this.createWebgl(this);
-    console.log(this.version);
+    // console.log(this.version);
     let viewer = this.createCesium("superMap");
     viewer.customInfobox = document.querySelector("#bubble");
     this.mountedWebgl && this.mountedWebgl(viewer);

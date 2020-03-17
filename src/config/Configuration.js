@@ -18,7 +18,8 @@ export function createCesium(idName) {
  */
 export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
   let { x, y, z } = MapFireXYZ;
-  var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+  const scene = viewer.scene;
+  const position = Cesium.Cartesian3.fromDegrees(x, y, z);
   console.log(viewer.entities);
   const FireEntity = viewer.entities.add({
     position: position,
@@ -35,7 +36,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
     endScale: 1.5,
     particleSize: 1
   };
-  FireParticleSystem = scene.primitives.add(
+  const FireParticleSystem = scene.primitives.add(
     new Cesium.ParticleSystem({
       // 粒子的图片
       image:
@@ -146,6 +147,7 @@ export function openMap(obj) {
       Cesium.when(
         promise,
         function(layers) {
+          console.log("openMap 开始");
           if (!scene.pickPositionSupported) {
             alert("不支持深度拾取,属性查询功能无法使用！");
           }
@@ -160,26 +162,14 @@ export function openMap(obj) {
           //   dataSetName: "New_Region",
           //   keyWord: "SmID"
           // });
-
-          let { name } = Config;
-          name && observeLayer(layers, Config);
-
-          // let layer = viewer.scene.layers.find(Config);
-          // const sceneLayer = layer;
-          console.log(666555);
-          let { x, y, z } = positionXYZ;
-          let { heading, pitch, roll } = Angle;
-          setView(
-            viewer.scene,
-            { x, y, z },
-            {
-              heading,
-              pitch,
-              roll
-            }
-          );
+          const ConfigName = Config && Config.name;
+          ConfigName && observeLayer(layers, Config);
+          const positionConfig = positionXYZ && Angle;
+          positionConfig && setViewConfig(viewer, positionXYZ, Angle);
           mountedOpenMap && mountedOpenMap(viewer, layers);
+
           resolve(layers);
+          console.log("openUrl 结束");
         },
         function(e) {
           errorOpenMap && errorOpenMap(e);
@@ -200,7 +190,21 @@ export function openMap(obj) {
     }
   });
 }
-
+export function setViewConfig(viewer, positionXYZ, Angle) {
+  console.log("setViewConfig 开始");
+  let { x, y, z } = positionXYZ;
+  let { heading, pitch, roll } = Angle;
+  setView(
+    viewer.scene,
+    { x, y, z },
+    {
+      heading,
+      pitch,
+      roll
+    }
+  );
+  console.log("setViewConfig 结束");
+}
 /**
  * 设置相机视角
  * @param scene
@@ -218,6 +222,7 @@ export function openMap(obj) {
 //     }
 // });
 export function setView(scene, position, angle) {
+  console.log("setView 开始");
   if (Object.keys(position).length === 3 && Object.keys(angle).length === 3) {
     let { heading, pitch, roll } = angle;
     let { x, y, z } = position;
@@ -229,6 +234,7 @@ export function setView(scene, position, angle) {
         roll
       }
     });
+    console.log("setView 结束");
   } else {
     throw new error("setView 参数不对");
   }

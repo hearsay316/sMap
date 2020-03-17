@@ -197,6 +197,21 @@ const routes = [
       import(
         /* webpackChunkName: "ParticleWater" */ "../views/rvt图层SuperMap.vue"
       )
+  },
+
+  {
+    path: "/newDome",
+    name: "newDome",
+    meta: {
+      title: "newDome",
+      icon:
+        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "ParticleWater" */ "../views/newDome.vue")
   }
 ];
 
