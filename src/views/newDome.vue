@@ -25,7 +25,11 @@
         <!--          <div>3</div>-->
         <!--          <div>4</div>-->
         <!--        </div>-->
-        <superNav></superNav>
+        <superNav
+          :baseUrl="baseUrl"
+          :picUrl="picUrl"
+          @handleClick="handleClick"
+        ></superNav>
       </template>
     </super-map>
   </div>
@@ -41,15 +45,28 @@ import { demoConfig } from "../config/mapConfig";
 import { viewerMountedFire } from "../config/Configuration";
 let viewer;
 import superNav from "../components/superNav";
-
+import picUrl, { baseUrl } from "../config/imgIcoConfig";
 export default {
   name: "newDome",
   data() {
     return {
-      ...demoConfig
+      ...demoConfig,
+      picUrl: {
+        ...picUrl
+      },
+      baseUrl: [...baseUrl]
     };
   },
   methods: {
+    handleClick(ls) {
+      this.baseUrl.forEach((item, index) => {
+        if (ls == index) {
+          item.Active = 1;
+        } else {
+          item.Active = 0;
+        }
+      });
+    },
     addFire() {
       viewerMountedFire(viewer, this.MapFireXYZ);
     },
