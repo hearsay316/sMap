@@ -1,10 +1,10 @@
 <template>
   <div class="superPopup">
-    <template v-for="(item, index) in baseUrl">
-      <div class="superPopup-active" v-if="item.Active" :key="item.name">
+    <template v-if="baseUrlOne">
+      <div class="superPopup-active" v-if="baseUrlOne.active">
         <div class="superPopup-title">
           <div class="superPopup-title-desc">资源部署</div>
-          <div class="superPopup-title-ico" @click="handlePopupTitleIco(index)">
+          <div class="superPopup-title-ico" @click="handlePopupTitleIco()">
             <el-switch
               v-model="value"
               :width="superPopupTitleIcoW"
@@ -14,15 +14,16 @@
             </el-switch>
           </div>
         </div>
-        <div class="superPopup-main" :key="item.name">
+        <div class="superPopup-main">
           <div
             class="superPopup-main-item"
             v-for="(item, index) in baseUrlItem1"
             :key="item.name"
-            @click="superPopupMainItem(index)"
+            @click="superPopupMainItem(index, item)"
           >
+            <!--suppress HtmlUnknownTarget -->
             <img :src="item.pic" alt="" />
-            <span>{{ item.name }}</span>
+            <span :class="{ itemActive: item.active }">{{ item.name }}</span>
           </div>
         </div>
       </div>
@@ -34,30 +35,29 @@
 export default {
   name: "superPopup",
   props: {
-    baseUrl: Array,
+    baseUrlOne: Object,
     baseUrlItem1: Array
   },
   data() {
     return {
       value: true,
-      superPopupTitleIcoW: 43,
-      superPopupMainData: [
-        {
-          pic: "",
-          name: "火点",
-          func: "xxx"
-        }
-      ]
+      superPopupTitleIcoW: 43
     };
   },
   methods: {
-    superPopupMainItem(func) {
-      this[func]();
+    superPopupMainItem(index, item) {
+      item.fun && this[item.fun](index, item);
     },
-    handlePopupTitleIco(index) {
-      console.log(index);
+    AddCarts(index, item) {
+      console.log("AddCarts", index, item);
+      !item.active && this.$emit("addCarts", index, item);
+    },
+    AddFire(index, item) {
+      !item.active && this.$emit("addFire", index, item);
+    },
+    handlePopupTitleIco() {
       this.value = true;
-      this.$emit("handlePopupTitleIco", index);
+      this.$emit("handlePopupTitleIco", 0);
     }
   }
 };
@@ -86,22 +86,26 @@ export default {
         margin-top: -3.2px;
     .superPopup-main
       height 337px
-      display flex
+      display grid
+      grid-template-columns 63px 63px 63px
+      grid-column-gap 36px
       flex-wrap wrap
       color #ffffff
-      /*padding 0 11px*/
+      padding 0 11px
       background-color RGBA(22, 57, 95, 0.9)
       .superPopup-main-item
-        width:33.33%
         display flex
         flex-direction column
-        align-items center
         span
           font-size 16px
         img
           height 63px
           width 63px
           padding  22px 0 5px 0
+       :nth-last-child(1)
+          span
+            width:90px
+            margin-left -10px
 
 /deep/.el-switch__core
   height 23px
@@ -115,4 +119,6 @@ export default {
       width: 23px;
       height: 23px;
  }
+.itemActive
+  color #fbe15c
 </style>

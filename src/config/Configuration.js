@@ -1,5 +1,4 @@
 import Cesium from "Cesium";
-
 /**
  *
  * @param idName
@@ -9,7 +8,195 @@ export function createCesium(idName) {
   const viewer = new Cesium.Viewer(idName);
   return viewer;
 }
+function lookFire(scene) {
+  try {
+    if (scene.camera) {
+      scene.camera.setView({
+        destination: new Cesium.Cartesian3(
+          -1209371.1848499542,
+          5655586.079866716,
+          2693109.1253441786
+        ),
+        orientation: {
+          heading: 6.283185042289299,
+          pitch: -0.7854026364258244,
+          roll: 6.283185307179586
+        }
+      });
+    } else {
+      console.log(scene);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+export function viewerMountedWater(viewer, cart, Fire) {
+  let scene = viewer.scene;
+  let emitterModelMatrix = new Cesium.Matrix4();
+  let translation = new Cesium.Cartesian3();
+  let rotation = new Cesium.Quaternion();
+  let hpr = new Cesium.HeadingPitchRoll();
+  let trs = new Cesium.TranslationRotationScale();
+  let entity = cart;
+  let viewModel = {
+    emissionRate: 40.0,
+    gravity: -3.5,
+    minimumParticleLife: 6,
+    maximumParticleLife: 7,
+    minimumSpeed: 9,
+    maximumSpeed: 9.5,
+    startScale: 1,
+    endScale: 20,
+    particleSize: 1
+  };
 
+  scene.logarithmicDepthBuffer = false;
+  //关闭HDR
+  scene.highDynamicRange = false;
+  let WaterParticleSystem = viewer.scene.primitives.add(
+    new Cesium.ParticleSystem({
+      image:
+        "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fountain2.png",
+      startColor: new Cesium.Color(1, 1, 1, 0.6),
+      endColor: new Cesium.Color(0.8, 0.86, 1, 0.4),
+      startScale: viewModel.startScale,
+      endScale: viewModel.endScale,
+      minimumParticleLife: viewModel.minimumParticleLife,
+      maximumParticleLife: viewModel.maximumParticleLife,
+      minimumSpeed: viewModel.minimumSpeed,
+      maximumSpeed: viewModel.maximumSpeed,
+      imageSize: new Cesium.Cartesian2(
+        viewModel.particleSize,
+        viewModel.particleSize
+      ),
+      emissionRate: viewModel.emissionRate,
+      //粒子发射器
+      emitter: new Cesium.CircleEmitter(0.2),
+      emitterModelMatrix: computeEmitterModelMatrix(),
+      //  updateCallback: applyGravity,
+      sizeInMeters: true,
+      performance: false,
+      lifetime: 16.0 // 默认情况下，粒子系统将永远运行。要使粒子系统运行一定的持续时间，请使用lifetime以秒为单位指定持续时间并将其设置loop为false。
+    })
+  );
+  viewer.scene.preUpdate.addEventListener(function(scene, time) {
+    WaterParticleSystem.modelMatrix = computeModelMatrix(entity, time);
+    // Account for any changes to the emitter model matrix.
+    WaterParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
+  });
+  // this.HandleS3DestroyedFire();
+
+  function computeModelMatrix(entity, time) {
+    return entity.computeModelMatrix(time, new Cesium.Matrix4());
+  }
+
+  // 改变粒子系统的位置
+  function computeEmitterModelMatrix() {
+    hpr = Cesium.HeadingPitchRoll.fromDegrees(10, 60, 200, hpr);
+    trs.translation = Cesium.Cartesian3.fromElements(0, 0, 5.4, translation);
+    trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
+    return Cesium.Matrix4.fromTranslationRotationScale(trs, emitterModelMatrix);
+  }
+  return WaterParticleSystem;
+}
+export function viewerDestroyedFire(
+  viewer,
+  { FireParticleSystem, FireEntity },
+  WaterParticleSystem
+) {
+  let index = 1;
+  let time = setInterval(() => {
+    if (index <= 0) {
+      clearInterval(time);
+      viewer.entities.remove(FireEntity);
+      viewer.scene.primitives.remove(WaterParticleSystem);
+
+      // this.$confirm("灭火成功,演示完毕", "提示", {
+      //   type: "success",
+      //   showCancelButton: false,
+      //   showConfirmButton: false,
+      //   showClose: false
+      // });
+    }
+    index -= 0.05;
+    var particleSize = parseFloat(index);
+    FireParticleSystem.minimumImageSize.x = particleSize;
+    FireParticleSystem.minimumImageSize.y = particleSize;
+    FireParticleSystem.maximumImageSize.x = particleSize;
+    FireParticleSystem.maximumImageSize.y = particleSize;
+  }, 400);
+}
+export function viewerCreateFireFighting(
+  viewer,
+  MapFireXYZ,
+  positionXYZ,
+  carts,
+  Fire
+) {
+  console.log(viewer, MapFireXYZ, positionXYZ, carts);
+  let { x, y, z } = MapFireXYZ;
+  let { x: x1, y: y1, z: z1 } = positionXYZ[0];
+  let { x: x2, y: y2, z: z2 } = positionXYZ[1];
+  let { x: x3, y: y3, z: z3 } = positionXYZ[2];
+  let index = 500;
+  let addx = (x - x1) / index;
+  let addy = (y - y1) / index;
+  let addz = (z - z1) / index;
+  let cart1 = carts[0];
+  let cart2 = carts[1];
+  let cart3 = carts[2];
+  let time = setInterval(() => {
+    if (index === 100) {
+      clearInterval(time);
+      let Waters = carts.map(cart => {
+        return viewerMountedWater(viewer, cart, Fire);
+      });
+      lookFire(viewer.scene);
+      return;
+    }
+    x1 += addx;
+    y1 += addy;
+    z1 += addz;
+    x2 += addx;
+    y2 += addy;
+    z2 += addz;
+    x3 += addx;
+    y3 += addy;
+    z3 += addz;
+    var position1 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
+    cart1.position = position1;
+    var position2 = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
+    cart2.position = position2;
+    var position3 = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
+    cart3.position = position3;
+    --index;
+  }, 0);
+}
+export function viewerMountedDeployCart(viewer, positionXYZ) {
+  let userCarts = [];
+  positionXYZ.forEach(xyz => {
+    let { x, y, z, name } = xyz;
+    var position = Cesium.Cartesian3.fromDegrees(x, y, z);
+    let cart = viewer.entities.add({
+      name: name,
+      model: {
+        uri:
+          "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+        minimumPixelSize: 32,
+        maximumScale: 0.5
+      },
+      viewFrom: new Cesium.Cartesian3(x, y, z),
+      position: position,
+      orientation: Cesium.Transforms.headingPitchRollQuaternion(
+        position,
+        new Cesium.HeadingPitchRoll(60 / 10, 0, 0)
+      )
+    });
+    userCarts.push(cart);
+  });
+  console.log(userCarts);
+  return userCarts;
+}
 /**
  *
  * @param viewer  视图
@@ -79,6 +266,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
     // Account for any changes to the emitter model matrix.
     FireParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
   });
+  return { FireParticleSystem, FireEntity };
 }
 export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);

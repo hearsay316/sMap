@@ -27,9 +27,11 @@
       </template>
       <template v-slot:popup>
         <superPopup
-          :baseUrl="baseUrl"
+          :baseUrlOne="baseUrlOne"
           :baseUrlItem1="baseUrlItem1"
           @handlePopupTitleIco="handlePopupTitleIco"
+          @addFire="addFire"
+          @addCarts="addCarts"
         ></superPopup>
       </template>
     </super-map>
@@ -43,8 +45,12 @@
 -->
 <script>
 import { demoConfig } from "../config/mapConfig";
-import { viewerMountedFire } from "../config/Configuration";
-let viewer;
+import {
+  viewerCreateFireFighting,
+  viewerMountedDeployCart,
+  viewerMountedFire
+} from "../config/Configuration";
+let viewer, carts, Fire;
 import superNav from "../components/superNav";
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 export default {
@@ -56,24 +62,62 @@ export default {
         ...picUrl
       },
       baseUrl: [...baseUrl],
-      baseUrlItem1: [...item1]
+      baseUrlItem1: [...item1],
+      positionCarts: [
+        {
+          x: 102.06943685862204,
+          y: 24.969427388802274,
+          z: 1571.2370406630653,
+          name: "cart1"
+        },
+        {
+          x: 102.06946361643989,
+          y: 24.96939567838009,
+          z: 1571.213370078212,
+          name: "cart2"
+        },
+        {
+          x: 102.06953602518084,
+          y: 24.969451096085642,
+          z: 1571.356784142299,
+          name: "cart3"
+        }
+      ]
     };
   },
   methods: {
     handlePopupTitleIco(index) {
-      this.baseUrl[index].Active = !this.baseUrl[index].Active;
+      this.baseUrl[index].active = !this.baseUrl[index].active;
     },
-    handleClick(ls) {
+    handleClick(itemIndex) {
+      if (itemIndex == 3 && !this.rescueActive) {
+        return;
+      } else if (itemIndex == 3 && this.rescueActive) {
+        this.rescue();
+      }
       this.baseUrl.forEach((item, index) => {
-        if (ls == index) {
-          item.Active = 1;
-        } else {
-          item.Active = 0;
-        }
+        itemIndex == index ? (item.active = 1) : (item.active = 0);
       });
     },
-    addFire() {
-      viewerMountedFire(viewer, this.MapFireXYZ);
+    rescue() {
+      console.log(this.rescueActive);
+      viewerCreateFireFighting(
+        viewer,
+        this.MapFireXYZ,
+        this.positionCarts,
+        carts,
+        Fire
+      );
+    },
+    addFire(index, item) {
+      console.log(item);
+      this.baseUrlItem1[index].active = true;
+      Fire = viewerMountedFire(viewer, this.MapFireXYZ);
+    },
+    addCarts(index, item) {
+      console.log(item);
+      this.baseUrlItem1[index].active = true;
+      carts = viewerMountedDeployCart(viewer, this.positionCarts);
     },
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position);
@@ -100,6 +144,14 @@ export default {
   components: {
     superNav,
     superPopup: () => import("../components/superPopup")
+  },
+  computed: {
+    baseUrlOne() {
+      return this.baseUrl[0];
+    },
+    rescueActive() {
+      return this.baseUrlItem1[0].active && this.baseUrlItem1[1].active;
+    }
   }
 };
 </script>

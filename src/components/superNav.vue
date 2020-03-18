@@ -11,7 +11,7 @@
       :key="item.name"
     >
       <!--suppress HtmlUnknownTarget -->
-      <img :src="!item.Active ? item.url : item.urlActive" :alt="item.name" />
+      <img :src="!item.active ? item.url : item.urlActive" :alt="item.name" />
     </div>
   </div>
 </template>
