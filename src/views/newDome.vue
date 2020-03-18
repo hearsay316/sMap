@@ -26,7 +26,11 @@
         ></superNav>
       </template>
       <template v-slot:popup>
-        <superPopup></superPopup>
+        <superPopup
+          :baseUrl="baseUrl"
+          :baseUrlItem1="baseUrlItem1"
+          @handlePopupTitleIco="handlePopupTitleIco"
+        ></superPopup>
       </template>
     </super-map>
   </div>
@@ -42,7 +46,7 @@ import { demoConfig } from "../config/mapConfig";
 import { viewerMountedFire } from "../config/Configuration";
 let viewer;
 import superNav from "../components/superNav";
-import picUrl, { baseUrl } from "../config/imgIcoConfig";
+import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 export default {
   name: "newDome",
   data() {
@@ -51,10 +55,14 @@ export default {
       picUrl: {
         ...picUrl
       },
-      baseUrl: [...baseUrl]
+      baseUrl: [...baseUrl],
+      baseUrlItem1: [...item1]
     };
   },
   methods: {
+    handlePopupTitleIco(index) {
+      this.baseUrl[index].Active = !this.baseUrl[index].Active;
+    },
     handleClick(ls) {
       this.baseUrl.forEach((item, index) => {
         if (ls == index) {

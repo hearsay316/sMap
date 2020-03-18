@@ -2,7 +2,7 @@
   <div
     class="superNav"
     :style="{
-      backgroundImage: `url(${picUrl['nav-bg']})`
+      backgroundImage: picUrlNavBg
     }"
   >
     <div
@@ -10,6 +10,7 @@
       v-for="(item, index) in baseUrl"
       :key="item.name"
     >
+      <!--suppress HtmlUnknownTarget -->
       <img :src="!item.Active ? item.url : item.urlActive" :alt="item.name" />
     </div>
   </div>
@@ -30,6 +31,11 @@ export default {
   methods: {
     handleItem(index) {
       this.$emit("handleClick", index);
+    }
+  },
+  computed: {
+    picUrlNavBg() {
+      return `url(${this.picUrl["nav-bg"]})`;
     }
   }
 };
