@@ -108,8 +108,18 @@ export default {
         carts,
         Fire
       ).then(res => {
-        console.log(res);
+        this.clearStatusAll();
       });
+    },
+    clearStatusAll() {
+      this.baseUrl.forEach(item => {
+        item.active = false;
+      });
+
+      this.baseUrlItem1.forEach(item => {
+        item.active = false;
+      });
+      console.log(this.baseUrlItem1, this.baseUrl);
     },
     addFire(index, item) {
       console.log(item);
