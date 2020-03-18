@@ -402,7 +402,7 @@ export default {
             if (!scene.pickPositionSupported) {
               alert("不支持深度拾取,属性查询功能无法使用！");
             }
-            layer = scene.layers.find("Config");
+            layer = scene.layers.find("Test4");
             //设置属性查询参数
             layer.setQueryParameter({
               url:

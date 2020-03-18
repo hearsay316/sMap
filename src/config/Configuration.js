@@ -92,8 +92,8 @@ export function viewerMountedWater(viewer, cart, Fire) {
 
   // 改变粒子系统的位置
   function computeEmitterModelMatrix() {
-    hpr = Cesium.HeadingPitchRoll.fromDegrees(10, 60, 200, hpr);
-    trs.translation = Cesium.Cartesian3.fromElements(0, 0, 5.4, translation);
+    hpr = Cesium.HeadingPitchRoll.fromDegrees(0, 90, 195, hpr);
+    trs.translation = Cesium.Cartesian3.fromElements(0, 0, 1.4, translation);
     trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
     return Cesium.Matrix4.fromTranslationRotationScale(trs, emitterModelMatrix);
   }
@@ -102,15 +102,17 @@ export function viewerMountedWater(viewer, cart, Fire) {
 export function viewerDestroyedFire(
   viewer,
   { FireParticleSystem, FireEntity },
-  WaterParticleSystem
+  WaterParticleSystems
 ) {
   let index = 1;
   let time = setInterval(() => {
     if (index <= 0) {
       clearInterval(time);
       viewer.entities.remove(FireEntity);
-      viewer.scene.primitives.remove(WaterParticleSystem);
-
+      WaterParticleSystems.forEach(WaterParticleSystem => {
+        viewer.scene.primitives.remove(WaterParticleSystem);
+      });
+      console.log(111);
       // this.$confirm("灭火成功,演示完毕", "提示", {
       //   type: "success",
       //   showCancelButton: false,
@@ -152,7 +154,8 @@ export function viewerCreateFireFighting(
         return viewerMountedWater(viewer, cart, Fire);
       });
       lookFire(viewer.scene);
-      return;
+      viewerDestroyedFire(viewer, Fire, Waters);
+      return true;
     }
     x1 += addx;
     y1 += addy;
@@ -268,6 +271,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
   });
   return { FireParticleSystem, FireEntity };
 }
+
 export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);
   let entitie = viewer.entities.add({
@@ -283,6 +287,7 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
   });
   return entitie;
 }
+
 /**
  *
  * @param layers
@@ -487,6 +492,7 @@ export function CesiumClickRight(scene, func) {
 function computeModelMatrix(entity, time) {
   return entity.computeModelMatrix(time, new Cesium.Matrix4());
 }
+
 // 改变粒子系统的位置
 function computeEmitterModelMatrix() {
   let emitterModelMatrix = new Cesium.Matrix4();
@@ -499,15 +505,16 @@ function computeEmitterModelMatrix() {
   trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
   return Cesium.Matrix4.fromTranslationRotationScale(trs, emitterModelMatrix);
 }
+
 export function MountedMapCart(viewer, positionXYZ, length) {
   let { x, y, z } = position;
   /*
-  102.06811287312502 24.97216506413337 1569.1730185409224
-demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
-demo3.vue?451f:1012 102.06814093688459 24.972130263176506 1569.1964102705317
-demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
-demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
-  */
+    102.06811287312502 24.97216506413337 1569.1730185409224
+  demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+  demo3.vue?451f:1012 102.06814093688459 24.972130263176506 1569.1964102705317
+  demo3.vue?451f:999 O {_scene: St, _transform: u, _invTransform: u, _actualTransform: u, _actualInvTransform: u, …} undefined
+  demo3.vue?451f:1012 102.06816550169316 24.97209762824952 1569.1852240472342
+    */
   const userX = 0.000028063759572205527;
   const userY = -0.00003480095686470008;
   const userZ = 0.02339172960932956;
