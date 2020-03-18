@@ -104,29 +104,32 @@ export function viewerDestroyedFire(
   { FireParticleSystem, FireEntity },
   WaterParticleSystems
 ) {
-  let index = 1;
-  let time = setInterval(() => {
-    if (index <= 0) {
-      clearInterval(time);
-      viewer.entities.remove(FireEntity);
-      WaterParticleSystems.forEach(WaterParticleSystem => {
-        viewer.scene.primitives.remove(WaterParticleSystem);
-      });
-      console.log(111);
-      // this.$confirm("灭火成功,演示完毕", "提示", {
-      //   type: "success",
-      //   showCancelButton: false,
-      //   showConfirmButton: false,
-      //   showClose: false
-      // });
-    }
-    index -= 0.05;
-    var particleSize = parseFloat(index);
-    FireParticleSystem.minimumImageSize.x = particleSize;
-    FireParticleSystem.minimumImageSize.y = particleSize;
-    FireParticleSystem.maximumImageSize.x = particleSize;
-    FireParticleSystem.maximumImageSize.y = particleSize;
-  }, 400);
+  return new Promise((resolve, reject) => {
+    let index = 1;
+    let time = setInterval(() => {
+      if (index <= 0) {
+        clearInterval(time);
+        viewer.entities.remove(FireEntity);
+        let remove = WaterParticleSystems.map(WaterParticleSystem => {
+          return viewer.scene.primitives.remove(WaterParticleSystem);
+        });
+        let isTrue = remove.every(item => item) && remove.length > 0;
+        isTrue ? resolve(isTrue) : reject(false);
+        // this.$confirm("灭火成功,演示完毕", "提示", {
+        //   type: "success",
+        //   showCancelButton: false,
+        //   showConfirmButton: false,
+        //   showClose: false
+        // });
+      }
+      index -= 0.05;
+      var particleSize = parseFloat(index);
+      FireParticleSystem.minimumImageSize.x = particleSize;
+      FireParticleSystem.minimumImageSize.y = particleSize;
+      FireParticleSystem.maximumImageSize.x = particleSize;
+      FireParticleSystem.maximumImageSize.y = particleSize;
+    }, 400);
+  });
 }
 export function viewerCreateFireFighting(
   viewer,
@@ -136,44 +139,49 @@ export function viewerCreateFireFighting(
   Fire
 ) {
   console.log(viewer, MapFireXYZ, positionXYZ, carts);
-  let { x, y, z } = MapFireXYZ;
-  let { x: x1, y: y1, z: z1 } = positionXYZ[0];
-  let { x: x2, y: y2, z: z2 } = positionXYZ[1];
-  let { x: x3, y: y3, z: z3 } = positionXYZ[2];
-  let index = 500;
-  let addx = (x - x1) / index;
-  let addy = (y - y1) / index;
-  let addz = (z - z1) / index;
-  let cart1 = carts[0];
-  let cart2 = carts[1];
-  let cart3 = carts[2];
-  let time = setInterval(() => {
-    if (index === 100) {
-      clearInterval(time);
-      let Waters = carts.map(cart => {
-        return viewerMountedWater(viewer, cart, Fire);
-      });
-      lookFire(viewer.scene);
-      viewerDestroyedFire(viewer, Fire, Waters);
-      return true;
-    }
-    x1 += addx;
-    y1 += addy;
-    z1 += addz;
-    x2 += addx;
-    y2 += addy;
-    z2 += addz;
-    x3 += addx;
-    y3 += addy;
-    z3 += addz;
-    var position1 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
-    cart1.position = position1;
-    var position2 = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
-    cart2.position = position2;
-    var position3 = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
-    cart3.position = position3;
-    --index;
-  }, 0);
+  return new Promise((resolve, reject) => {
+    let { x, y, z } = MapFireXYZ;
+    let { x: x1, y: y1, z: z1 } = positionXYZ[0];
+    let { x: x2, y: y2, z: z2 } = positionXYZ[1];
+    let { x: x3, y: y3, z: z3 } = positionXYZ[2];
+    let index = 500;
+    let addx = (x - x1) / index;
+    let addy = (y - y1) / index;
+    let addz = (z - z1) / index;
+    let cart1 = carts[0];
+    let cart2 = carts[1];
+    let cart3 = carts[2];
+    let time = setInterval(() => {
+      if (index === 100) {
+        clearInterval(time);
+        let Waters = carts.map(cart => {
+          return viewerMountedWater(viewer, cart, Fire);
+        });
+        lookFire(viewer.scene);
+        viewerDestroyedFire(viewer, Fire, Waters)
+          .then(res => {
+            resolve(res);
+          })
+          .catch(error => reject(error));
+      }
+      x1 += addx;
+      y1 += addy;
+      z1 += addz;
+      x2 += addx;
+      y2 += addy;
+      z2 += addz;
+      x3 += addx;
+      y3 += addy;
+      z3 += addz;
+      var position1 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
+      cart1.position = position1;
+      var position2 = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
+      cart2.position = position2;
+      var position3 = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
+      cart3.position = position3;
+      --index;
+    }, 0);
+  });
 }
 export function viewerMountedDeployCart(viewer, positionXYZ) {
   let userCarts = [];

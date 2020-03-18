@@ -107,7 +107,9 @@ export default {
         this.positionCarts,
         carts,
         Fire
-      );
+      ).then(res => {
+        console.log(res);
+      });
     },
     addFire(index, item) {
       console.log(item);
