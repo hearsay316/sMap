@@ -19,6 +19,7 @@
       </template>
       <template v-slot:nav>
         <superNav
+          v-if="isSuperNav"
           :baseUrl="baseUrl"
           :picUrl="picUrl"
           @handleClick="handleClick"
@@ -91,6 +92,7 @@ export default {
       picUrl: {
         ...picUrl
       },
+      isSuperNav: true,
       baseUrl: [...baseUrl],
       baseUrlItem1: [...item1],
       superPlotIndex: -1,
@@ -129,6 +131,7 @@ export default {
     popupActiveTitle(value) {
       console.log(value);
       value && this.rescue();
+      value ? (this.isSuperNav = false) : void 0;
       this.isRescue = false;
       this.clearBaseUrl();
     },
@@ -146,6 +149,7 @@ export default {
       let time = setTimeout(() => {
         clearTimeout(time);
         this.popupActiveTitleDescActive = false;
+        this.isSuperNav = true;
       }, 4000);
     }, //viewer.entities.remove
     clearEntities(Entities) {
