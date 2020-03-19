@@ -27,12 +27,19 @@
       </template>
       <template v-slot:popup>
         <superPopup
+          v-if="baseUrlOne.active"
           :baseUrlOne="baseUrlOne"
           :baseUrlItem1="baseUrlItem1"
           @handlePopupTitleIco="handlePopupTitleIco"
           @addFire="addFire"
           @addCarts="addCarts"
         ></superPopup>
+      </template>
+      <template v-slot:plot>
+        <superPlot
+          :superPlotIndex="superPlotIndex"
+          @handlePopupTitleIco="clearTitle"
+        ></superPlot>
       </template>
     </super-map>
   </div>
@@ -48,7 +55,8 @@ import { demoConfig } from "../config/mapConfig";
 import {
   viewerCreateFireFighting,
   viewerMountedDeployCart,
-  viewerMountedFire
+  viewerMountedFire,
+  InitPlot
 } from "../config/Configuration";
 let viewer, carts, Fire;
 import superNav from "../components/superNav";
@@ -62,10 +70,16 @@ export default {
         ...picUrl
       },
       baseUrl: [...baseUrl],
-      baseUrlItem1: [...item1]
+      baseUrlItem1: [...item1],
+      superPlotIndex: -1
     };
   },
   methods: {
+    clearTitle(value) {
+      console.log(value);
+      this.superPlotIndex = -1;
+      this.handlePopupTitleIco(2);
+    },
     handlePopupTitleIco(index) {
       this.baseUrl[index].active = !this.baseUrl[index].active;
     },
@@ -78,6 +92,7 @@ export default {
       this.baseUrl.forEach((item, index) => {
         itemIndex == index ? (item.active = 1) : (item.active = 0);
       });
+      itemIndex == 2 ? (this.superPlotIndex = 666) : (this.superPlotIndex = -1);
     },
     async rescue() {
       let isRescue = await viewerCreateFireFighting(
@@ -136,7 +151,14 @@ export default {
     mountedWebgl(v) {
       viewer = v;
     },
-    mountedOpenMap(viewer, layers) {},
+    mountedOpenMap(viewer, layers) {
+      console.log(viewer, 666);
+      try {
+        InitPlot(viewer, this.serverUrl);
+      } catch (e) {
+        console.log(e);
+      }
+    },
     createWebgl(vm) {
       // vm是 superMap的this
     },
@@ -149,7 +171,8 @@ export default {
   },
   components: {
     superNav,
-    superPopup: () => import("../components/superPopup")
+    superPopup: () => import("../components/superPopup"),
+    superPlot: () => import("../components/superPlot")
   },
   computed: {
     baseUrlOne() {

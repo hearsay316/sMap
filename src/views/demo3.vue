@@ -136,7 +136,7 @@
           <div
             id="plotPanel"
             title="标绘面板"
-            style="  height: 100%;overflow: hidden;"
+            style="height: 100%;overflow: hidden;"
           ></div>
           <div
             id="stylePanel"
@@ -1099,6 +1099,7 @@ __proto__: Object */
       if (!viewer) {
         return;
       }
+      console.log("InitPlot 开始执行");
       plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
       scene.layers.add(plottingLayer);
 

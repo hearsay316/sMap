@@ -1,4 +1,6 @@
 import Cesium from "Cesium";
+import initPlotPanel from "initPlotPanel";
+import StylePanel from "StylePanel";
 /**
  *
  * @param idName
@@ -29,6 +31,40 @@ function lookFire(scene) {
   } catch (e) {
     console.log(e);
   }
+}
+export function InitPlot(viewer, serverUrl) {
+  if (!viewer) {
+    return;
+  }
+  let scene = viewer.scene;
+  window.scene = scene;
+  const plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
+  scene.layers.add(plottingLayer);
+  const plotEditControl = new Cesium.PlotEditControl(scene, plottingLayer); //编辑控件
+  window.plotEditControl = plotEditControl;
+  const plotDrawControl = new Cesium.PlotDrawControl(scene, plottingLayer); //绘制控件
+  plotDrawControl.drawFinishEvent.addEventListener(function() {
+    //标绘结束，激活编辑控件
+    plotEditControl.activate();
+  });
+
+  const plotting = Cesium.Plotting.getInstance(serverUrl, scene);
+  //标绘面板
+  initPlotPanel(
+    "plotPanel",
+    serverUrl,
+    plotDrawControl,
+    plotEditControl,
+    plotting
+  );
+  const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
+  return {
+    plottingLayer,
+    plotEditControl,
+    plotDrawControl,
+    plotting,
+    stylePanel
+  };
 }
 export function viewerMountedWater(viewer, cart, Fire) {
   let scene = viewer.scene;

@@ -6,6 +6,7 @@
     </div>
     <slot name="nav"></slot>
     <slot name="popup"></slot>
+    <slot name="plot"></slot>
   </div>
 </template>
 

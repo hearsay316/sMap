@@ -25,6 +25,7 @@ export const demoConfig = {
     y: 24.969712733889363,
     z: 1573.026203891956
   },
+  serverUrl: "http://47.103.125.18:8090/iserver/services/plot-JY/rest/plot",
   positionCarts: [
     {
       x: 102.06943685862204,

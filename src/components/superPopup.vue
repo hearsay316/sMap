@@ -1,7 +1,7 @@
 <template>
   <div class="superPopup">
     <template v-if="baseUrlOne">
-      <div class="superPopup-active" v-if="baseUrlOne.active">
+      <div class="superPopup-active">
         <div class="superPopup-title">
           <div class="superPopup-title-desc">资源部署</div>
           <div class="superPopup-title-ico" @click="handlePopupTitleIco()">
