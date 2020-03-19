@@ -8,6 +8,7 @@
     <slot name="popup"></slot>
     <slot name="plot"></slot>
     <slot name="popupActive"></slot>
+    <slot name="popupActiveEnd"></slot>
   </div>
 </template>
 

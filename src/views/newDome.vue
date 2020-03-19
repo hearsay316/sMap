@@ -41,20 +41,24 @@
         ></superPlot>
       </template>
       <template v-slot:popupActive>
-        <div v-if="baseUrlThree.active" class="popupActive">
-          <div class="popupActive-title">
-            <img src="../assets/popupActive-g-2.png" alt="" />
-            <div class="popupActive-title-desc">
-              <div class="popupActive-title-gb">是否发起总攻</div>
-              <div class="popupActive-title-left" @click="popupActiveTitle(1)">
-                是
-              </div>
-              <div class="popupActive-title-right" @click="popupActiveTitle(0)">
-                否
-              </div>
-            </div>
+        <popupActiveTitle
+          :popupActiveTitleDesc="popupActiveTitleDesc"
+          v-if="baseUrlThree.active"
+        >
+          <div class="popupActive-title-left" @click="popupActiveTitle(1)">
+            是
           </div>
-        </div>
+          <div class="popupActive-title-right" @click="popupActiveTitle(0)">
+            否
+          </div>
+        </popupActiveTitle>
+      </template>
+      <template v-slot:popupActiveEnd>
+        <popupActiveTitle
+          :popupActiveTitleDesc="popupActiveEndDesc"
+          v-if="popupActiveTitleDescActive"
+        >
+        </popupActiveTitle>
       </template>
     </super-map>
   </div>
@@ -76,6 +80,8 @@ import {
 } from "../config/Configuration";
 let viewer, carts, Fire;
 import superNav from "../components/superNav";
+import popupActiveTitle from "../components/popupActiveTitle";
+
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 export default {
   name: "newDome",
@@ -88,7 +94,10 @@ export default {
       baseUrl: [...baseUrl],
       baseUrlItem1: [...item1],
       superPlotIndex: -1,
-      isRescue: false
+      isRescue: false,
+      popupActiveEndDesc: "总攻结束",
+      popupActiveTitleDesc: "是否发起总攻",
+      popupActiveTitleDescActive: false
     };
   },
   methods: {
@@ -131,8 +140,13 @@ export default {
         carts,
         Fire
       );
+      this.popupActiveTitleDescActive = true;
       isRescue && this.clearStatusAll();
       isRescue && this.clearEntities(carts);
+      let time = setTimeout(() => {
+        clearTimeout(time);
+        this.popupActiveTitleDescActive = false;
+      }, 4000);
     }, //viewer.entities.remove
     clearEntities(Entities) {
       let Types = Object.prototype.toString.call(Entities);
@@ -200,6 +214,7 @@ export default {
   },
   components: {
     superNav,
+    popupActiveTitle,
     superPopup: () => import("../components/superPopup"),
     superPlot: () => import("../components/superPlot")
   },
@@ -241,63 +256,4 @@ export default {
             box-sizing border-box
         :not(first-of-type)
             border-top 1px solid blue
-.popupActive
-      position absolute
-      width 400px
-      height: 225px
-      top 0
-      left 0
-      right 0
-      bottom 0
-      margin auto
-      background-color #0e2d5f
-      background url("../assets/popupActive-bg-1.gif")  no-repeat 50% 50%
-    .popupActive-title
-        position absolute
-        height: 100%
-        top 0
-        left 0
-        right 0
-        bottom 0
-        margin auto
-        img
-          height:100%
-          transform scale(1.08)
-          opacity 0.55
-        .popupActive-title-desc
-            position absolute
-            top 0
-            left 0
-            right 0
-            bottom 0
-            display flex
-            flex-direction column
-            .popupActive-title-gb
-                font-size 48px
-                height calc(100% - 120px)
-                display flex
-                flex-direction column-reverse
-                color #D7EFF9
-            .popupActive-title-left
-                width:87px;
-                height:36px;
-                line-height 36px
-                font-size 24px
-                color #FBFBFB
-                background:#0C8BC8;
-                border-radius:10px;
-                position absolute
-                left 100px
-                bottom 31px
-            .popupActive-title-right
-                position absolute
-                width:87px;
-                height:36px;
-                line-height 36px
-                font-size 24px
-                color #91C1DA
-                background:#76ADC8;
-                border-radius:10px;
-                right 100px
-                bottom 31px
 </style>
