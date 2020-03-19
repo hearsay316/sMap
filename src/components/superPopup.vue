@@ -57,7 +57,7 @@ export default {
     },
     handlePopupTitleIco() {
       this.value = true;
-      this.$emit("handlePopupTitleIco", 0);
+      this.$emit("handlePopupTitleIco", 1);
     }
   }
 };

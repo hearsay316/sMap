@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     handleItem(index) {
+      console.log(index);
       this.$emit("handleClick", index);
     }
   },

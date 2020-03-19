@@ -256,9 +256,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
   const position = Cesium.Cartesian3.fromDegrees(x, y, z);
   console.log(viewer.entities);
   const FireEntity = viewer.entities.add({
-    position: position,
-    name: "99999999999",
-    id: "id"
+    position: position
   });
   let viewModel = {
     emissionRate: 200,
@@ -270,8 +268,12 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
     endScale: 1.5,
     particleSize: 1
   };
+  // var origin = Cesium.Cartesian3.fromDegrees(x, y, z);
+  // var modelMatrix = Cesium.Transforms.headingPitchRollToFixedFrame(origin);
+
   const FireParticleSystem = scene.primitives.add(
     new Cesium.ParticleSystem({
+      id: "xxx",
       // 粒子的图片
       image:
         "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fire.png",
@@ -498,6 +500,18 @@ export function CesiumClickLayer(viewer, fuc) {
 export function CesiumClickLeft(scene, func) {
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function(e) {
+    var pick = scene.pick(e.position);
+    if (Cesium.defined(pick)) {
+      var primitiveInfo = pick.primitive;
+      console.log(
+        "pick.primitive",
+        pick.primitive,
+        pick.primitive._collection._textureAtlasGUID
+      );
+      scene.primitives._primitives.forEach(item => {
+        console.log(item?._billboardCollection?._textureAtlasGUID);
+      });
+    }
     let positions = scene.pickPosition(e.position);
     //将笛卡尔坐标转化为经纬度坐标
     let cartographic = Cesium.Cartographic.fromCartesian(positions);
