@@ -62,27 +62,7 @@ export default {
         ...picUrl
       },
       baseUrl: [...baseUrl],
-      baseUrlItem1: [...item1],
-      positionCarts: [
-        {
-          x: 102.06943685862204,
-          y: 24.969427388802274,
-          z: 1571.2370406630653,
-          name: "cart1"
-        },
-        {
-          x: 102.06946361643989,
-          y: 24.96939567838009,
-          z: 1571.213370078212,
-          name: "cart2"
-        },
-        {
-          x: 102.06953602518084,
-          y: 24.969451096085642,
-          z: 1571.356784142299,
-          name: "cart3"
-        }
-      ]
+      baseUrlItem1: [...item1]
     };
   },
   methods: {
@@ -99,17 +79,33 @@ export default {
         itemIndex == index ? (item.active = 1) : (item.active = 0);
       });
     },
-    rescue() {
-      console.log(this.rescueActive);
-      viewerCreateFireFighting(
+    async rescue() {
+      let isRescue = await viewerCreateFireFighting(
         viewer,
         this.MapFireXYZ,
         this.positionCarts,
         carts,
         Fire
-      ).then(res => {
-        this.clearStatusAll();
+      );
+      isRescue && this.clearStatusAll();
+      isRescue && this.clearEntities(carts);
+    }, //viewer.entities.remove
+    clearEntities(Entities) {
+      let Types = Object.prototype.toString.call(Entities);
+      typeof this[`Entities${Types}`] === "function"
+        ? this[`Entities${Types}`](Entities)
+        : this.isError("Entities 类型错误");
+    },
+    isError(desc) {
+      throw new Error(desc);
+    },
+    "Entities[object Array]"(Entities) {
+      Entities.forEach(entity => {
+        viewer.entities.remove(entity);
       });
+    },
+    "Entities[object Object]"(Entities) {
+      viewer.entities.remove(Entities);
     },
     clearStatusAll() {
       this.baseUrl.forEach(item => {
@@ -127,7 +123,6 @@ export default {
       Fire = viewerMountedFire(viewer, this.MapFireXYZ);
     },
     addCarts(index, item) {
-      console.log(item);
       this.baseUrlItem1[index].active = true;
       carts = viewerMountedDeployCart(viewer, this.positionCarts);
     },
@@ -139,7 +134,6 @@ export default {
     },
 
     mountedWebgl(v) {
-      console.log(viewer, 666);
       viewer = v;
     },
     mountedOpenMap(viewer, layers) {},
