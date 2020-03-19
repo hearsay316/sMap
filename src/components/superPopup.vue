@@ -71,7 +71,7 @@ export default {
     margin auto
     right 365px
     width:280px
-    height:393px
+    height:505px
     .superPopup-title
       height 56px
       font-size 23px
@@ -85,7 +85,7 @@ export default {
       .superPopup-title-ico
         margin-top: -3.2px;
     .superPopup-main
-      height 337px
+      height 449px
       display grid
       grid-template-columns 63px 63px 63px
       grid-column-gap 36px
@@ -102,10 +102,10 @@ export default {
           height 63px
           width 63px
           padding  22px 0 5px 0
-       :nth-last-child(1)
+       :nth-last-child(4)
           span
             width:90px
-            margin-left -10px
+            margin-left -12px
 
 /deep/.el-switch__core
   height 23px

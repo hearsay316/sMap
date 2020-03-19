@@ -213,7 +213,6 @@ export default {
     RegCesiumClickLayer(feature) {
       this.layerTitle = feature.SMID;
       console.log(feature);
-      // this.$message("这个是" + JSON.stringify(feature));
     }
   },
   components: {
