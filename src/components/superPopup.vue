@@ -46,14 +46,8 @@ export default {
   },
   methods: {
     superPopupMainItem(index, item) {
-      item.fun && this[item.fun](index, item);
-    },
-    AddCarts(index, item) {
-      console.log("AddCarts", index, item);
-      !item.active && this.$emit("addCarts", index, item);
-    },
-    AddFire(index, item) {
-      !item.active && this.$emit("addFire", index, item);
+      let active = item.fun && !item.active;
+      active && this.$emit(item.fun, index, item);
     },
     handlePopupTitleIco() {
       this.value = true;

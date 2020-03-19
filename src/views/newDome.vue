@@ -33,6 +33,9 @@
           @handlePopupTitleIco="handlePopupTitleIco"
           @addFire="addFire"
           @addCarts="addCarts"
+          @measureDis="measureDis"
+          @measureArea="measureArea"
+          @measureHeight="measureHeight"
         ></superPopup>
       </template>
       <template v-slot:plot>
@@ -77,9 +80,12 @@ import {
   viewerCreateFireFighting,
   viewerMountedDeployCart,
   viewerMountedFire,
-  InitPlot
+  InitPlot,
+  viewerHandlerDis,
+  viewerHandlerArea,
+  viewerHandlerHeight
 } from "../config/Configuration";
-let viewer, carts, Fire;
+let viewer, carts, Fire, handlerDis, handlerArea, handlerHeight;
 import superNav from "../components/superNav";
 import popupActiveTitle from "../components/popupActiveTitle";
 
@@ -187,6 +193,32 @@ export default {
     addCarts(index, item) {
       this.baseUrlItem1[index].active = true;
       carts = viewerMountedDeployCart(viewer, this.positionCarts);
+    },
+    deactiveAll() {
+      handlerDis && handlerDis.deactivate();
+      handlerArea && handlerArea.deactivate();
+      handlerHeight && handlerHeight.deactivate();
+    },
+    measureDis(index, item) {
+      console.log(index, item);
+      this.baseUrlItem1[index].active = true;
+      handlerDis = viewerHandlerDis(viewer, 0, this.baseUrlItem1, index);
+      console.log(handlerDis);
+      handlerDis && handlerDis.activate();
+    },
+    measureArea(index, item) {
+      console.log(index, item);
+      this.baseUrlItem1[index].active = true;
+      handlerArea = viewerHandlerArea(viewer, 0, this.baseUrlItem1, index);
+      console.log(handlerDis);
+      handlerArea && handlerArea.activate();
+    },
+    measureHeight(index, item) {
+      console.log(index, item);
+      this.baseUrlItem1[index].active = true;
+      handlerHeight = viewerHandlerHeight(viewer, 0, this.baseUrlItem1, index);
+      console.log(handlerHeight);
+      handlerHeight && handlerHeight.activate();
     },
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position);
