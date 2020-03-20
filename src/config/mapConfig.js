@@ -11,6 +11,18 @@ export const demoConfig = {
     pitch: -0.8606068847349784,
     roll: 7.638334409421077e-14
   },
+  earth: {
+    positionXYZ: {
+      x: -31907059.63158584,
+      y: 31790256.53609646,
+      z: 6842226.596228782
+    },
+    orientation: {
+      heading: 5.748175488108613,
+      pitch: -1.5279875767724511,
+      roll: 0
+    }
+  },
   Config: {
     name: "Config",
     setQueryParameter: {

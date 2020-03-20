@@ -21,6 +21,7 @@ export default {
     Config: Object,
     positionXYZ: Object,
     Angle: Object,
+    earth: Object,
     mountedWebgl: Function,
     createWebgl: Function,
     mountedOpenMap: Function,
@@ -40,8 +41,7 @@ export default {
       viewer,
       url: this.url,
       Config: this.Config,
-      positionXYZ: this.positionXYZ,
-      Angle: this.Angle,
+      earth: this.earth,
       mountedOpenMap: this.mountedOpenMap,
       errorOpenMap: this.errorOpenMap
     });

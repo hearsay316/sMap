@@ -72,8 +72,8 @@ export function InitPlot(viewer, serverUrl) {
     plotting
   );
   const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
-  window.scene = undefined;
-  window.plotEditControl = undefined;
+  // window.scene = undefined;
+  // window.plotEditControl = undefined;
   console.log("InitPlot 动态标绘结束");
 
   return {
@@ -434,15 +434,8 @@ export function observeLayer(layers, Config) {
  * @param obj
  */
 export function openMap(obj) {
-  let {
-    viewer,
-    url,
-    Config,
-    positionXYZ,
-    Angle,
-    mountedOpenMap,
-    errorOpenMap
-  } = obj;
+  let { viewer, url, Config, earth, mountedOpenMap, errorOpenMap } = obj;
+  const { positionXYZ, orientation } = earth;
   const scene = viewer.scene;
   const widget = viewer.cesiumWidget;
   return new Promise((resolve, reject) => {
@@ -469,8 +462,8 @@ export function openMap(obj) {
           // });
           const ConfigName = Config && Config.name;
           ConfigName && observeLayer(layers, Config);
-          const positionConfig = positionXYZ && Angle;
-          positionConfig && setViewConfig(viewer, positionXYZ, Angle);
+          const positionConfig = positionXYZ && orientation;
+          positionConfig && setViewConfig(viewer, positionXYZ, orientation);
           mountedOpenMap && mountedOpenMap(viewer, layers);
 
           resolve(layers);
@@ -495,10 +488,10 @@ export function openMap(obj) {
     }
   });
 }
-export function setViewConfig(viewer, positionXYZ, Angle) {
+export function setViewConfig(viewer, positionXYZ, orientation) {
   console.log("setViewConfig 开始");
   let { x, y, z } = positionXYZ;
-  let { heading, pitch, roll } = Angle;
+  let { heading, pitch, roll } = orientation;
   setView(
     viewer.scene,
     { x, y, z },
@@ -592,6 +585,8 @@ export function CesiumClickLeft(scene, func) {
       z = 0;
     }
     func(e, { x, y, z });
+    window.scene = scene;
+    // console.log(scene.camera, scene.Cartesian3);
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
 
@@ -700,6 +695,15 @@ export function viewerHandlerArea(viewer, clampMode, baseUrlItem1, index) {
   console.log("viewerHandlerArea 结束");
   return handlerArea;
 }
+
+/**
+ *  高 Height
+ * @param viewer
+ * @param clampMode
+ * @param baseUrlItem1
+ * @param index
+ * @returns {Cesium.MeasureHandler}
+ */
 export function viewerHandlerHeight(viewer, clampMode, baseUrlItem1, index) {
   console.log("viewerHandlerHeight 开始 ");
   // let vm = this;

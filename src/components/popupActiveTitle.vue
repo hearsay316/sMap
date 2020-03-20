@@ -30,7 +30,7 @@ export default {
     bottom 0
     margin auto
     background-color #0e2d5f
-    background url("../assets/popupActive-bg-1.gif")  no-repeat 50% 50%
+    background url("http://cdn.j6375x.cn/cdn/pic/p-bg.gif")  no-repeat 50% 50%
 .popupActive-title
     position absolute
     height: 100%

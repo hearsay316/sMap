@@ -66,40 +66,44 @@ export default {
     right 365px
     width:280px
     height:505px
-    .superPopup-title
-      height 56px
-      font-size 23px
-      font-weight 600
-      color #ffffff
-      display flex
-      justify-content space-between
-      padding 15.8px 37px 17.2px 37px
-      background-color RGBA(55, 99, 150, 0.98)
-      box-sizing border-box
-      .superPopup-title-ico
-        margin-top: -3.2px;
-    .superPopup-main
-      height 449px
-      display grid
-      grid-template-columns 63px 63px 63px
-      grid-column-gap 36px
-      flex-wrap wrap
-      color #ffffff
-      padding 0 11px
-      background-color RGBA(22, 57, 95, 0.9)
-      .superPopup-main-item
+    .superPopup-active
+      border:3px solid rgba(51,255,254,.7)
+      /*box-shadow 3px 2px 20px #33fffe*/
+      /*outline 2px #33fffe*/
+      .superPopup-title
+        height 56px
+        font-size 23px
+        font-weight 600
+        color #ffffff
         display flex
-        flex-direction column
-        span
-          font-size 16px
-        img
-          height 63px
-          width 63px
-          padding  22px 0 5px 0
-       :nth-last-child(5)
+        justify-content space-between
+        padding 15.8px 37px 17.2px 37px
+        background-color RGBA(55, 99, 150, 0.98)
+        box-sizing border-box
+        .superPopup-title-ico
+          margin-top: -3.2px;
+      .superPopup-main
+        height 449px
+        display grid
+        grid-template-columns 63px 63px 63px
+        grid-column-gap 36px
+        flex-wrap wrap
+        color #ffffff
+        padding 0 11px
+        background-color RGBA(22, 57, 95, 0.9)
+        .superPopup-main-item
+          display flex
+          flex-direction column
           span
-            width:90px
-            margin-left -12px
+            font-size 16px
+          img
+            height 63px
+            width 63px
+            padding  22px 0 5px 0
+         :nth-last-child(5)
+            span
+              width:90px
+              margin-left -12px
 
 /deep/.el-switch__core
   height 23px

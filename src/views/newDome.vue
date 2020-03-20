@@ -6,6 +6,7 @@
       :position-x-y-z="positionXYZ"
       :angle="angle"
       :Config="Config"
+      :earth="earth"
       :createWebgl="createWebgl"
       :mountedWebgl="mountedWebgl"
       :mountedOpenMap="mountedOpenMap"
@@ -14,8 +15,13 @@
       :RegCesiumClickRight="RegCesiumClickRight"
     >
       <template v-slot:default>
-        <div>dsewdewd</div>
-        <div>房屋信息XXXXXXXXXXXXXXXXXXXX</div>
+        <div class="default-img">
+          <img
+            src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"
+            alt=""
+          />
+        </div>
+        <div>建筑用材存放</div>
       </template>
       <template v-slot:nav>
         <superNav
@@ -66,6 +72,13 @@
         </popupActiveTitle>
       </template>
     </super-map>
+    <div
+      class="newDome-title"
+      v-if="isNewDomeTitle"
+      @click="handleNewDomeTitle"
+    >
+      进入场景
+    </div>
   </div>
 </template>
 <!--
@@ -84,7 +97,8 @@ import {
   InitPlot,
   viewerHandlerDis,
   viewerHandlerArea,
-  viewerHandlerHeight
+  viewerHandlerHeight,
+  setView
 } from "../config/Configuration";
 let viewer, carts, Fire, handlerDis, handlerArea, handlerHeight;
 import superNav from "../components/superNav";
@@ -96,10 +110,11 @@ export default {
   data() {
     return {
       ...demoConfig,
+      isNewDomeTitle: true,
       picUrl: {
         ...picUrl
       },
-      isSuperNav: true,
+      isSuperNav: false,
       baseUrl: [...baseUrl],
       baseUrlItem1: [...item1],
       superPlotIndex: -1,
@@ -110,6 +125,11 @@ export default {
     };
   },
   methods: {
+    handleNewDomeTitle() {
+      this.isNewDomeTitle = false;
+      setView(viewer, this.positionXYZ, this.angle);
+      this.isSuperNav = true;
+    },
     clearTitle(value) {
       this.superPlotIndex = -1;
       this.handlePopupTitleIco(2);
@@ -242,7 +262,7 @@ export default {
       handlerHeight && handlerHeight.clear();
     },
     RegCesiumClickLeft(e, position) {
-      console.log("Left", e, position);
+      console.log("Left", e, position, viewer);
     },
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);
@@ -311,4 +331,15 @@ export default {
             box-sizing border-box
         :not(first-of-type)
             border-top 1px solid blue
+  .newDome-title
+      position absolute
+      top 20px
+      width 64px
+      height 64px
+      line-height 64px
+      border-radius 8px
+      color #ffffff
+      background-color #0e2d5f
+  .newDome-title:hover
+      box-shadow 3px 2px 20px #213d96
 </style>
