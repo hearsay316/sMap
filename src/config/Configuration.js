@@ -7,8 +7,7 @@ import StylePanel from "StylePanel";
  * @returns {Cesium.Viewer}  idName div  id的值
  */
 export function createCesium(idName) {
-  const viewer = new Cesium.Viewer(idName);
-  return viewer;
+  return new Cesium.Viewer(idName);
 }
 //todo 需要重构
 /**
@@ -195,7 +194,7 @@ export function viewerDestroyedFire(
         //   showClose: false
         // });
       }
-      index -= 0.05;
+      index -= 0.025;
       var particleSize = parseFloat(index);
       FireParticleSystem.minimumImageSize.x = particleSize;
       FireParticleSystem.minimumImageSize.y = particleSize;
@@ -224,16 +223,22 @@ export function viewerCreateFireFighting(
   console.log(viewer, MapFireXYZ, positionXYZ, carts);
   return new Promise((resolve, reject) => {
     let { x, y, z } = MapFireXYZ;
-    let { x: x1, y: y1, z: z1 } = positionXYZ[0];
-    let { x: x2, y: y2, z: z2 } = positionXYZ[1];
-    let { x: x3, y: y3, z: z3 } = positionXYZ[2];
+    // let { x: x1, y: y1, z: z1 } = positionXYZ[0];
+    // let { x: x2, y: y2, z: z2 } = positionXYZ[1];
+    // let { x: x3, y: y3, z: z3 } = positionXYZ[2];
+    let [
+      { x: x1, y: y1, z: z1 },
+      { x: x2, y: y2, z: z2 },
+      { x: x3, y: y3, z: z3 }
+    ] = positionXYZ;
     let index = 500;
     let addx = (x - x1) / index;
     let addy = (y - y1) / index;
     let addz = (z - z1) / index;
-    let cart1 = carts[0];
-    let cart2 = carts[1];
-    let cart3 = carts[2];
+    // let cart1 = carts[0];
+    // let cart2 = carts[1];
+    // let cart3 = carts[2];
+    let [cart1, cart2, cart3] = carts;
     let time = setInterval(() => {
       if (index === 100) {
         clearInterval(time);
@@ -256,12 +261,9 @@ export function viewerCreateFireFighting(
       x3 += addx;
       y3 += addy;
       z3 += addz;
-      var position1 = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
-      cart1.position = position1;
-      var position2 = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
-      cart2.position = position2;
-      var position3 = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
-      cart3.position = position3;
+      cart1.position = Cesium.Cartesian3.fromDegrees(x1, y1, z1);
+      cart2.position = Cesium.Cartesian3.fromDegrees(x2, y2, z2);
+      cart3.position = Cesium.Cartesian3.fromDegrees(x3, y3, z3);
       --index;
     }, 0);
   });
@@ -380,18 +382,18 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
 /**
  * 创建物体实例
  * @param viewer
+ * @param url  "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf"
  * @param x
  * @param y
  * @param z
  * @param obj
  * @returns {*}
  */
-export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
+export function viewerEntitiesAdd(viewer, url, { x, y, z }, obj) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);
-  let entitie = viewer.entities.add({
+  return viewer.entities.add({
     model: {
-      uri:
-        "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+      url,
       minimumPixelSize: 32,
       maximumScale: 0.5
     },
@@ -399,7 +401,6 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
     position: position,
     ...obj
   });
-  return entitie;
 }
 
 /**

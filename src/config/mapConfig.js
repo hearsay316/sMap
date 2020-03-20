@@ -23,6 +23,19 @@ export const demoConfig = {
       roll: 0
     }
   },
+  FireFightingPosition: {
+    // 灭火喷水时候需要拉近的位置
+    positionXYZ: {
+      x: -1209371.1848499542,
+      y: 5655586.079866716,
+      z: 2693109.1253441786
+    },
+    orientation: {
+      heading: 6.283185042289299,
+      pitch: -0.7854026364258244,
+      roll: 6.283185307179586
+    }
+  },
   Config: {
     name: "Config",
     setQueryParameter: {
