@@ -14,6 +14,7 @@
 
 <script>
 import * as map from "../config/Configuration";
+//todo  props需要做验证
 export default {
   name: "superMap",
   props: {
@@ -32,7 +33,6 @@ export default {
   },
   async mounted() {
     this.createWebgl && this.createWebgl(this);
-    // console.log(this.version);
     let viewer = this.createCesium("superMap");
     viewer.customInfobox = document.querySelector("#bubble");
     this.mountedWebgl && this.mountedWebgl(viewer);

@@ -10,7 +10,7 @@ export function createCesium(idName) {
   const viewer = new Cesium.Viewer(idName);
   return viewer;
 }
-
+//todo 需要重构
 /**
  * 移动相机 坐标
  * @param scene
@@ -50,6 +50,7 @@ export function InitPlot(viewer, serverUrl) {
   if (!viewer) {
     return;
   }
+  // 挂在全局方法
   let scene = viewer.scene;
   window.scene = scene;
   const plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
@@ -72,8 +73,9 @@ export function InitPlot(viewer, serverUrl) {
     plotting
   );
   const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
-  // window.scene = undefined;
-  // window.plotEditControl = undefined;
+  window.scene = undefined;
+  window.plotEditControl = undefined;
+  // 清除window作用域
   console.log("InitPlot 动态标绘结束");
 
   return {
@@ -488,6 +490,13 @@ export function openMap(obj) {
     }
   });
 }
+//todo 需要重构
+/**
+ * setViewConfig 逻辑需要重写
+ * @param viewer
+ * @param positionXYZ
+ * @param orientation
+ */
 export function setViewConfig(viewer, positionXYZ, orientation) {
   console.log("setViewConfig 开始");
   let { x, y, z } = positionXYZ;
@@ -585,7 +594,7 @@ export function CesiumClickLeft(scene, func) {
       z = 0;
     }
     func(e, { x, y, z });
-    window.scene = scene;
+    // window.scene = scene;
     // console.log(scene.camera, scene.Cartesian3);
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }

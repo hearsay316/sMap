@@ -13,12 +13,12 @@
       :errorOpenMap="errorOpenMap"
       :RegCesiumClickLeft="RegCesiumClickLeft"
       :RegCesiumClickRight="RegCesiumClickRight"
+      :RegCesiumClickLayer="RegCesiumClickLayer"
     >
       <template v-slot:default>
         <div class="default-img">
           <img
             src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"
-            alt=""
           />
         </div>
         <div>建筑用材存放</div>
@@ -137,17 +137,40 @@ export default {
     handlePopupTitleIco(index) {
       this.baseUrl[index].active = !this.baseUrl[index].active;
     },
+    //
+    navHandleClick() {
+      let vm = this;
+      return {
+        navHandleClick1(itemIndex) {
+          return true;
+        },
+        navHandleClick2(itemIndex) {
+          return (vm.superPlotIndex = 666);
+        },
+        navHandleClick3(itemIndex) {
+          return vm.rescueActive ? (vm.isRescue = true) : false;
+        },
+        navHandleClick0(itemIndex) {
+          return true;
+        },
+        navHandleClick4(itemIndex) {
+          return true;
+        }
+      };
+    },
     handleClick(itemIndex) {
-      if (itemIndex == 3 && !this.rescueActive) {
-        return;
-      } else if (itemIndex == 3 && this.rescueActive) {
-        //this.rescue();
-        this.isRescue = true;
-      }
+      itemIndex !== 2 ? (this.superPlotIndex = -1) : void 0;
+      // 根据itemIndex执行对应的方法
+      let navHandleClick = this.navHandleClick();
+      let isNavHandleClick = navHandleClick[`navHandleClick${itemIndex}`](
+        itemIndex
+      );
+      // 清除所有状态
       this.baseUrl.forEach((item, index) => {
-        itemIndex == index ? (item.active = 1) : (item.active = 0);
+        isNavHandleClick && itemIndex === index
+          ? (item.active = 1)
+          : (item.active = 0);
       });
-      itemIndex == 2 ? (this.superPlotIndex = 666) : (this.superPlotIndex = -1);
     },
     clearBaseUrl() {
       this.baseUrl.forEach(item => {
@@ -212,12 +235,6 @@ export default {
       carts = viewerMountedDeployCart(viewer, this.positionCarts);
     },
     deActiveAll() {
-      console.log(
-        "deActiveAlldeActiveAlldeActiveAll",
-        handlerDis?.deactivate,
-        handlerArea?.deactivate,
-        handlerHeight?.deactivate
-      );
       handlerDis && handlerDis.deactivate();
       handlerArea && handlerArea.deactivate();
       handlerHeight && handlerHeight.deactivate();
@@ -267,7 +284,6 @@ export default {
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);
     },
-
     mountedWebgl(v) {
       viewer = v;
     },
