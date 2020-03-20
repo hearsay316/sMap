@@ -96,7 +96,7 @@ export default {
           height 63px
           width 63px
           padding  22px 0 5px 0
-       :nth-last-child(4)
+       :nth-last-child(5)
           span
             width:90px
             margin-left -12px

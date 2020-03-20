@@ -2,7 +2,7 @@ import Cesium from "Cesium";
 import initPlotPanel from "initPlotPanel";
 import StylePanel from "StylePanel";
 /**
- *
+ * 创建Cesium 实例
  * @param idName
  * @returns {Cesium.Viewer}  idName div  id的值
  */
@@ -10,6 +10,11 @@ export function createCesium(idName) {
   const viewer = new Cesium.Viewer(idName);
   return viewer;
 }
+
+/**
+ * 移动相机 坐标
+ * @param scene
+ */
 function lookFire(scene) {
   try {
     if (scene.camera) {
@@ -32,7 +37,16 @@ function lookFire(scene) {
     console.log(e);
   }
 }
+
+/**
+ * 创建动态标绘 (动态标绘 只能隐藏 不能销毁)
+ * @param viewer
+ * @param serverUrl
+ * @returns {{plottingLayer: Cesium.PlottingLayer, plotDrawControl: Cesium.PlotDrawControl, plotting: (*|module:zrender/ZRender), plotEditControl: Cesium.PlotEditControl, stylePanel}}
+ * @constructor
+ */
 export function InitPlot(viewer, serverUrl) {
+  console.log("InitPlot 动态标绘开始");
   if (!viewer) {
     return;
   }
@@ -58,6 +72,10 @@ export function InitPlot(viewer, serverUrl) {
     plotting
   );
   const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
+  window.scene = undefined;
+  window.plotEditControl = undefined;
+  console.log("InitPlot 动态标绘结束");
+
   return {
     plottingLayer,
     plotEditControl,
@@ -66,6 +84,14 @@ export function InitPlot(viewer, serverUrl) {
     stylePanel
   };
 }
+
+/**
+ * 创建水的效果
+ * @param viewer
+ * @param cart
+ * @param Fire
+ * @returns {*}
+ */
 export function viewerMountedWater(viewer, cart, Fire) {
   let scene = viewer.scene;
   let emitterModelMatrix = new Cesium.Matrix4();
@@ -128,13 +154,22 @@ export function viewerMountedWater(viewer, cart, Fire) {
 
   // 改变粒子系统的位置
   function computeEmitterModelMatrix() {
-    hpr = Cesium.HeadingPitchRoll.fromDegrees(0, 90, 195, hpr);
-    trs.translation = Cesium.Cartesian3.fromElements(0, 0, 1.4, translation);
+    hpr = Cesium.HeadingPitchRoll.fromDegrees(0, 90, 195, hpr); //方向坐标
+    trs.translation = Cesium.Cartesian3.fromElements(0, 0, 1.4, translation); //位置高度
     trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr, rotation);
     return Cesium.Matrix4.fromTranslationRotationScale(trs, emitterModelMatrix);
   }
   return WaterParticleSystem;
 }
+
+/**
+ *  灭火
+ * @param viewer
+ * @param FireParticleSystem 火的实例
+ * @param FireEntity  火的实例
+ * @param WaterParticleSystems 水的实力
+ * @returns {Promise<unknown>}
+ */
 export function viewerDestroyedFire(
   viewer,
   { FireParticleSystem, FireEntity },
@@ -167,6 +202,16 @@ export function viewerDestroyedFire(
     }, 400);
   });
 }
+
+/**
+ *
+ * @param viewer
+ * @param MapFireXYZ
+ * @param positionXYZ
+ * @param carts
+ * @param Fire
+ * @returns {Promise<unknown>}
+ */
 export function viewerCreateFireFighting(
   viewer,
   MapFireXYZ,
@@ -219,7 +264,15 @@ export function viewerCreateFireFighting(
     }, 0);
   });
 }
+
+/**
+ *
+ * @param viewer 创建小车
+ * @param positionXYZ 坐标
+ * @returns {[]}  返回创建小车的实例  (用来销毁小车)
+ */
 export function viewerMountedDeployCart(viewer, positionXYZ) {
+  console.log("viewerMountedDeployCart 开始创建小车");
   let userCarts = [];
   positionXYZ.forEach(xyz => {
     let { x, y, z, name } = xyz;
@@ -242,6 +295,8 @@ export function viewerMountedDeployCart(viewer, positionXYZ) {
     userCarts.push(cart);
   });
   console.log(userCarts);
+  console.log("viewerMountedDeployCart 小车结束");
+
   return userCarts;
 }
 /**
@@ -251,10 +306,10 @@ export function viewerMountedDeployCart(viewer, positionXYZ) {
  * @param primitivesConfig 配置参数
  */
 export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
+  console.log("viewerMountedFire 开始创建火");
   let { x, y, z } = MapFireXYZ;
   const scene = viewer.scene;
   const position = Cesium.Cartesian3.fromDegrees(x, y, z);
-  console.log(viewer.entities);
   const FireEntity = viewer.entities.add({
     position: position
   });
@@ -315,9 +370,20 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
     // Account for any changes to the emitter model matrix.
     FireParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
   });
+  console.log("viewerMountedFire 创建火完毕");
+
   return { FireParticleSystem, FireEntity };
 }
 
+/**
+ * 创建物体实例
+ * @param viewer
+ * @param x
+ * @param y
+ * @param z
+ * @param obj
+ * @returns {*}
+ */
 export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);
   let entitie = viewer.entities.add({
@@ -335,7 +401,7 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
 }
 
 /**
- *
+ * 注册点击单体化
  * @param layers
  * @param Config
  */
@@ -500,13 +566,17 @@ export function CesiumClickLayer(viewer, fuc) {
 export function CesiumClickLeft(scene, func) {
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function(e) {
-    var pick = scene.pick(e.position);
+    /**
+     *  点击物体事件触发
+     */
+    const pick = scene.pick(e.position);
     if (Cesium.defined(pick)) {
-      var primitiveInfo = pick.primitive;
+      // 点击物体事件触发
+      let primitiveInfo = pick.primitive;
       console.log(
         "pick.primitive",
         pick.primitive,
-        pick.primitive._collection._textureAtlasGUID
+        pick.primitive?._collection?._textureAtlasGUID
       );
       scene.primitives._primitives.forEach(item => {
         console.log(item?._billboardCollection?._textureAtlasGUID);
@@ -596,8 +666,11 @@ export function viewerHandlerDis(viewer, clampMode, baseUrlItem1, index) {
  *
  * @param viewer
  * @param clampMode//初始化测量面积
+ * @param baseUrlItem1
+ * @param index
  */
 export function viewerHandlerArea(viewer, clampMode, baseUrlItem1, index) {
+  console.log("viewerHandlerArea 开始");
   // let vm = this;
   //初始化测量面积
   const handlerArea = new Cesium.MeasureHandler(
@@ -624,9 +697,11 @@ export function viewerHandlerArea(viewer, clampMode, baseUrlItem1, index) {
       $("body").removeClass("measureCur");
     }
   });
+  console.log("viewerHandlerArea 结束");
   return handlerArea;
 }
 export function viewerHandlerHeight(viewer, clampMode, baseUrlItem1, index) {
+  console.log("viewerHandlerHeight 开始 ");
   // let vm = this;
   //初始化测量高度
   const handlerHeight = new Cesium.MeasureHandler(
@@ -663,6 +738,8 @@ export function viewerHandlerHeight(viewer, clampMode, baseUrlItem1, index) {
       $("body").removeClass("measureCur");
     }
   });
+  console.log("viewerHandlerHeight 结束 ");
+
   return handlerHeight;
 }
 // 改变粒子系统的位置

@@ -36,6 +36,7 @@
           @measureDis="measureDis"
           @measureArea="measureArea"
           @measureHeight="measureHeight"
+          @clearMeasure="clearMeasure"
         ></superPopup>
       </template>
       <template v-slot:plot>
@@ -110,7 +111,6 @@ export default {
   },
   methods: {
     clearTitle(value) {
-      console.log(value);
       this.superPlotIndex = -1;
       this.handlePopupTitleIco(2);
     },
@@ -135,7 +135,6 @@ export default {
       });
     },
     popupActiveTitle(value) {
-      console.log(value);
       value && this.rescue();
       value ? (this.isSuperNav = false) : void 0;
       this.isRescue = false;
@@ -183,10 +182,8 @@ export default {
       this.baseUrlItem1.forEach(item => {
         item.active = false;
       });
-      console.log(this.baseUrlItem1, this.baseUrl);
     },
     addFire(index, item) {
-      console.log(item);
       this.baseUrlItem1[index].active = true;
       Fire = viewerMountedFire(viewer, this.MapFireXYZ);
     },
@@ -194,31 +191,55 @@ export default {
       this.baseUrlItem1[index].active = true;
       carts = viewerMountedDeployCart(viewer, this.positionCarts);
     },
-    deactiveAll() {
+    deActiveAll() {
+      console.log(
+        "deActiveAlldeActiveAlldeActiveAll",
+        handlerDis?.deactivate,
+        handlerArea?.deactivate,
+        handlerHeight?.deactivate
+      );
       handlerDis && handlerDis.deactivate();
       handlerArea && handlerArea.deactivate();
       handlerHeight && handlerHeight.deactivate();
     },
     measureDis(index, item) {
-      console.log(index, item);
+      this.deActiveAll();
       this.baseUrlItem1[index].active = true;
-      handlerDis = viewerHandlerDis(viewer, 0, this.baseUrlItem1, index);
-      console.log(handlerDis);
+      handlerDis
+        ? void 0
+        : (handlerDis = viewerHandlerDis(viewer, 0, this.baseUrlItem1, index));
       handlerDis && handlerDis.activate();
     },
     measureArea(index, item) {
-      console.log(index, item);
+      this.deActiveAll();
       this.baseUrlItem1[index].active = true;
-      handlerArea = viewerHandlerArea(viewer, 0, this.baseUrlItem1, index);
-      console.log(handlerDis);
+      handlerArea
+        ? void 0
+        : (handlerArea = viewerHandlerArea(
+            viewer,
+            0,
+            this.baseUrlItem1,
+            index
+          ));
       handlerArea && handlerArea.activate();
     },
     measureHeight(index, item) {
-      console.log(index, item);
+      this.deActiveAll();
       this.baseUrlItem1[index].active = true;
-      handlerHeight = viewerHandlerHeight(viewer, 0, this.baseUrlItem1, index);
-      console.log(handlerHeight);
+      handlerHeight
+        ? void 0
+        : (handlerHeight = viewerHandlerHeight(
+            viewer,
+            0,
+            this.baseUrlItem1,
+            index
+          ));
       handlerHeight && handlerHeight.activate();
+    },
+    clearMeasure() {
+      handlerDis && handlerDis.clear();
+      handlerArea && handlerArea.clear();
+      handlerHeight && handlerHeight.clear();
     },
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position);
@@ -231,11 +252,10 @@ export default {
       viewer = v;
     },
     mountedOpenMap(viewer, layers) {
-      console.log(viewer, 666);
       try {
         InitPlot(viewer, this.serverUrl);
       } catch (e) {
-        console.log(e);
+        console.log(e, layers);
       }
     },
     createWebgl(vm) {

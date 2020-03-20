@@ -113,6 +113,7 @@ export const item1 = [
   },
   {
     name: "清除",
+    fun: "clearMeasure",
     active: false,
     pic: "http://cdn.j6375x.cn/cdn/pic/测高.png"
   }
