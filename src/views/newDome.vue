@@ -1,5 +1,6 @@
 <template>
   <div class="newDome">
+    <!--超图的实例-->
     <super-map
       ref="superMap"
       :url="url"
@@ -16,6 +17,7 @@
       :RegCesiumClickLayer="RegCesiumClickLayer"
     >
       <template v-slot:default>
+        <!--单体化的提示框-->
         <div class="default-img">
           <img
             src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"
@@ -24,6 +26,13 @@
         <div>建筑用材存放</div>
       </template>
       <template v-slot:nav>
+        <!--这个是导航栏
+        v-if="isSuperNav"
+        :baseUrl="baseUrl"  导航栏的主要信息 数据
+        :picUrl="picUrl"  背景图信息 数据
+        @handleClick="handleClick" 点击导航栏的自定义事件
+
+        -->
         <superNav
           v-if="isSuperNav"
           :baseUrl="baseUrl"
@@ -32,6 +41,18 @@
         ></superNav>
       </template>
       <template v-slot:popup>
+        <!--  弹出框
+          @handlePopupTitleIco 点击隐藏的自定义函数
+          v-if="baseUrlOne.active"   baseUrlOne 是导航栏的baseUrl项
+          :baseUrlOne="baseUrlOne"  用来if的数据  baseUrlOne 是导航栏的baseUrl项
+          :baseUrlItem1="baseUrlItem1" 主数据
+          @addFire="addFire" 从一到8的点击后的执行函数 这个耦合太高 需要重新思考
+          @addCarts="addCarts"
+          @measureDis="measureDis"
+          @measureArea="measureArea"
+          @measureHeight="measureHeight"
+          @clearMeasure="clearMeasure"
+        -->
         <superPopup
           v-if="baseUrlOne.active"
           :baseUrlOne="baseUrlOne"
@@ -46,12 +67,18 @@
         ></superPopup>
       </template>
       <template v-slot:plot>
+        <!--
+        标绘面板
+         superPlotIndex  定位的z-index值
+         @handlePopupTitleIco 点击隐藏的自定义函数
+         -->
         <superPlot
           :superPlotIndex="superPlotIndex"
           @handlePopupTitleIco="clearTitle"
         ></superPlot>
       </template>
       <template v-slot:popupActive>
+        <!-- 救援行动启动的弹出框  -->
         <popupActiveTitle
           :popupActiveTitleDesc="popupActiveTitleDesc"
           v-if="baseUrlThree.active"
@@ -65,6 +92,7 @@
         </popupActiveTitle>
       </template>
       <template v-slot:popupActiveEnd>
+        <!--救援行动结束的体验-->
         <popupActiveTitle
           :popupActiveTitleDesc="popupActiveEndDesc"
           v-if="popupActiveTitleDescActive"
@@ -72,6 +100,7 @@
         </popupActiveTitle>
       </template>
     </super-map>
+    <!--首页显示的按钮-->
     <div
       class="newDome-title"
       v-if="isNewDomeTitle"
