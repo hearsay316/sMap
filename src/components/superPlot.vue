@@ -39,7 +39,10 @@ export default {
     }
   },
   components: {
-    superTitle: () => import("../components/superTitle.vue")
+    superTitle: () =>
+      import(
+        /* webpackChunkName: "superTitle" */ "../components/superTitle.vue"
+      )
   }
 };
 </script>

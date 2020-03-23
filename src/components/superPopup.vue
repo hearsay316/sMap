@@ -17,7 +17,7 @@
         <div class="superPopup-main">
           <div
             class="superPopup-main-item"
-            v-for="(item, index) in baseUrlItem1"
+            v-for="(item, index) in baseUrlItems"
             :key="item.name"
             @click="superPopupMainItem(index, item)"
           >
@@ -36,7 +36,7 @@ export default {
   name: "superPopup",
   props: {
     baseUrlOne: Object,
-    baseUrlItem1: Array
+    baseUrlItems: Array
   },
   data() {
     return {
@@ -47,7 +47,7 @@ export default {
   methods: {
     superPopupMainItem(index, item) {
       let active = item.fun && !item.active;
-      active && this.$emit(item.fun, index, item);
+      active && this.$emit("handleClickLists", index, item);
     },
     handlePopupTitleIco() {
       this.value = true;

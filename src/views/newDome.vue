@@ -31,7 +31,6 @@
         :baseUrl="baseUrl"  导航栏的主要信息 数据
         :picUrl="picUrl"  背景图信息 数据
         @handleClick="handleClick" 点击导航栏的自定义事件
-
         -->
         <superNav
           v-if="isSuperNav"
@@ -45,7 +44,7 @@
           @handlePopupTitleIco 点击隐藏的自定义函数
           v-if="baseUrlOne.active"   baseUrlOne 是导航栏的baseUrl项
           :baseUrlOne="baseUrlOne"  用来if的数据  baseUrlOne 是导航栏的baseUrl项
-          :baseUrlItem1="baseUrlItem1" 主数据
+          :baseUrlItems="baseUrlItems" 主数据
           @addFire="addFire" 从一到8的点击后的执行函数 这个耦合太高 需要重新思考
           @addCarts="addCarts"
           @measureDis="measureDis"
@@ -56,14 +55,9 @@
         <superPopup
           v-if="baseUrlOne.active"
           :baseUrlOne="baseUrlOne"
-          :baseUrlItem1="baseUrlItem1"
+          :baseUrlItems="baseUrlItems"
           @handlePopupTitleIco="handlePopupTitleIco"
-          @addFire="addFire"
-          @addCarts="addCarts"
-          @measureDis="measureDis"
-          @measureArea="measureArea"
-          @measureHeight="measureHeight"
-          @clearMeasure="clearMeasure"
+          @handleClickLists="handleClickLists"
         ></superPopup>
       </template>
       <template v-slot:plot>
@@ -78,7 +72,9 @@
         ></superPlot>
       </template>
       <template v-slot:popupActive>
-        <!-- 救援行动启动的弹出框  -->
+        <!-- 救援行动启动的弹出框
+           popupActiveEndDesc  显示的文字
+          -->
         <popupActiveTitle
           :popupActiveTitleDesc="popupActiveTitleDesc"
           v-if="baseUrlThree.active"
@@ -92,7 +88,9 @@
         </popupActiveTitle>
       </template>
       <template v-slot:popupActiveEnd>
-        <!--救援行动结束的体验-->
+        <!--救援行动结束的体验
+        popupActiveEndDesc  显示的文字
+        -->
         <popupActiveTitle
           :popupActiveTitleDesc="popupActiveEndDesc"
           v-if="popupActiveTitleDescActive"
@@ -115,7 +113,6 @@
 2 添加小车
 3 等等..
       :RegCesiumClickLayer="RegCesiumClickLayer"
-
 -->
 <script>
 import { demoConfig } from "../config/mapConfig";
@@ -130,8 +127,8 @@ import {
   setView
 } from "../config/Configuration";
 let viewer, carts, Fire, handlerDis, handlerArea, handlerHeight;
-import superNav from "../components/superNav";
-import popupActiveTitle from "../components/popupActiveTitle";
+// import superNav from "../components/superNav";
+// import popupActiveTitle from "../components/popupActiveTitle";
 
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 export default {
@@ -145,7 +142,7 @@ export default {
       },
       isSuperNav: false,
       baseUrl: [...baseUrl],
-      baseUrlItem1: [...item1],
+      baseUrlItems: [...item1],
       superPlotIndex: -1,
       isRescue: false,
       popupActiveEndDesc: "总攻结束",
@@ -251,61 +248,78 @@ export default {
         item.active = false;
       });
 
-      this.baseUrlItem1.forEach(item => {
+      this.baseUrlItems.forEach(item => {
         item.active = false;
       });
     },
-    addFire(index, item) {
-      this.baseUrlItem1[index].active = true;
-      Fire = viewerMountedFire(viewer, this.MapFireXYZ);
+    handleClickLists(index) {
+      console.log("handleClickLists", this.baseUrlItems[index], index);
+      let baseUrlItemFucName = this.baseUrlItems[index]?.fun;
+      let fuc = this.baseUrlItemsFun();
+      index != 10 ? (this.baseUrlItems[index].active = true) : void 0;
+      fuc[baseUrlItemFucName] && fuc[baseUrlItemFucName](index);
     },
-    addCarts(index, item) {
-      this.baseUrlItem1[index].active = true;
-      carts = viewerMountedDeployCart(viewer, this.positionCarts);
+    baseUrlItemsFun() {
+      let vm = this;
+      return {
+        addFire(index) {
+          // vm.baseUrlItems[index].active = true;
+          Fire = viewerMountedFire(viewer, vm.MapFireXYZ);
+        },
+        addCarts(index) {
+          // vm.baseUrlItems[index].active = true;
+          carts = viewerMountedDeployCart(viewer, vm.positionCarts);
+        },
+        measureDis(index) {
+          vm.deActiveAll();
+          // vm.baseUrlItems[index].active = true;
+          handlerDis
+            ? void 0
+            : (handlerDis = viewerHandlerDis(
+                viewer,
+                0,
+                vm.baseUrlItems,
+                index
+              ));
+          handlerDis && handlerDis.activate();
+        },
+        measureArea(index) {
+          vm.deActiveAll();
+          // vm.baseUrlItems[index].active = true;
+          handlerArea
+            ? void 0
+            : (handlerArea = viewerHandlerArea(
+                viewer,
+                0,
+                vm.baseUrlItems,
+                index
+              ));
+          handlerArea && handlerArea.activate();
+        },
+        measureHeight(index) {
+          vm.deActiveAll();
+          // vm.baseUrlItems[index].active = true;
+          handlerHeight
+            ? void 0
+            : (handlerHeight = viewerHandlerHeight(
+                viewer,
+                0,
+                vm.baseUrlItems,
+                index
+              ));
+          handlerHeight && handlerHeight.activate();
+        },
+        clearMeasure() {
+          handlerDis && handlerDis.clear();
+          handlerArea && handlerArea.clear();
+          handlerHeight && handlerHeight.clear();
+        }
+      };
     },
     deActiveAll() {
       handlerDis && handlerDis.deactivate();
       handlerArea && handlerArea.deactivate();
       handlerHeight && handlerHeight.deactivate();
-    },
-    measureDis(index, item) {
-      this.deActiveAll();
-      this.baseUrlItem1[index].active = true;
-      handlerDis
-        ? void 0
-        : (handlerDis = viewerHandlerDis(viewer, 0, this.baseUrlItem1, index));
-      handlerDis && handlerDis.activate();
-    },
-    measureArea(index, item) {
-      this.deActiveAll();
-      this.baseUrlItem1[index].active = true;
-      handlerArea
-        ? void 0
-        : (handlerArea = viewerHandlerArea(
-            viewer,
-            0,
-            this.baseUrlItem1,
-            index
-          ));
-      handlerArea && handlerArea.activate();
-    },
-    measureHeight(index, item) {
-      this.deActiveAll();
-      this.baseUrlItem1[index].active = true;
-      handlerHeight
-        ? void 0
-        : (handlerHeight = viewerHandlerHeight(
-            viewer,
-            0,
-            this.baseUrlItem1,
-            index
-          ));
-      handlerHeight && handlerHeight.activate();
-    },
-    clearMeasure() {
-      handlerDis && handlerDis.clear();
-      handlerArea && handlerArea.clear();
-      handlerHeight && handlerHeight.clear();
     },
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position, viewer);
@@ -333,10 +347,16 @@ export default {
     }
   },
   components: {
-    superNav,
-    popupActiveTitle,
-    superPopup: () => import("../components/superPopup"),
-    superPlot: () => import("../components/superPlot")
+    superNav: () =>
+      import(/* webpackChunkName: "superNav" */ "../components/superNav"),
+    popupActiveTitle: () =>
+      import(
+        /* webpackChunkName: "popupActiveTitle" */ "../components/popupActiveTitle"
+      ),
+    superPopup: () =>
+      import(/* webpackChunkName: "superPopup" */ "../components/superPopup"),
+    superPlot: () =>
+      import(/* webpackChunkName: "superPlot" */ "../components/superPlot")
   },
   computed: {
     baseUrlOne() {
@@ -346,7 +366,7 @@ export default {
       return this.baseUrl[3];
     },
     rescueActive() {
-      return this.baseUrlItem1[0].active && this.baseUrlItem1[1].active;
+      return this.baseUrlItems[0].active && this.baseUrlItems[1].active;
     }
   }
 };

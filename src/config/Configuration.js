@@ -284,8 +284,7 @@ export function viewerMountedDeployCart(viewer, positionXYZ) {
     let cart = viewer.entities.add({
       name: name,
       model: {
-        uri:
-          "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+        uri: "./webgl/models/Cesium_Ground.gltf",
         minimumPixelSize: 32,
         maximumScale: 0.5
       },
@@ -641,7 +640,7 @@ export function viewerHandlerDis(viewer, clampMode, baseUrlItem1, index) {
   );
   //注册测距功能事件
   handlerDis.measureEvt.addEventListener(function(result) {
-    console.log(result);
+    // console.log(result);
     let dis = Number(result.distance);
     let distance =
       dis > 1000 ? (dis / 1000).toFixed(2) + "km" : dis.toFixed(2) + "m";
@@ -812,8 +811,7 @@ export function MountedMapCart(viewer, positionXYZ, length) {
     const position = Cesium.Cartesian3.fromDegrees(x, y, z);
     cart = viewer.entities.add({
       model: {
-        uri:
-          "http://support.supermap.com.cn:8090/webgl/examples/SampleData/models/Cesium_Ground.gltf",
+        uri: "./webgl/models/Cesium_Ground.gltf",
         minimumPixelSize: 32
       },
       viewFrom: new Cesium.Cartesian3(x, y, z),
