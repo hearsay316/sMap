@@ -10,13 +10,23 @@
             :superTitleDesc="superTitleDesc"
             @handlePopupTitleIco="handlePopupTitleIco"
           ></superTitle>
+          <div class="controlPanel">
+            <div
+              @click="handleControlPanel"
+              :class="{ 'controlPanel-bg': isControlPanel }"
+            >
+              标绘面板
+            </div>
+            <div
+              @click="handleControlPanel"
+              :class="{ 'controlPanel-bg': !isControlPanel }"
+            >
+              属性面板
+            </div>
+          </div>
         </div>
-        <div id="plotPanel" title="标绘面板"></div>
-        <div
-          id="stylePanel"
-          title="属性面板"
-          style="width: 290px;overflow: hidden;display: none"
-        ></div>
+        <div id="plotPanel" v-show="isControlPanel" title="标绘面板"></div>
+        <div id="stylePanel" title="属性面板"></div>
       </div>
     </div>
   </div>
@@ -30,10 +40,14 @@ export default {
   },
   data() {
     return {
-      superTitleDesc: "路径规划"
+      superTitleDesc: "路径规划",
+      isControlPanel: true
     };
   },
   methods: {
+    handleControlPanel() {
+      this.isControlPanel = !this.isControlPanel;
+    },
     handlePopupTitleIco(value) {
       this.$emit("handlePopupTitleIco", value);
     }
@@ -60,6 +74,15 @@ export default {
 #plotPanel
   height calc(100% - 56px)
   overflow: hidden;
+
+.controlPanel
+  display: grid;
+  grid-template-columns 50% 50%
+  line-height 45px
+.controlPanel-bg
+  background-color #0e0e0e
+/deep/#stylePanel
+    width 250px
 /deep/.ztree li a
   color #ffffff
 /deep/#plotPanel>div:nth-of-type(1){

@@ -253,10 +253,9 @@ export default {
       });
     },
     handleClickLists(index) {
-      console.log("handleClickLists", this.baseUrlItems[index], index);
       let baseUrlItemFucName = this.baseUrlItems[index]?.fun;
       let fuc = this.baseUrlItemsFun();
-      index != 10 ? (this.baseUrlItems[index].active = true) : void 0;
+      index !== 10 ? (this.baseUrlItems[index].active = true) : void 0;
       fuc[baseUrlItemFucName] && fuc[baseUrlItemFucName](index);
     },
     baseUrlItemsFun() {
