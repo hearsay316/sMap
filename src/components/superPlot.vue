@@ -81,6 +81,17 @@ export default {
   line-height 45px
 .controlPanel-bg
   background-color #0e0e0e
+/deep/.datagrid-body
+  height: calc(100vh - 100px) !important
+  background-color transparent !important
+  overflow-y auto
+/deep/.panel-body
+  background-color transparent
+/deep/.datagrid-btable
+  color #ffffff
+/deep/.propertygrid .datagrid-group
+  background-color transparent
+  color #ffffff
 /deep/#stylePanel
     width 250px
 /deep/.ztree li a

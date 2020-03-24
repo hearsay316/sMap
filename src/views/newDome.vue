@@ -97,6 +97,11 @@
         >
         </popupActiveTitle>
       </template>
+      <template v-slot:measure>
+        <superMeasure class="newDome-measure" :isSuperMeasure="isSuperMeasure">
+          <span>XX</span>
+        </superMeasure>
+      </template>
     </super-map>
     <!--首页显示的按钮-->
     <div
@@ -140,6 +145,7 @@ export default {
       picUrl: {
         ...picUrl
       },
+      isSuperMeasure: false,
       isSuperNav: false,
       baseUrl: [...baseUrl],
       baseUrlItems: [...item1],
@@ -355,7 +361,11 @@ export default {
     superPopup: () =>
       import(/* webpackChunkName: "superPopup" */ "../components/superPopup"),
     superPlot: () =>
-      import(/* webpackChunkName: "superPlot" */ "../components/superPlot")
+      import(/* webpackChunkName: "superPlot" */ "../components/superPlot"),
+    superMeasure: () =>
+      import(
+        /* webpackChunkName: "superMeasure" */ "../components/superMeasure"
+      )
   },
   computed: {
     baseUrlOne() {
@@ -406,4 +416,11 @@ export default {
       background-color #0e2d5f
   .newDome-title:hover
       box-shadow 3px 2px 20px #213d96
+  .newDome-measure
+    position absolute
+    top 10px
+    right 410px
+    height:30px
+    width:74px
+    background-color #0e0e0e
 </style>

@@ -63,7 +63,9 @@ export function InitPlot(viewer, serverUrl) {
   });
 
   const plotting = Cesium.Plotting.getInstance(serverUrl, scene);
-  //标绘面板
+
+  const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
+  // 标绘面板
   initPlotPanel(
     "plotPanel",
     serverUrl,
@@ -71,7 +73,6 @@ export function InitPlot(viewer, serverUrl) {
     plotEditControl,
     plotting
   );
-  const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
   window.scene = undefined;
   window.plotEditControl = undefined;
   // 清除window作用域

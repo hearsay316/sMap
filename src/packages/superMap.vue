@@ -9,6 +9,7 @@
     <slot name="plot"></slot>
     <slot name="popupActive"></slot>
     <slot name="popupActiveEnd"></slot>
+    <slot name="measure"></slot>
   </div>
 </template>
 
