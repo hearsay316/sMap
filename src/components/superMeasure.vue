@@ -1,13 +1,30 @@
 <template>
   <div class="superMeasure">
     <div class="superMeasure-no">
-      <div class="superMeasure-title">工具</div>
-      <div class="superMeasure-open">
+      <div class="superMeasure-title">{{ superMeasureData.title }}</div>
+      <div
+        class="superMeasure-open"
+        :class="{ 'superMeasure-open-active': superMeasureData.active }"
+        @click="handleSuperMeasureActive(superMeasureData.active)"
+      >
         <i class="iconfont icon-htmal5icon44"></i>
       </div>
     </div>
-    <div class="superMeasure-active">
-      <div></div>
+    <div class="superMeasure-active" v-if="superMeasureData.active">
+      <div
+        class="superMeasure-active-item"
+        :class="{ 'superMeasure-active-item-active': superMeasure.active }"
+        v-for="(superMeasure, index) in superMeasureData.MeasuringConfig"
+        :key="superMeasure.name"
+        @click="handleSuperMeasureActiveItem(index)"
+      >
+        <div class="superMeasure-active-item-img">
+          <img :src="superMeasure.url" alt="superMeasure.name" />
+        </div>
+        <span class="superMeasure-active-item-title">
+          {{ superMeasure.name }}{{ index }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -15,11 +32,27 @@
 export default {
   name: "superMeasure",
   props: {
-    isSuperMeasure: Boolean
+    isSuperMeasure: Boolean,
+    superMeasureData: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    handleSuperMeasureActiveItem(index) {
+      console.log(index);
+    },
+    handleSuperMeasureActive(active) {
+      console.log("handleSuperMeasureActive");
+      this.$emit("handleSuperMeasureActive", active);
+    }
   }
 };
 </script>
 <style lang="stylus" scoped>
+.superMeasure{
+  border 3px solid rgba(51,255,254,0.8)
+}
 .superMeasure-no
   display grid
   width: 74px
@@ -31,6 +64,10 @@ export default {
     background-color #031E3C
   .superMeasure-open
     background-color #0BB1DD
+  .superMeasure-open-active
+    transform: rotate(90deg);
+    width: 33px;
+    margin-right: -3px;
     .icon-htmal5icon44
       font-size 12px
   .superMeasure-end
@@ -38,11 +75,27 @@ export default {
     background-color #0BB1DD
     .icon-guanbi
       font-size 8px
+      //rgba(51,255,254,0.7);
 .superMeasure-active
     display grid
     box-sizing border-box
-    grid-template-rows
-      width:74px
-      height 453px
-      background-color #1bc5a3
+    grid-template-rows repeat(4 ,54px)
+    width:74px
+    align-content center
+    background-color #031E40
+  .superMeasure-active-item
+      display flex
+      align-items center
+      justify-content center
+      flex-direction column
+      border-top 3px solid rgba(51,255,254,0.8)
+.superMeasure-active-item-img
+        height:21px
+        img
+          height: 100%;
+    .superMeasure-active-item-title
+        font-size 12px
+        color #ffffff
+.superMeasure-active-item-active
+    background-color RGBA(52, 168, 195, 0.75)
 </style>

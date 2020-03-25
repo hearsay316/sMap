@@ -98,8 +98,12 @@
         </popupActiveTitle>
       </template>
       <template v-slot:measure>
-        <superMeasure class="newDome-measure" :isSuperMeasure="isSuperMeasure">
-          <span>XX</span>
+        <superMeasure
+          :superMeasureData="superMeasureData"
+          @handleSuperMeasureActive="handleSuperMeasureActive"
+          class="newDome-measure"
+          :isSuperMeasure="isSuperMeasure"
+        >
         </superMeasure>
       </template>
     </super-map>
@@ -131,10 +135,8 @@ import {
   viewerHandlerHeight,
   setView
 } from "../config/Configuration";
+import MeasuringConfig from "../config/MeasuringConfig.js";
 let viewer, carts, Fire, handlerDis, handlerArea, handlerHeight;
-// import superNav from "../components/superNav";
-// import popupActiveTitle from "../components/popupActiveTitle";
-
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 export default {
   name: "newDome",
@@ -144,6 +146,9 @@ export default {
       isNewDomeTitle: true,
       picUrl: {
         ...picUrl
+      },
+      superMeasureData: {
+        ...MeasuringConfig
       },
       isSuperMeasure: false,
       isSuperNav: false,
@@ -157,6 +162,12 @@ export default {
     };
   },
   methods: {
+    handleSuperMeasureActive() {
+      // console.log(active, this.superMeasureData);
+      // console.log(this.superMeasureData[active]);
+      this.superMeasureData.active = !this.superMeasureData.active;
+      console.log(this.superMeasureData.active);
+    },
     handleNewDomeTitle() {
       this.isNewDomeTitle = false;
       setView(viewer, this.positionXYZ, this.angle);
@@ -390,21 +401,6 @@ export default {
     width:100%
     height:100%
     overflow hidden
-    .newDome-nav
-        width:200px
-        height:200px
-        background #0e90d2
-        position absolute
-        display flex
-        flex-direction column
-        top 0
-        right 0
-        div
-            height 50px
-            line-height 50px
-            box-sizing border-box
-        :not(first-of-type)
-            border-top 1px solid blue
   .newDome-title
       position absolute
       top 20px
@@ -420,7 +416,6 @@ export default {
     position absolute
     top 10px
     right 410px
-    height:30px
     width:74px
     background-color #0e0e0e
 </style>
