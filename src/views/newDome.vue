@@ -100,6 +100,7 @@
       <template v-slot:measure>
         <superMeasure
           :superMeasureData="superMeasureData"
+          @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
           @handleSuperMeasureActive="handleSuperMeasureActive"
           class="newDome-measure"
           :isSuperMeasure="isSuperMeasure"
@@ -162,6 +163,60 @@ export default {
     };
   },
   methods: {
+    SuperMeasure() {
+      let vm = this;
+      return {
+        measureDis(index) {
+          vm.deActiveAll();
+          handlerDis
+            ? void 0
+            : (handlerDis = viewerHandlerDis(
+                viewer,
+                0,
+                vm.superMeasureData.MeasuringConfig,
+                index
+              ));
+          handlerDis && handlerDis.activate();
+        },
+        measureArea(index) {
+          vm.deActiveAll();
+          handlerArea
+            ? void 0
+            : (handlerArea = viewerHandlerArea(
+                viewer,
+                0,
+                vm.superMeasureData.MeasuringConfig,
+                index
+              ));
+          handlerArea && handlerArea.activate();
+        },
+        measureHeight(index) {
+          vm.deActiveAll();
+          handlerHeight
+            ? void 0
+            : (handlerHeight = viewerHandlerHeight(
+                viewer,
+                0,
+                vm.superMeasureData.MeasuringConfig,
+                index
+              ));
+          handlerHeight && handlerHeight.activate();
+        },
+        clearMeasure() {
+          handlerDis && handlerDis.clear();
+          handlerArea && handlerArea.clear();
+          handlerHeight && handlerHeight.clear();
+        }
+      };
+    },
+    handleSuperMeasureActiveItem(index) {
+      index !== 3
+        ? (this.superMeasureData.MeasuringConfig[index].active = true)
+        : void 0;
+      let SuperMeasure = this.SuperMeasure();
+      let fun = this.superMeasureData.MeasuringConfig[index].fun;
+      fun && SuperMeasure[fun](index);
+    },
     handleSuperMeasureActive() {
       // console.log(active, this.superMeasureData);
       // console.log(this.superMeasureData[active]);
@@ -285,50 +340,6 @@ export default {
         addCarts(index) {
           // vm.baseUrlItems[index].active = true;
           carts = viewerMountedDeployCart(viewer, vm.positionCarts);
-        },
-        measureDis(index) {
-          vm.deActiveAll();
-          // vm.baseUrlItems[index].active = true;
-          handlerDis
-            ? void 0
-            : (handlerDis = viewerHandlerDis(
-                viewer,
-                0,
-                vm.baseUrlItems,
-                index
-              ));
-          handlerDis && handlerDis.activate();
-        },
-        measureArea(index) {
-          vm.deActiveAll();
-          // vm.baseUrlItems[index].active = true;
-          handlerArea
-            ? void 0
-            : (handlerArea = viewerHandlerArea(
-                viewer,
-                0,
-                vm.baseUrlItems,
-                index
-              ));
-          handlerArea && handlerArea.activate();
-        },
-        measureHeight(index) {
-          vm.deActiveAll();
-          // vm.baseUrlItems[index].active = true;
-          handlerHeight
-            ? void 0
-            : (handlerHeight = viewerHandlerHeight(
-                viewer,
-                0,
-                vm.baseUrlItems,
-                index
-              ));
-          handlerHeight && handlerHeight.activate();
-        },
-        clearMeasure() {
-          handlerDis && handlerDis.clear();
-          handlerArea && handlerArea.clear();
-          handlerHeight && handlerHeight.clear();
         }
       };
     },
@@ -417,5 +428,4 @@ export default {
     top 10px
     right 410px
     width:74px
-    background-color #0e0e0e
 </style>

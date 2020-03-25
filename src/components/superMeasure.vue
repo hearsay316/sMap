@@ -41,6 +41,7 @@ export default {
   methods: {
     handleSuperMeasureActiveItem(index) {
       console.log(index);
+      this.$emit("handleSuperMeasureActiveItem", index);
     },
     handleSuperMeasureActive(active) {
       console.log("handleSuperMeasureActive");
@@ -57,17 +58,18 @@ export default {
   display grid
   width: 74px
   grid-template-columns 2fr  1fr
-  div
-    line-height 30px
-    color #ffffff
+  height 30px
+  line-height 30px
+  color: #ffffff;
   .superMeasure-title
+    width 44px
     background-color #031E3C
   .superMeasure-open
+    width: 30px;
+    height 30px
     background-color #0BB1DD
   .superMeasure-open-active
-    transform: rotate(90deg);
-    width: 33px;
-    margin-right: -3px;
+    transform:  rotate(90deg);
     .icon-htmal5icon44
       font-size 12px
   .superMeasure-end
@@ -82,13 +84,13 @@ export default {
     grid-template-rows repeat(4 ,54px)
     width:74px
     align-content center
-    background-color #031E40
   .superMeasure-active-item
       display flex
       align-items center
       justify-content center
       flex-direction column
       border-top 3px solid rgba(51,255,254,0.8)
+      background-color #031E40
 .superMeasure-active-item-img
         height:21px
         img
@@ -97,5 +99,6 @@ export default {
         font-size 12px
         color #ffffff
 .superMeasure-active-item-active
-    background-color RGBA(52, 168, 195, 0.75)
+    background-color rgba(51,255,254,0.85)
+    border-top none
 </style>
