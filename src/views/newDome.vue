@@ -372,7 +372,31 @@ export default {
           // vm.baseUrlItems[index].active = true;
           carts = viewerMountedDeployCart(viewer, vm.positionCarts);
         },
-        add(index) {
+        addMedical(index) {
+          console.log("addaddaddadd");
+          vm.Resources.Medical.active = true;
+          vm.Resources.Medical.index = index;
+          console.log(index);
+        },
+        addEmergency(index) {
+          console.log("addaddaddadd");
+          vm.Resources.Emergency.active = true;
+          vm.Resources.Emergency.index = index;
+          console.log(index);
+        },
+        addExpert(index) {
+          console.log("addaddaddadd");
+          vm.Resources.Expert.active = true;
+          vm.Resources.Expert.index = index;
+          console.log(index);
+        },
+        addSupplies(index) {
+          console.log("addaddaddadd");
+          vm.Resources.Supplies.active = true;
+          vm.Resources.Supplies.index = index;
+          console.log(index);
+        },
+        addCommand(index) {
           console.log("addaddaddadd");
           vm.Resources.Command.active = true;
           vm.Resources.Command.index = index;
