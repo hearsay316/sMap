@@ -163,7 +163,28 @@ export default {
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
-      isapp: "111"
+      Resources: {
+        Medical: {
+          active: false,
+          index: undefined
+        },
+        Emergency: {
+          active: false,
+          index: undefined
+        },
+        Expert: {
+          active: false,
+          index: undefined
+        },
+        Supplies: {
+          active: false,
+          index: undefined
+        },
+        Command: {
+          active: false,
+          index: undefined
+        }
+      }
     };
   },
   methods: {
@@ -351,9 +372,11 @@ export default {
           // vm.baseUrlItems[index].active = true;
           carts = viewerMountedDeployCart(viewer, vm.positionCarts);
         },
-        add() {
+        add(index) {
           console.log("addaddaddadd");
-          vm.isapp = "xsxsxs";
+          vm.Resources.Command.active = true;
+          vm.Resources.Command.index = index;
+          console.log(index);
         }
       };
     },
@@ -364,7 +387,6 @@ export default {
     },
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position, viewer);
-      console.log(this.isapp);
       let obj = {
         name: "风机设备",
         code: "123456789",
@@ -382,7 +404,15 @@ export default {
           height: 461
         }
       };
-      viewerEntitiesAdd(viewer, position, obj);
+      Object.keys(this.Resources).forEach(item => {
+        let a =
+          this.Resources[item].active &&
+          viewerEntitiesAdd(viewer, position, obj);
+        a ? (this.Resources[item].active = false) : void 0;
+        a
+          ? (this.baseUrlItems[this.Resources[item].index].active = false)
+          : void 0;
+      });
     },
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);
