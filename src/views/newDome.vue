@@ -99,6 +99,7 @@
       </template>
       <template v-slot:measure>
         <superMeasure
+          v-if="isMeasure"
           :superMeasureData="superMeasureData"
           @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
           @handleSuperMeasureActive="handleSuperMeasureActive"
@@ -134,7 +135,8 @@ import {
   viewerHandlerDis,
   viewerHandlerArea,
   viewerHandlerHeight,
-  setView
+  setView,
+  viewerEntitiesAdd
 } from "../config/Configuration";
 import MeasuringConfig from "../config/MeasuringConfig.js";
 let viewer, carts, Fire, handlerDis, handlerArea, handlerHeight;
@@ -144,6 +146,7 @@ export default {
   data() {
     return {
       ...demoConfig,
+      isMeasure: false,
       isNewDomeTitle: true,
       picUrl: {
         ...picUrl
@@ -159,7 +162,8 @@ export default {
       isRescue: false,
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
-      popupActiveTitleDescActive: false
+      popupActiveTitleDescActive: false,
+      isapp: "111"
     };
   },
   methods: {
@@ -226,15 +230,13 @@ export default {
         : void 0;
     },
     handleSuperMeasureActive() {
-      // console.log(active, this.superMeasureData);
-      // console.log(this.superMeasureData[active]);
       this.superMeasureData.active = !this.superMeasureData.active;
-      console.log(this.superMeasureData.active, "xxxxxxxxxxxxxxxxxx");
     },
     handleNewDomeTitle() {
       this.isNewDomeTitle = false;
       setView(viewer, this.positionXYZ, this.angle);
       this.isSuperNav = true;
+      this.isMeasure = true;
     },
     clearTitle(value) {
       this.superPlotIndex = -1;
@@ -348,6 +350,10 @@ export default {
         addCarts(index) {
           // vm.baseUrlItems[index].active = true;
           carts = viewerMountedDeployCart(viewer, vm.positionCarts);
+        },
+        add() {
+          console.log("addaddaddadd");
+          vm.isapp = "xsxsxs";
         }
       };
     },
@@ -358,6 +364,25 @@ export default {
     },
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position, viewer);
+      console.log(this.isapp);
+      let obj = {
+        name: "风机设备",
+        code: "123456789",
+        point: {
+          //点
+          pixelSize: 5,
+          color: Cesium.Color.RED,
+          outlineColor: Cesium.Color.WHITE,
+          outlineWidth: 2
+        },
+        billboard: {
+          //图标
+          image: "./img/01.jpg",
+          width: 360,
+          height: 461
+        }
+      };
+      viewerEntitiesAdd(viewer, position, obj);
     },
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);

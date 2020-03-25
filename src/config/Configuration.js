@@ -389,17 +389,11 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
  * @param obj
  * @returns {*}
  */
-export function viewerEntitiesAdd(viewer, url, { x, y, z }, obj) {
+export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);
   return viewer.entities.add({
-    model: {
-      url,
-      minimumPixelSize: 32,
-      maximumScale: 0.5
-    },
-    viewFrom: new Cesium.Cartesian3(x, y, z),
-    position: position,
-    ...obj
+    ...obj,
+    position: position
   });
 }
 
@@ -710,7 +704,7 @@ export function viewerHandlerArea(viewer, clampMode, superMeasureData, index) {
  *  高 Height
  * @param viewer
  * @param clampMode
- * @param baseUrlItem1
+ * @param superMeasureData
  * @param index
  * @returns {Cesium.MeasureHandler}
  */
