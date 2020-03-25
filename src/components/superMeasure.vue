@@ -11,20 +11,23 @@
       </div>
     </div>
     <div class="superMeasure-active" v-if="superMeasureData.active">
-      <div
-        class="superMeasure-active-item"
-        :class="{ 'superMeasure-active-item-active': superMeasure.active }"
+      <template
         v-for="(superMeasure, index) in superMeasureData.MeasuringConfig"
-        :key="superMeasure.name"
-        @click="handleSuperMeasureActiveItem(index)"
       >
-        <div class="superMeasure-active-item-img">
-          <img :src="superMeasure.url" alt="superMeasure.name" />
+        <div
+          class="superMeasure-active-item"
+          :class="{ 'superMeasure-active-item-active': superMeasure.active }"
+          :key="superMeasure.name"
+          @click="handleSuperMeasureActiveItem(index)"
+        >
+          <div class="superMeasure-active-item-img">
+            <img :src="superMeasure.url" alt="superMeasure.name" />
+          </div>
+          <span class="superMeasure-active-item-title">
+            {{ superMeasure.name }}
+          </span>
         </div>
-        <span class="superMeasure-active-item-title">
-          {{ superMeasure.name }}{{ index }}
-        </span>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -40,11 +43,9 @@ export default {
   },
   methods: {
     handleSuperMeasureActiveItem(index) {
-      console.log(index);
       this.$emit("handleSuperMeasureActiveItem", index);
     },
     handleSuperMeasureActive(active) {
-      console.log("handleSuperMeasureActive");
       this.$emit("handleSuperMeasureActive", active);
     }
   }

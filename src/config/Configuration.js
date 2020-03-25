@@ -576,14 +576,14 @@ export function CesiumClickLeft(scene, func) {
     if (Cesium.defined(pick)) {
       // 点击物体事件触发
       let primitiveInfo = pick.primitive;
-      console.log(
-        "pick.primitive",
-        pick.primitive,
-        pick.primitive?._collection?._textureAtlasGUID
-      );
-      scene.primitives._primitives.forEach(item => {
-        console.log(item?._billboardCollection?._textureAtlasGUID);
-      });
+      // console.log(
+      //   "pick.primitive",
+      //   pick.primitive,
+      //   pick.primitive?._collection?._textureAtlasGUID
+      // );
+      // scene.primitives._primitives.forEach(item => {
+      //   console.log(item?._billboardCollection?._textureAtlasGUID);
+      // });
     }
     let positions = scene.pickPosition(e.position);
     //将笛卡尔坐标转化为经纬度坐标
@@ -630,7 +630,7 @@ function computeModelMatrix(entity, time) {
  *
  * @param clampMode 初始化测量距离
  */
-export function viewerHandlerDis(viewer, clampMode, baseUrlItem1, index) {
+export function viewerHandlerDis(viewer, clampMode, superMeasureData, index) {
   // let vm = this;
   //初始化测量距离
   console.log("viewerHandlerDis初始化测量距离");
@@ -658,7 +658,7 @@ export function viewerHandlerDis(viewer, clampMode, baseUrlItem1, index) {
         .addClass("measureCur");
     } else {
       //  vm.demo3MenuDistance = false;
-      baseUrlItem1[index].active = false;
+      superMeasureData.MeasuringConfig[index].active = 0;
       viewer.enableCursorStyle = true;
       $("body").removeClass("measureCur");
     }
@@ -674,7 +674,7 @@ export function viewerHandlerDis(viewer, clampMode, baseUrlItem1, index) {
  * @param baseUrlItem1
  * @param index
  */
-export function viewerHandlerArea(viewer, clampMode, baseUrlItem1, index) {
+export function viewerHandlerArea(viewer, clampMode, superMeasureData, index) {
   console.log("viewerHandlerArea 开始");
   // let vm = this;
   //初始化测量面积
@@ -697,7 +697,7 @@ export function viewerHandlerArea(viewer, clampMode, baseUrlItem1, index) {
         .removeClass("measureCur")
         .addClass("measureCur");
     } else {
-      baseUrlItem1[index].active = false;
+      superMeasureData.MeasuringConfig[index].active = false;
       viewer.enableCursorStyle = true;
       $("body").removeClass("measureCur");
     }
@@ -714,7 +714,12 @@ export function viewerHandlerArea(viewer, clampMode, baseUrlItem1, index) {
  * @param index
  * @returns {Cesium.MeasureHandler}
  */
-export function viewerHandlerHeight(viewer, clampMode, baseUrlItem1, index) {
+export function viewerHandlerHeight(
+  viewer,
+  clampMode,
+  superMeasureData,
+  index
+) {
   console.log("viewerHandlerHeight 开始 ");
   // let vm = this;
   //初始化测量高度
@@ -747,7 +752,8 @@ export function viewerHandlerHeight(viewer, clampMode, baseUrlItem1, index) {
         .removeClass("measureCur")
         .addClass("measureCur");
     } else {
-      baseUrlItem1[index].active = false;
+      superMeasureData.MeasuringConfig[index].active = false;
+      console.log("superMeasureData.MeasuringConfig[index].active");
       viewer.enableCursorStyle = true;
       $("body").removeClass("measureCur");
     }

@@ -173,7 +173,7 @@ export default {
             : (handlerDis = viewerHandlerDis(
                 viewer,
                 0,
-                vm.superMeasureData.MeasuringConfig,
+                vm.superMeasureData,
                 index
               ));
           handlerDis && handlerDis.activate();
@@ -185,7 +185,7 @@ export default {
             : (handlerArea = viewerHandlerArea(
                 viewer,
                 0,
-                vm.superMeasureData.MeasuringConfig,
+                vm.superMeasureData,
                 index
               ));
           handlerArea && handlerArea.activate();
@@ -197,7 +197,7 @@ export default {
             : (handlerHeight = viewerHandlerHeight(
                 viewer,
                 0,
-                vm.superMeasureData.MeasuringConfig,
+                vm.superMeasureData,
                 index
               ));
           handlerHeight && handlerHeight.activate();
@@ -210,18 +210,26 @@ export default {
       };
     },
     handleSuperMeasureActiveItem(index) {
-      index !== 3
-        ? (this.superMeasureData.MeasuringConfig[index].active = true)
-        : void 0;
+      console.log(this.superMeasureData.MeasuringConfig[index].active);
+      // index !== 3
+      //   ? (this.superMeasureData.MeasuringConfig[index].active = 1)
+      //   : void 0;
+      let obj = this.superMeasureData.MeasuringConfig[index];
       let SuperMeasure = this.SuperMeasure();
       let fun = this.superMeasureData.MeasuringConfig[index].fun;
       fun && SuperMeasure[fun](index);
+      index !== 3
+        ? this.superMeasureData.MeasuringConfig.splice(index, 1, {
+            ...obj,
+            active: 1
+          })
+        : void 0;
     },
     handleSuperMeasureActive() {
       // console.log(active, this.superMeasureData);
       // console.log(this.superMeasureData[active]);
       this.superMeasureData.active = !this.superMeasureData.active;
-      console.log(this.superMeasureData.active);
+      console.log(this.superMeasureData.active, "xxxxxxxxxxxxxxxxxx");
     },
     handleNewDomeTitle() {
       this.isNewDomeTitle = false;
