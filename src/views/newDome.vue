@@ -189,6 +189,7 @@ export default {
   },
   methods: {
     SuperMeasure() {
+      //测量全部的函数
       let vm = this;
       return {
         measureDis(index) {
@@ -235,10 +236,7 @@ export default {
       };
     },
     handleSuperMeasureActiveItem(index) {
-      console.log(this.superMeasureData.MeasuringConfig[index].active);
-      // index !== 3
-      //   ? (this.superMeasureData.MeasuringConfig[index].active = 1)
-      //   : void 0;
+      // 测量的emit的子定义事件
       let obj = this.superMeasureData.MeasuringConfig[index];
       let SuperMeasure = this.SuperMeasure();
       let fun = this.superMeasureData.MeasuringConfig[index].fun;
@@ -251,19 +249,26 @@ export default {
         : void 0;
     },
     handleSuperMeasureActive() {
+      // 控制测量工具的显示和收缩
       this.superMeasureData.active = !this.superMeasureData.active;
     },
     handleNewDomeTitle() {
+      // 首页专场的视角移动
       this.isNewDomeTitle = false;
+      // 控制按钮
       setView(viewer, this.positionXYZ, this.angle);
       this.isSuperNav = true;
+      // 导航栏显示
       this.isMeasure = true;
+      //工具栏显示
     },
     clearTitle(value) {
+      // 控制Plot 隐藏显示
       this.superPlotIndex = -1;
       this.handlePopupTitleIco(2);
     },
     handlePopupTitleIco(index) {
+      // 控制导航栏的 Plot 高亮显示
       this.baseUrl[index].active = !this.baseUrl[index].active;
     },
     //
