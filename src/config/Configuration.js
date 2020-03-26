@@ -183,6 +183,7 @@ export function viewerDestroyedFire(
       if (index <= 0) {
         clearInterval(time);
         viewer.entities.remove(FireEntity);
+        viewer.scene.primitives.remove(FireParticleSystem);
         let remove = WaterParticleSystems.map(WaterParticleSystem => {
           return viewer.scene.primitives.remove(WaterParticleSystem);
         });

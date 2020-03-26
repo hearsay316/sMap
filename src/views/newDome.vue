@@ -346,19 +346,21 @@ export default {
     "Entities[object Object]"(Entities) {
       viewer.entities.remove(Entities);
     },
-    clearStatusAll() {
-      this.baseUrl.forEach(item => {
-        item.active = false;
-      });
+    clearStatusAll(baseUrl, baseUrlItems) {
+      baseUrl &&
+        this.baseUrl.forEach(item => {
+          item.active = false;
+        });
 
-      this.baseUrlItems.forEach(item => {
-        item.active = false;
-      });
+      baseUrlItems &&
+        this.baseUrlItems.forEach(item => {
+          item.active = false;
+        });
     },
     handleClickLists(index) {
       let baseUrlItemFucName = this.baseUrlItems[index]?.fun;
       let fuc = this.baseUrlItemsFun();
-      index !== 10 ? (this.baseUrlItems[index].active = true) : void 0;
+      index !== 7 ? (this.baseUrlItems[index].active = true) : void 0;
       fuc[baseUrlItemFucName] && fuc[baseUrlItemFucName](index);
     },
     baseUrlItemsFun() {
@@ -373,34 +375,30 @@ export default {
           carts = viewerMountedDeployCart(viewer, vm.positionCarts);
         },
         addMedical(index) {
-          console.log("addaddaddadd");
           vm.Resources.Medical.active = true;
           vm.Resources.Medical.index = index;
-          console.log(index);
         },
         addEmergency(index) {
-          console.log("addaddaddadd");
           vm.Resources.Emergency.active = true;
           vm.Resources.Emergency.index = index;
-          console.log(index);
         },
         addExpert(index) {
-          console.log("addaddaddadd");
           vm.Resources.Expert.active = true;
           vm.Resources.Expert.index = index;
-          console.log(index);
         },
         addSupplies(index) {
-          console.log("addaddaddadd");
           vm.Resources.Supplies.active = true;
           vm.Resources.Supplies.index = index;
-          console.log(index);
         },
         addCommand(index) {
-          console.log("addaddaddadd");
           vm.Resources.Command.active = true;
           vm.Resources.Command.index = index;
-          console.log(index);
+        },
+        clearMeasure(index) {
+          console.log("clearMeasure", index, "i清楚");
+          viewer.entities.removeAll();
+          viewer.scene.primitives.removeAll();
+          vm.clearStatusAll(0, 1);
         }
       };
     },
