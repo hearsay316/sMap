@@ -73,6 +73,7 @@ export default {
   background: transparent;
   max-width: none;
   max-height: none;
+  text-align: left;
 }
 .bubble:after {
   border-color: transparent #34eff9;
