@@ -108,6 +108,9 @@
         >
         </superMeasure>
       </template>
+      <template v-slot:search>
+        <superSearch></superSearch>
+      </template>
     </super-map>
     <!--首页显示的按钮-->
     <div
@@ -446,6 +449,8 @@ export default {
     },
     mountedWebgl(v) {
       viewer = v;
+      window.scene = viewer.scene;
+      window.qaz = scene.Cartesian3;
     },
     mountedOpenMap(viewer, layers) {
       try {
@@ -477,6 +482,10 @@ export default {
     superMeasure: () =>
       import(
         /* webpackChunkName: "superMeasure" */ "../components/superMeasure"
+      ),
+    superSearch: () =>
+      import(
+        /* webpackChunkName: "superSearch" */ "../components/superSearch.vue"
       )
   },
   computed: {

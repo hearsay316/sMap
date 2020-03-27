@@ -88,6 +88,7 @@ export const demoSingConfig = {
     roll: 7.638334409421077e-14
   },
   earth: {
+    //地球来的地址
     positionXYZ: {
       x: -31907059.63158584,
       y: 31790256.53609646,
@@ -113,7 +114,8 @@ export const demoSingConfig = {
     }
   },
   Config: {
-    name: "Config",
+    // 单体化的配置项
+    name: "Config_1",
     setQueryParameter: {
       url:
         "http://47.103.125.18:8090/iserver/services/data-supermap03261643/rest/data",

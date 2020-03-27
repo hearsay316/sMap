@@ -10,6 +10,7 @@
     <slot name="popupActive"></slot>
     <slot name="popupActiveEnd"></slot>
     <slot name="measure"></slot>
+    <slot name="search"></slot>
   </div>
 </template>
 

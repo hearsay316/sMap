@@ -73,7 +73,7 @@ export function InitPlot(viewer, serverUrl) {
     plotEditControl,
     plotting
   );
-  window.scene = undefined;
+  //window.scene = undefined;
   window.plotEditControl = undefined;
   // 清除window作用域
   console.log("InitPlot 动态标绘结束");
@@ -397,7 +397,9 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
     position: position
   });
 }
-
+function error(desc) {
+  console.error(desc);
+}
 /**
  * 注册点击单体化
  * @param layers
@@ -405,11 +407,9 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
  */
 export function observeLayer(layers, Config) {
   let { name, setQueryParameter } = Config;
-  console.log(layers);
-  !Array.isArray(layers) && console.error("layers 不是数组");
+  !Array.isArray(layers) && error("layers 不是数组");
   const layer = layers.find(layer => layer.name === name);
-  console.log(layer, !layer);
-  !layer && console.error("layer 没有,Config.name 找不到");
+  !layer && error("layer 没有,Config.name 找不到");
   let data = {
     keyWord: "SmID",
     ...setQueryParameter
@@ -555,7 +555,6 @@ export function setView(scene, position, angle) {
  */
 export function CesiumClickLayer(viewer, fuc) {
   try {
-    console.log(11);
     viewer.pickEvent.addEventListener(feature => {
       fuc(feature);
     });
