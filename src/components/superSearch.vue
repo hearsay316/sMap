@@ -90,15 +90,15 @@ export default {
         box-sizing border-box
         height: 32px
         outline none
-        border 1px solid #aef
-        background-color transparent
+        border 1px solid #34eff9
+        background-color #042351
         color #ffffff
         border-radius 3px
         padding 0  33px 0 8px
         box-shadow:2px 2px 5px #ffffff;
         margin-bottom 8px
     .superSearch-input:focus
-        border 1px solid #ea4
+        border 1px solid #aef
         box-shadow:none;
     .superSearch-search
         position absolute
