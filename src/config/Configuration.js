@@ -405,7 +405,11 @@ export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
  */
 export function observeLayer(layers, Config) {
   let { name, setQueryParameter } = Config;
+  console.log(layers);
+  !Array.isArray(layers) && console.error("layers 不是数组");
   const layer = layers.find(layer => layer.name === name);
+  console.log(layer, !layer);
+  !layer && console.error("layer 没有,Config.name 找不到");
   let data = {
     keyWord: "SmID",
     ...setQueryParameter
@@ -550,9 +554,14 @@ export function setView(scene, position, angle) {
  * @constructor
  */
 export function CesiumClickLayer(viewer, fuc) {
-  viewer.pickEvent.addEventListener(feature => {
-    fuc(feature);
-  });
+  try {
+    console.log(11);
+    viewer.pickEvent.addEventListener(feature => {
+      fuc(feature);
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 /**

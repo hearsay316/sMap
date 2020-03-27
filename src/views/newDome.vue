@@ -126,7 +126,7 @@
       :RegCesiumClickLayer="RegCesiumClickLayer"
 -->
 <script>
-import { demoConfig } from "../config/mapConfig";
+import { demoConfig, demoSingConfig } from "../config/mapConfig";
 import {
   viewerCreateFireFighting,
   viewerMountedDeployCart,
@@ -145,7 +145,7 @@ export default {
   name: "newDome",
   data() {
     return {
-      ...demoConfig,
+      ...demoSingConfig,
       isMeasure: false,
       isNewDomeTitle: true,
       picUrl: {
