@@ -69,8 +69,12 @@ export default {
 }
 #bubble {
   position: absolute;
-  background: #ffffff;
-  padding: 8px;
-  border-radius: 3px;
+  margin: 0;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+}
+.bubble:after {
+  border-color: transparent #34eff9;
 }
 </style>

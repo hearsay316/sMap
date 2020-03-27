@@ -1,12 +1,30 @@
 <template>
   <div class="superSearch">
     <div class="superSearch-main">
-      <input
-        class="superSearch-input"
-        placeholder="请输入查询的仓库名称"
-        type="text"
-      />
-      <span class="superSearch-search">
+      <transition name="fade">
+        <div
+          class="superSearch-form"
+          @mouseleave="mouseSuperSearchForm"
+          v-show="showSuperSearchInput"
+        >
+          <input
+            class="superSearch-input"
+            placeholder="请输入查询的仓库名称"
+            type="text"
+            v-model="superSearchInput"
+          />
+          <ul class="ul" style="background-color: #ffffff ;padding-top: 10px">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+          </ul>
+        </div>
+      </transition>
+      <span @mouseenter="mouseSuperSearchSearch" class="superSearch-search">
         <svg
           t="1585276050237"
           class="icon"
@@ -30,19 +48,46 @@
 
 <script>
 export default {
-  name: "superSearch"
+  name: "superSearch",
+  data() {
+    return {
+      superSearchInput: "",
+      showSuperSearchInput: false
+    };
+  },
+  methods: {
+    mouseSuperSearchForm() {
+      console.log("xsswdwdwdw");
+      !this.superSearchInput ? (this.showSuperSearchInput = false) : void 0;
+    },
+    mouseSuperSearchSearch() {
+      console.log("XXXXX");
+      this.showSuperSearchInput = true;
+    }
+  }
 };
 </script>
 
 <style lang="stylus" scoped>
+.superSearch.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.superSearch.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    width:0;
+    overflow hidden
+}
 .superSearch
     position absolute
     top 12px;
     right 12px
     .superSearch-main
         position relative
+    .superSearch-form
+        width:260px
     .superSearch-input
-        width:180px
+        width:100%
+        box-sizing border-box
         height: 32px
         outline none
         border 1px solid #aef
@@ -51,11 +96,12 @@ export default {
         border-radius 3px
         padding 0  33px 0 8px
         box-shadow:2px 2px 5px #ffffff;
+        margin-bottom 8px
     .superSearch-input:focus
         border 1px solid #ea4
         box-shadow:none;
     .superSearch-search
         position absolute
-        top 2px
+        top 1px
         right 1px
 </style>

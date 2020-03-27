@@ -18,12 +18,13 @@
     >
       <template v-slot:default>
         <!--单体化的提示框-->
-        <div class="default-img">
-          <img
-            src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"
-          />
-        </div>
-        <div>建筑用材存放</div>
+        <superSingularization></superSingularization>
+        <!--        <div class="default-img">-->
+        <!--          <img-->
+        <!--            src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"-->
+        <!--          />-->
+        <!--        </div>-->
+        <!--        <div>建筑用材存放</div>-->
       </template>
       <template v-slot:nav>
         <!--这个是导航栏
@@ -469,6 +470,10 @@ export default {
     }
   },
   components: {
+    superSingularization: () =>
+      import(
+        /* webpackChunkName: "superNav" */ "../components/superSingularization"
+      ),
     superNav: () =>
       import(/* webpackChunkName: "superNav" */ "../components/superNav"),
     popupActiveTitle: () =>
@@ -505,7 +510,6 @@ export default {
 <style lang="stylus">
 .newDome .cesium-viewer-navigationContainer
     display none
-
 .newDome
     position relative
     width:100%
