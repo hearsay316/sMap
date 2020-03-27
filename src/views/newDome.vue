@@ -110,7 +110,7 @@
         </superMeasure>
       </template>
       <template v-slot:search>
-        <superSearch></superSearch>
+        <superSearch :searchData="setLocation"></superSearch>
       </template>
     </super-map>
     <!--首页显示的按钮-->
@@ -131,6 +131,7 @@
 -->
 <script>
 import { demoConfig, demoSingConfig } from "../config/mapConfig";
+import { setLocation } from "../config/LocationConfig.js";
 import {
   viewerCreateFireFighting,
   viewerMountedDeployCart,
@@ -151,6 +152,7 @@ export default {
     return {
       ...demoSingConfig,
       isMeasure: false,
+      setLocation: [...setLocation],
       isNewDomeTitle: true,
       picUrl: {
         ...picUrl
