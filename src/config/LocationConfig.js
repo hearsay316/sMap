@@ -130,7 +130,7 @@ export const setLocation = [
     }
   },
   {
-    name: "第十一个房子",
+    name: "第十二个房子",
     position: {
       x: -1209351.4678692224,
       y: 5655564.944987558,
@@ -143,7 +143,7 @@ export const setLocation = [
     }
   },
   {
-    name: "第十二个房子",
+    name: "第十三个房子",
     position: {
       x: -1209347.622050101,
       y: 5655586.879473146,
