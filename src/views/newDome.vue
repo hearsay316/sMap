@@ -110,7 +110,13 @@
         </superMeasure>
       </template>
       <template v-slot:search>
-        <superSearch :searchData="setLocation"></superSearch>
+        <superSearch
+          :showSuperSearchInput="search.showSuperSearchInput"
+          :searchData="search.setLocationFilter"
+          @searchItem="searchItem"
+          @searchValue="searchValue"
+          @modShowSuperSearchInput="modShowSuperSearchInput"
+        ></superSearch>
       </template>
     </super-map>
     <!--首页显示的按钮-->
@@ -152,7 +158,11 @@ export default {
     return {
       ...demoSingConfig,
       isMeasure: false,
-      setLocation: [...setLocation],
+      search: {
+        showSuperSearchInput: false,
+        setLocation: [...setLocation],
+        setLocationFilter: []
+      },
       isNewDomeTitle: true,
       picUrl: {
         ...picUrl
@@ -194,6 +204,18 @@ export default {
     };
   },
   methods: {
+    modShowSuperSearchInput(value) {
+      this.search.showSuperSearchInput = value;
+    },
+    searchItem(item) {
+      setView(viewer.scene, item.position, item.angle);
+      this.search.showSuperSearchInput = false;
+    },
+    searchValue(value) {
+      this.search.setLocationFilter = this.search.setLocation.filter(item => {
+        return item.name.includes(value);
+      });
+    },
     SuperMeasure() {
       //测量全部的函数
       let vm = this;

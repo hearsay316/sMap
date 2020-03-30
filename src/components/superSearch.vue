@@ -9,21 +9,21 @@
           v-show="showSuperSearchInput"
         >
           <input
+            autocomplete="off"
             ref="superSearchInput"
             :id="['superSearch-form-input']"
             class="superSearch-form-input"
             placeholder="请输入查询的仓库名称"
             type="text"
+            @input="searchValue"
             v-model="superSearchInput"
           />
-          <ul
-            class="superSearch-form-list"
-            style="background-color: #ffffff ;padding-top: 10px"
-          >
+          <ul class="superSearch-form-list">
             <li
               class="superSearch-form-item"
               v-for="item in searchData"
               :key="item.name"
+              @click="superSearchFormListItem(item)"
             >
               {{ item.name }}
             </li>
@@ -57,12 +57,12 @@
 export default {
   name: "superSearch",
   props: {
-    searchData: Array
+    searchData: Array,
+    showSuperSearchInput: Boolean
   },
   data() {
     return {
       superSearchInput: "",
-      showSuperSearchInput: false,
       superSearchInputTime: undefined,
       mouseSuperSearchFormTime: undefined,
       "superSearch-form-input": "superSearch-form-input"
@@ -72,6 +72,12 @@ export default {
     this.superSearchInputTime && clearTimeout(this.superSearchInputTime);
   },
   methods: {
+    superSearchFormListItem(item) {
+      this.$emit("searchItem", item);
+    },
+    searchValue() {
+      this.$emit("searchValue", this.superSearchInput);
+    },
     mouseSuperSearchForm() {
       //延迟操作
       this.mouseSuperSearchFormTime &&
@@ -79,30 +85,22 @@ export default {
       this.mouseSuperSearchFormTime = setTimeout(() => {
         document.activeElement.id === this["superSearch-form-input"]
           ? void 0
-          : (this.showSuperSearchInput = false);
+          : this.$emit("modShowSuperSearchInput", false);
       }, 100);
       this.mouseSuperSearchFormTime = undefined;
     },
     mouseSuperSearchSearch() {
-      console.log("mouseSuperSearchSearch", this.mouseSuperSearchFormTime);
       if (
         document.activeElement.id === this["superSearch-form-input"] ||
         this.mouseSuperSearchFormTime
       ) {
         clearTimeout(this.mouseSuperSearchFormTime);
       } else {
-        this.showSuperSearchInput = true;
-        this.mouseSuperSearchSearchTime = setTimeout(() => {
-          // this.$refs.superSearchInput.focus();
-        }, 350);
+        this.$emit("modShowSuperSearchInput", true);
       }
     },
     documentAddEventListener() {
       document.addEventListener("click", event => {
-        console.log(
-          this.$refs.superSearchMain.contains(event.target),
-          event.target === this.$refs.superSearchMain
-        );
         let isFalse =
           this.$refs.superSearchMain.contains(event.target) ||
           event.target === this.$refs.superSearchMain;
@@ -138,6 +136,7 @@ export default {
     position absolute
     top 48px;
     right 24px
+    font-size 14px
     .superSearch-main
         position relative
     .superSearch-form
@@ -151,7 +150,7 @@ export default {
         background-color #042351
         color #ffffff
         border-radius 3px
-        padding 0  33px 0 8px
+        padding 0  33px 0 15px
         box-shadow:2px 2px 5px #ffffff;
         margin-bottom 8px
     .superSearch-form-input:focus
@@ -169,8 +168,9 @@ export default {
 }
 .superSearch-form-list
   box-sizing border-box
-  padding 8px
   text-align left
+  background-color #042351
+  color #ffffff
   .superSearch-form-item
-    padding 8px
+    padding 8px 15px
 </style>
