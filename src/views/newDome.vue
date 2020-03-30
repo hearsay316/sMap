@@ -17,16 +17,14 @@
       :RegCesiumClickLayer="RegCesiumClickLayer"
     >
       <template v-slot:default>
-        <!--单体化的提示框-->
+        <!--单体化的提示框
+
+        superSingularizationData 数据参数
+        -->
+
         <superSingularization
           :superSingularizationData="superSingularizationData"
         ></superSingularization>
-        <!--        <div class="default-img">-->
-        <!--          <img-->
-        <!--            src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"-->
-        <!--          />-->
-        <!--        </div>-->
-        <!--        <div>建筑用材存放</div>-->
       </template>
       <template v-slot:nav>
         <!--这个是导航栏
@@ -165,18 +163,7 @@ export default {
   data() {
     return {
       ...demoSingConfig,
-      superSingularizationData: {
-        title: "大行仓库(厂房或者货场面积大于9000m2)dd",
-        titleImg:
-          "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/001.png",
-        desc: "标准结构",
-        descImg:
-          "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/002.png",
-        features:
-          "机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。",
-        FeaturesImg:
-          "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/003.png"
-      },
+      superSingularizationData: {},
       isMeasure: false,
       search: {
         showSuperSearchInput: false,
@@ -492,8 +479,10 @@ export default {
     },
     errorOpenMap(e) {},
     RegCesiumClickLayer(feature) {
-      this.layerTitle = feature.SMID;
-      console.log(feature);
+      this.superSingularizationData = {
+        ...this.search.setLocation[feature.SMID - 0 - 1]
+          .superSingularizationData
+      };
     }
   },
   components: {
