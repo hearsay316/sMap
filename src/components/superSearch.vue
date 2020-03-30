@@ -16,8 +16,17 @@
             type="text"
             v-model="superSearchInput"
           />
-          <ul class="ul" style="background-color: #ffffff ;padding-top: 10px">
-            <li v-for="item in searchData" :key="item.name">{{ item.name }}</li>
+          <ul
+            class="superSearch-form-list"
+            style="background-color: #ffffff ;padding-top: 10px"
+          >
+            <li
+              class="superSearch-form-item"
+              v-for="item in searchData"
+              :key="item.name"
+            >
+              {{ item.name }}
+            </li>
           </ul>
         </div>
       </transition>
@@ -75,7 +84,10 @@ export default {
       }, 100);
     },
     mouseSuperSearchSearch() {
-      if (document.activeElement.id === this["superSearch-form-input"]) {
+      if (
+        document.activeElement.id === this["superSearch-form-input"] ||
+        this.mouseSuperSearchFormTime
+      ) {
         clearTimeout(this.mouseSuperSearchFormTime);
       } else {
         this.showSuperSearchInput = true;
@@ -83,17 +95,20 @@ export default {
           this.$refs.superSearchInput.focus();
         }, 350);
       }
+    },
+    documentAddEventListener() {
+      document.addEventListener("click", event => {
+        if (event.target.id !== this["superSearch-form-input"]) {
+          this.$nextTick(() => {
+            this.$refs.superSearchInput.blur();
+            this.mouseSuperSearchForm();
+          });
+        }
+      });
     }
   },
   mounted() {
-    document.addEventListener("click", event => {
-      if (event.target.id !== this["superSearch-form-input"]) {
-        this.$nextTick(() => {
-          this.$refs.superSearchInput.blur();
-          this.mouseSuperSearchForm();
-        });
-      }
-    });
+    this.documentAddEventListener();
   }
 };
 </script>
@@ -144,4 +159,10 @@ export default {
 .superSearch-search-icon-bg{
   background-color #1bc5a3
 }
+.superSearch-form-list
+  box-sizing border-box
+  padding 8px
+  text-align left
+  .superSearch-form-item
+    padding 8px
 </style>
