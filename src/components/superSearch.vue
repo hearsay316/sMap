@@ -1,6 +1,6 @@
 <template>
   <div class="superSearch">
-    <div class="superSearch-main">
+    <div class="superSearch-main" ref="superSearchMain">
       <transition name="slide-fade">
         <div
           class="superSearch-form"
@@ -80,10 +80,11 @@ export default {
         document.activeElement.id === this["superSearch-form-input"]
           ? void 0
           : (this.showSuperSearchInput = false);
-        this.mouseSuperSearchFormTime = undefined;
       }, 100);
+      this.mouseSuperSearchFormTime = undefined;
     },
     mouseSuperSearchSearch() {
+      console.log("mouseSuperSearchSearch", this.mouseSuperSearchFormTime);
       if (
         document.activeElement.id === this["superSearch-form-input"] ||
         this.mouseSuperSearchFormTime
@@ -91,14 +92,21 @@ export default {
         clearTimeout(this.mouseSuperSearchFormTime);
       } else {
         this.showSuperSearchInput = true;
-        setTimeout(() => {
-          this.$refs.superSearchInput.focus();
+        this.mouseSuperSearchSearchTime = setTimeout(() => {
+          // this.$refs.superSearchInput.focus();
         }, 350);
       }
     },
     documentAddEventListener() {
       document.addEventListener("click", event => {
-        if (event.target.id !== this["superSearch-form-input"]) {
+        console.log(
+          this.$refs.superSearchMain.contains(event.target),
+          event.target === this.$refs.superSearchMain
+        );
+        let isFalse =
+          this.$refs.superSearchMain.contains(event.target) ||
+          event.target === this.$refs.superSearchMain;
+        if (!isFalse && this.superSearchInput === "") {
           this.$nextTick(() => {
             this.$refs.superSearchInput.blur();
             this.mouseSuperSearchForm();
@@ -128,8 +136,8 @@ export default {
   }
 .superSearch
     position absolute
-    top 12px;
-    right 12px
+    top 48px;
+    right 24px
     .superSearch-main
         position relative
     .superSearch-form
