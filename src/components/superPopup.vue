@@ -86,10 +86,10 @@ export default {
         height 449px
         display grid
         grid-template-columns 63px 63px 63px
-        grid-column-gap 36px
+        grid-column-gap 25px
         flex-wrap wrap
         color #ffffff
-        padding 0 11px
+        justify-content center
         background-color RGBA(22, 57, 95, 0.9)
         .superPopup-main-item
           display flex
@@ -100,7 +100,7 @@ export default {
             height 63px
             width 63px
             padding  22px 0 5px 0
-         :nth-last-child(5)
+         :nth-last-child(2)
             span
               width:90px
               margin-left -12px

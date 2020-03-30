@@ -101,15 +101,18 @@ export default {
     },
     documentAddEventListener() {
       document.addEventListener("click", event => {
-        let isFalse =
-          this.$refs.superSearchMain.contains(event.target) ||
-          event.target === this.$refs.superSearchMain;
-        if (!isFalse && this.superSearchInput === "") {
-          this.$nextTick(() => {
-            this.$refs.superSearchInput.blur();
-            this.mouseSuperSearchForm();
-          });
-        }
+        this.$nextTick(() => {
+          let isFalse =
+            (this.$refs.superSearchMain.contains &&
+              this.$refs.superSearchMain.contains(event.target)) ||
+            event.target === this.$refs.superSearchMain;
+          if (!isFalse && this.superSearchInput === "") {
+            this.$nextTick(() => {
+              this.$refs.superSearchInput.blur();
+              this.mouseSuperSearchForm();
+            });
+          }
+        });
       });
     }
   },

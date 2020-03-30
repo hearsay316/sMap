@@ -150,7 +150,13 @@ import {
   viewerEntitiesAdd
 } from "../config/Configuration";
 import MeasuringConfig from "../config/MeasuringConfig.js";
-let viewer, carts, Fire, handlerDis, handlerArea, handlerHeight;
+let viewer,
+  carts,
+  Fire,
+  handlerDis,
+  handlerArea,
+  handlerHeight,
+  viewerEntities = [];
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 export default {
   name: "newDome",
@@ -182,19 +188,23 @@ export default {
       Resources: {
         Medical: {
           active: false,
-          index: undefined
+          index: undefined,
+          url: ""
         },
         Emergency: {
           active: false,
-          index: undefined
+          index: undefined,
+          url: ""
         },
         Expert: {
           active: false,
-          index: undefined
+          index: undefined,
+          url: ""
         },
         Supplies: {
           active: false,
-          index: undefined
+          index: undefined,
+          url: ""
         },
         Command: {
           active: false,
@@ -429,8 +439,10 @@ export default {
         },
         clearMeasure(index) {
           console.log("clearMeasure", index, "i清楚");
-          viewer.entities.removeAll();
-          viewer.scene.primitives.removeAll();
+          viewerEntities.map(item => {
+            viewer.entities.remove(item);
+          });
+          Fire && viewer.scene.primitives.remove(Fire.FireParticleSystem);
           vm.clearStatusAll(0, 1);
         }
       };
@@ -443,8 +455,7 @@ export default {
     RegCesiumClickLeft(e, position) {
       console.log("Left", e, position, viewer);
       let obj = {
-        name: "风机设备",
-        code: "123456789",
+        show: true,
         point: {
           //点
           pixelSize: 5,
@@ -456,13 +467,15 @@ export default {
           //图标
           image: "./img/01.jpg",
           width: 360,
-          height: 461
+          height: 461,
+          show: true
         }
       };
       Object.keys(this.Resources).forEach(item => {
         let a =
           this.Resources[item].active &&
           viewerEntitiesAdd(viewer, position, obj);
+        viewerEntities.push(a);
         a ? (this.Resources[item].active = false) : void 0;
         a
           ? (this.baseUrlItems[this.Resources[item].index].active = false)
