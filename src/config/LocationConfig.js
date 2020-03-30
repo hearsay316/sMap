@@ -61,12 +61,15 @@ export const setLocation = [
       roll: 6.283185307179583
     },
     superSingularizationData: {
-      title: "大行仓库(厂房或者货场面积大于9000m2)第3个房子",
-      titleImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/001.png",
-      desc: "标准结构",
+      title:
+        "储罐用以存放酸碱、醇、气体、液态等提炼的化学物质。储罐广泛在华北地区，根据材质不同大体上有：聚乙烯储罐、聚丙烯储罐、玻璃钢储罐、陶瓷储罐、橡胶储罐、不锈钢储罐等。\n" +
+        "由于储存介质的不同，储罐的形式也是多种多样的",
+      titleImg:
+        "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/0001.png",
+      desc: "浮顶储罐",
       descImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/002.png",
       features:
-        "机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。",
+        "储罐工程所需材料分为罐体材料和附属设施材料。罐体材料可按抗拉屈服强度或抗拉标准强度分为低强钢和高强钢，高强钢多用于5000m3以上储罐；附属设施（包括抗风圈梁、锁口、盘梯、护栏等）均采用强度较低的普通碳素结构钢，其余配件、附件则根据不同的用途采用其他材质，制造罐体常用的国产钢材有20、20R、16Mn、16MnR、以及Q235系列等。",
       FeaturesImg:
         "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/003.png"
     }
@@ -84,12 +87,15 @@ export const setLocation = [
       roll: 6.283185307179579
     },
     superSingularizationData: {
-      title: "大行仓库(厂房或者货场面积大于9000m2)第4个房子",
-      titleImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/001.png",
-      desc: "标准结构",
+      title:
+        "储罐用以存放酸碱、醇、气体、液态等提炼的化学物质。储罐广泛在华北地区，根据材质不同大体上有：聚乙烯储罐、聚丙烯储罐、玻璃钢储罐、陶瓷储罐、橡胶储罐、不锈钢储罐等。\n" +
+        "由于储存介质的不同，储罐的形式也是多种多样的",
+      titleImg:
+        "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/0001.png",
+      desc: "浮顶储罐",
       descImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/002.png",
       features:
-        "机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。",
+        "储罐工程所需材料分为罐体材料和附属设施材料。罐体材料可按抗拉屈服强度或抗拉标准强度分为低强钢和高强钢，高强钢多用于5000m3以上储罐；附属设施（包括抗风圈梁、锁口、盘梯、护栏等）均采用强度较低的普通碳素结构钢，其余配件、附件则根据不同的用途采用其他材质，制造罐体常用的国产钢材有20、20R、16Mn、16MnR、以及Q235系列等。",
       FeaturesImg:
         "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/003.png"
     }
@@ -130,12 +136,15 @@ export const setLocation = [
       roll: 1.0658141036401503e-14
     },
     superSingularizationData: {
-      title: "大行仓库(厂房或者货场面积大于9000m2)第6个房子",
-      titleImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/001.png",
-      desc: "标准结构",
+      title:
+        "储罐用以存放酸碱、醇、气体、液态等提炼的化学物质。储罐广泛在华北地区，根据材质不同大体上有：聚乙烯储罐、聚丙烯储罐、玻璃钢储罐、陶瓷储罐、橡胶储罐、不锈钢储罐等。\n" +
+        "由于储存介质的不同，储罐的形式也是多种多样的",
+      titleImg:
+        "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/0001.png",
+      desc: "球形储罐",
       descImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/002.png",
       features:
-        "机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。",
+        "储罐工程所需材料分为罐体材料和附属设施材料。罐体材料可按抗拉屈服强度或抗拉标准强度分为低强钢和高强钢，高强钢多用于5000m3以上储罐；附属设施（包括抗风圈梁、锁口、盘梯、护栏等）均采用强度较低的普通碳素结构钢，其余配件、附件则根据不同的用途采用其他材质，制造罐体常用的国产钢材有20、20R、16Mn、16MnR、以及Q235系列等。",
       FeaturesImg:
         "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/003.png"
     }
@@ -153,12 +162,15 @@ export const setLocation = [
       roll: 6.283185307179586
     },
     superSingularizationData: {
-      title: "大行仓库(厂房或者货场面积大于9000m2)第八个房子",
-      titleImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/001.png",
-      desc: "标准结构",
+      title:
+        "储罐用以存放酸碱、醇、气体、液态等提炼的化学物质。储罐广泛在华北地区，根据材质不同大体上有：聚乙烯储罐、聚丙烯储罐、玻璃钢储罐、陶瓷储罐、橡胶储罐、不锈钢储罐等。\n" +
+        "由于储存介质的不同，储罐的形式也是多种多样的",
+      titleImg:
+        "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/0001.png",
+      desc: "球形储罐",
       descImg: "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/002.png",
       features:
-        "机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。",
+        "储罐工程所需材料分为罐体材料和附属设施材料。罐体材料可按抗拉屈服强度或抗拉标准强度分为低强钢和高强钢，高强钢多用于5000m3以上储罐；附属设施（包括抗风圈梁、锁口、盘梯、护栏等）均采用强度较低的普通碳素结构钢，其余配件、附件则根据不同的用途采用其他材质，制造罐体常用的国产钢材有20、20R、16Mn、16MnR、以及Q235系列等。",
       FeaturesImg:
         "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/003.png"
     }
