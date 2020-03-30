@@ -18,7 +18,9 @@
     >
       <template v-slot:default>
         <!--单体化的提示框-->
-        <superSingularization></superSingularization>
+        <superSingularization
+          :superSingularizationData="superSingularizationData"
+        ></superSingularization>
         <!--        <div class="default-img">-->
         <!--          <img-->
         <!--            src="http://img1.imgtn.bdimg.com/it/u=1769822317,2460540396&fm=26&gp=0.jpg"-->
@@ -163,6 +165,18 @@ export default {
   data() {
     return {
       ...demoSingConfig,
+      superSingularizationData: {
+        title: "大行仓库(厂房或者货场面积大于9000m2)dd",
+        titleImg:
+          "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/001.png",
+        desc: "标准结构",
+        descImg:
+          "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/002.png",
+        features:
+          "机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。",
+        FeaturesImg:
+          "http://cdn.j6375x.cn/cdn/pic/img/superSingularization/003.png"
+      },
       isMeasure: false,
       search: {
         showSuperSearchInput: false,

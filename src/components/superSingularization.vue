@@ -4,26 +4,26 @@
       <div class="superSingularization-main-desc">
         <div class="superSingularization-main-desc-item">
           <div class="superSingularization-main-desc-item-img">
-            <img src="../assets/superSingularization/001.png" alt="" />
+            <img :src="superSingularizationData.titleImg" alt="" />
           </div>
           <div class="superSingularization-main-desc-item-title">
-            大行仓库(厂房或者货场面积大于9000m2)
+            {{ superSingularizationData.title }}
           </div>
         </div>
         <div class="superSingularization-main-desc-item">
           <div class="superSingularization-main-desc-item-img">
-            <img src="../assets/superSingularization/002.png" alt="" />
+            <img :src="superSingularizationData.descImg" alt="" />
           </div>
           <div class="superSingularization-main-desc-item-title">
-            标准结构
+            {{ superSingularizationData.desc }}
           </div>
         </div>
         <div class="superSingularization-main-desc-item">
           <div class="superSingularization-main-desc-item-img">
-            <img src="../assets/superSingularization/003.png" alt="" />
+            <img :src="superSingularizationData.FeaturesImg" alt="" />
           </div>
           <div class="superSingularization-main-desc-item-title">
-            机械加工制造、重工类：一般要求单层，而且对厂房的高度、地面承重有要求，部分行业要求行车梁，可以装行车（吊车）。
+            {{ superSingularizationData.features }}
           </div>
         </div>
       </div>
@@ -52,7 +52,17 @@
 </template>
 <script>
 export default {
-  name: "app"
+  name: "app",
+  props: {
+    superSingularizationData: {
+      title: "大行仓库(厂房或者货场面积大于9000m2)",
+      titleImg: "",
+      desc: "标准结构",
+      descImg: "",
+      features: "",
+      FeaturesImg: ""
+    }
+  }
 };
 </script>
 <style>
