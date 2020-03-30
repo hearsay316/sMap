@@ -124,6 +124,7 @@ export const demoSingConfig = {
       keyWord: "SmID"
     }
   },
+  Z: 1574.4067809551273,
   MapFireXYZ: {
     x: 102.07025202712828,
     y: 24.969712733889363,

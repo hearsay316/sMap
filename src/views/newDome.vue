@@ -186,29 +186,10 @@ export default {
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
       Resources: {
-        Medical: {
+        Active: {
           active: false,
           index: undefined,
           url: ""
-        },
-        Emergency: {
-          active: false,
-          index: undefined,
-          url: ""
-        },
-        Expert: {
-          active: false,
-          index: undefined,
-          url: ""
-        },
-        Supplies: {
-          active: false,
-          index: undefined,
-          url: ""
-        },
-        Command: {
-          active: false,
-          index: undefined
         }
       }
     };
@@ -401,10 +382,19 @@ export default {
         });
     },
     handleClickLists(index) {
+      let arrFUnc = [
+        "addMedical",
+        "addEmergency",
+        "addExpert",
+        "addSupplies",
+        "addCommand"
+      ];
       let baseUrlItemFucName = this.baseUrlItems[index]?.fun;
       let fuc = this.baseUrlItemsFun();
       index !== 7 ? (this.baseUrlItems[index].active = true) : void 0;
-      fuc[baseUrlItemFucName] && fuc[baseUrlItemFucName](index);
+      arrFUnc.includes(baseUrlItemFucName)
+        ? fuc.addFuc(index)
+        : fuc[baseUrlItemFucName](index);
     },
     baseUrlItemsFun() {
       let vm = this;
@@ -417,28 +407,13 @@ export default {
           // vm.baseUrlItems[index].active = true;
           carts = viewerMountedDeployCart(viewer, vm.positionCarts);
         },
-        addMedical(index) {
-          vm.Resources.Medical.active = true;
-          vm.Resources.Medical.index = index;
-        },
-        addEmergency(index) {
-          vm.Resources.Emergency.active = true;
-          vm.Resources.Emergency.index = index;
-        },
-        addExpert(index) {
-          vm.Resources.Expert.active = true;
-          vm.Resources.Expert.index = index;
-        },
-        addSupplies(index) {
-          vm.Resources.Supplies.active = true;
-          vm.Resources.Supplies.index = index;
-        },
-        addCommand(index) {
-          vm.Resources.Command.active = true;
-          vm.Resources.Command.index = index;
+        addFuc(index) {
+          console.log("addFuc");
+          vm.Resources.Active.active = true;
+          vm.Resources.Active.index = index;
+          vm.Resources.Active.url = vm.baseUrlItems[index].url;
         },
         clearMeasure(index) {
-          console.log("clearMeasure", index, "i清楚");
           viewerEntities.map(item => {
             viewer.entities.remove(item);
           });
@@ -453,34 +428,35 @@ export default {
       handlerHeight && handlerHeight.deactivate();
     },
     RegCesiumClickLeft(e, position) {
-      console.log("Left", e, position, viewer);
       let obj = {
         show: true,
-        point: {
-          //点
-          pixelSize: 5,
-          color: Cesium.Color.RED,
-          outlineColor: Cesium.Color.WHITE,
-          outlineWidth: 2
-        },
+        // point: {
+        //   //点
+        //   pixelSize: 5,
+        //   color: Cesium.Color.RED,
+        //   outlineColor: Cesium.Color.WHITE,
+        //   outlineWidth: 2
+        // },
         billboard: {
           //图标
-          image: "./img/01.jpg",
-          width: 360,
-          height: 461,
+          image: this.Resources.Active.url,
+          width: 32,
+          height: 32,
           show: true
         }
       };
-      Object.keys(this.Resources).forEach(item => {
-        let a =
-          this.Resources[item].active &&
-          viewerEntitiesAdd(viewer, position, obj);
-        viewerEntities.push(a);
-        a ? (this.Resources[item].active = false) : void 0;
-        a
-          ? (this.baseUrlItems[this.Resources[item].index].active = false)
-          : void 0;
-      });
+      let viewerEntity =
+        this.Resources.Active.active &&
+        viewerEntitiesAdd(
+          viewer,
+          { x: position.x, y: position.y, z: this.Z },
+          obj
+        );
+      viewerEntities.push(viewerEntity);
+      viewerEntity ? (this.Resources.Active.active = false) : void 0;
+      viewerEntity
+        ? (this.baseUrlItems[this.Resources.Active.index].active = false)
+        : void 0;
     },
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);
