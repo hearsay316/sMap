@@ -1,5 +1,5 @@
 <template>
-  <div class="popupActive" :style="{ background: popupActiveStyle }">
+  <div class="popupActive">
     <div class="popupActive-title">
       <img src="../assets/popupActive-g-2.png" />
       <div class="popupActive-title-desc">
