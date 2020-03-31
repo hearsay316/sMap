@@ -159,7 +159,7 @@ let viewer,
   handlerHeight,
   viewerEntities = [];
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
-import bg from "../config/bgConfig.js";
+// import bg from "../config/bgConfig.js";
 
 export default {
   name: "newDome",
@@ -186,7 +186,7 @@ export default {
       baseUrlItems: [...item1],
       superPlotIndex: -1,
       isRescue: false,
-      popupActiveBg: bg.bg,
+      popupActiveBg: "xx",
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
@@ -530,6 +530,12 @@ export default {
     showSuperSingularizationData() {
       return Object.keys(this.superSingularizationData).length > 0;
     }
+  },
+  created() {
+    // this.popupActiveBg().then(res => {
+    //   console.log(res);
+    //   this.popupActiveBg = res.default.bg;
+    // });
   }
 };
 </script>

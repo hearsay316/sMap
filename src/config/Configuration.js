@@ -119,8 +119,7 @@ export function viewerMountedWater(viewer, cart, Fire) {
   scene.highDynamicRange = false;
   let WaterParticleSystem = viewer.scene.primitives.add(
     new Cesium.ParticleSystem({
-      image:
-        "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fountain2.png",
+      image: "http://cdn.j6375x.cn/cdn/pic/fountain2.png",
       startColor: new Cesium.Color(1, 1, 1, 0.6),
       endColor: new Cesium.Color(0.8, 0.86, 1, 0.4),
       startScale: viewModel.startScale,
@@ -335,8 +334,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
     new Cesium.ParticleSystem({
       id: "xxx",
       // 粒子的图片
-      image:
-        "http://support.supermap.com.cn:8090/webgl/examples/images/ParticleSystem/fire.png",
+      image: "http://cdn.j6375x.cn/cdn/pic/fire.png",
       // 起始颜色
       startColor: new Cesium.Color(1, 1, 1, 1),
       // 结束颜色
