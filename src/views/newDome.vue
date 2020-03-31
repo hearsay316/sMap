@@ -426,6 +426,7 @@ export default {
           viewerEntities.map(item => {
             viewer.entities.remove(item);
           });
+          carts && vm.clearEntities(carts);
           Fire && viewer.scene.primitives.remove(Fire.FireParticleSystem);
           vm.clearStatusAll(0, 1);
         }
