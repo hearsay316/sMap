@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <router-view />
   </div>
 </template>
@@ -8,6 +8,9 @@ import { initStats } from "./utils/base";
 export default {
   mounted() {
     initStats();
+    // this.$nextTick(()=>{
+    //   this.toggleFullScreen();
+    // })
   }
 };
 </script>

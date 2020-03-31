@@ -48,7 +48,6 @@
       <el-button type="primary" @click="HandleS3Deploy" v-if="Status.isMapFire">
         开始部署</el-button
       >
-
       <el-button
         type="primary"
         v-if="Status.isMapCart"

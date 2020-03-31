@@ -77,7 +77,8 @@ let FireEntity;
 let MapFireXYZ = {
   x: 102.07025202712828,
   y: 24.969712733889363,
-  z: 1577.620664980985
+  z: 1573.026203891956
+  //1572.026203891956
 };
 let carts = [];
 let positionXYZ = [
@@ -433,7 +434,6 @@ export default {
     },
     HandleClickS3Move() {
       let vm = this;
-
       try {
         if (scene.camera) {
           scene.camera.setView({
@@ -590,8 +590,5 @@ export default {
   position: absolute;
   background: #fff;
   padding: 8px;
-}
-.bgcolor {
-  background: #00e5e5;
 }
 </style>

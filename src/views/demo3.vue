@@ -248,10 +248,11 @@ let serverUrl,
   handlerHeight,
   stylePanel,
   plotDrawControl;
+// 小车最后的坐标
 let MapFireXYZ = {
   x: 102.07025202712828,
   y: 24.969712733889363,
-  z: 1577.620664980985
+  z: 1573.026203891956
 };
 /*
 demo3.vue?451f:824 102.06808795138754 24.972126138655273 1572.7586330095774
@@ -652,6 +653,10 @@ export default {
       this.demo3Menu = false;
       this.demo3MenuItem = true;
     },
+    /*orientation: Cesium.Transforms.headingPitchRollQuaternion(
+            position,
+            new Cesium.HeadingPitchRoll(26 / 10, 0, 0)  HandleS3Deploy
+          )*/
     HandleS3CreateFireFighting() {
       let vm = this;
       let { x, y, z } = MapFireXYZ;
@@ -691,16 +696,6 @@ export default {
         cart3.position = position3;
         --index;
       }, 0);
-    },
-    HandleS3Create(eventStatus) {
-      Object.keys(this.Status).forEach(item => {
-        console.log(item === eventStatus, item, eventStatus);
-        if (item === eventStatus) {
-          this.Status[eventStatus] = !this.Status[eventStatus];
-        } else {
-          this.Status[item] = false;
-        }
-      });
     },
     HandleS3MountedWater(cart) {
       let vm = this;
@@ -909,7 +904,11 @@ export default {
             maximumScale: 0.5
           },
           viewFrom: new Cesium.Cartesian3(x, y, z),
-          position: position
+          position: position,
+          orientation: Cesium.Transforms.headingPitchRollQuaternion(
+            position,
+            new Cesium.HeadingPitchRoll(60 / 10, 0, 0)
+          )
         });
         carts.push(cart);
       });
@@ -1242,7 +1241,7 @@ __proto__: Object */
       var infoboxContainer = document.getElementById("bubble");
       //初始化viewer部件
       viewer = new Cesium.Viewer("cesiumContainer");
-      viewer.customInfobox = infoboxContainer;
+      //  viewer.customInfobox = infoboxContainer;
       scene = viewer.scene;
       window.scene = scene;
       //globe : Globe 获取地球对象。
@@ -1324,17 +1323,19 @@ z: 2693548.99315424
       var des = document.getElementById("des");
       var myimg = document.getElementById("myimg");
       viewer.selectedEntityChanged.addEventListener(function(entity) {
-        if (entity && viewer.selectedEntity.name) {
-          vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
-            type: "success",
-            showCancelButton: false,
-            showConfirmButton: false,
-            showClose: false
-          });
-        }
+        // if (entity && viewer.selectedEntity.name) {
+        //   vm.$confirm(`这个是小车${viewer.selectedEntity.name}`, "提示", {
+        //     type: "success",
+        //     showCancelButton: false,
+        //     showConfirmButton: false,
+        //     showClose: false
+        //   });
+        // }
+        console.log(entity);
       });
       //注册鼠标点击事件
       viewer.pickEvent.addEventListener(function(feature) {
+        console.log(feature);
         // vm.$confirm(`这个是房屋详情XXXX`, "提示", {
         //   type: "success",
         //   showCancelButton: false,
