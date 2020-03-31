@@ -157,6 +157,8 @@ let viewer,
   handlerDis,
   handlerArea,
   handlerHeight,
+  plottingLayer,
+  Plot,
   viewerEntities = [];
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
 // import bg from "../config/bgConfig.js";
@@ -429,6 +431,10 @@ export default {
           carts && vm.clearEntities(carts);
           Fire && viewer.scene.primitives.remove(Fire.FireParticleSystem);
           vm.clearStatusAll(0, 1);
+          // 清除状态
+          Plot.plottingLayer.removeAll();
+          // 清除消除的状态
+          Plot.plotDrawControl.deactivate();
         }
       };
     },
@@ -436,6 +442,9 @@ export default {
       handlerDis && handlerDis.deactivate();
       handlerArea && handlerArea.deactivate();
       handlerHeight && handlerHeight.deactivate();
+    },
+    clearLayers() {
+      plottingLayer.removeAll();
     },
     RegCesiumClickLeft(e, position) {
       let obj = {
@@ -478,7 +487,7 @@ export default {
     },
     mountedOpenMap(viewer, layers) {
       try {
-        InitPlot(viewer, this.serverUrl);
+        Plot = InitPlot(viewer, this.serverUrl);
       } catch (e) {
         console.log(e, layers);
       }
