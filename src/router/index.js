@@ -62,7 +62,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "Suofeiya" */ "../views/Particle.vue")
+      import(/* webpackChunkName: "Particle" */ "../views/Particle.vue")
   },
   {
     path: "/S3MTiles",
@@ -76,7 +76,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "Suofeiya" */ "../views/S3MTiles.vue")
+      import(/* webpackChunkName: "S3MTiles" */ "../views/S3MTiles.vue")
   },
   {
     path: "/ParticleWater",
@@ -105,8 +105,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "ParticleWater" */ "../views/demo.vue")
+    component: () => import(/* webpackChunkName: "demo" */ "../views/demo.vue")
   },
   {
     path: "/demo2",
@@ -120,7 +119,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "ParticleWater" */ "../views/demo2.vue")
+      import(/* webpackChunkName: "demo2" */ "../views/demo2.vue")
   },
   {
     path: "/plot_dynamicPlot",
@@ -135,7 +134,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(
-        /* webpackChunkName: "ParticleWater" */ "../views/plot_dynamicPlot.vue"
+        /* webpackChunkName: "plot_dynamicPlot" */ "../views/plot_dynamicPlot.vue"
       )
   },
   {
@@ -151,7 +150,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(
-        /* webpackChunkName: "ParticleWater" */ "../views/plot_dynamicPlot_icon.vue"
+        /* webpackChunkName: "plot_dynamicPlot_icon" */ "../views/plot_dynamicPlot_icon.vue"
       )
   },
   {
@@ -166,7 +165,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "ParticleWater" */ "../views/demo3.vue")
+      import(/* webpackChunkName: "demo3" */ "../views/demo3.vue")
   },
   {
     path: "/rvt",
@@ -180,7 +179,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "ParticleWater" */ "../views/rvt图层.vue")
+      import(/* webpackChunkName: "rvt图层" */ "../views/rvt图层.vue")
   },
   {
     path: "/rvtSuperMap",
@@ -195,8 +194,23 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(
-        /* webpackChunkName: "ParticleWater" */ "../views/rvt图层SuperMap.vue"
+        /* webpackChunkName: "rvt图层SuperMap" */ "../views/rvt图层SuperMap.vue"
       )
+  },
+
+  {
+    path: "/newDome",
+    name: "newDome",
+    meta: {
+      title: "newDome",
+      icon:
+        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "newDome" */ "../views/newDome.vue")
   }
 ];
 
