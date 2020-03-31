@@ -71,21 +71,20 @@ export function ff(Cesium) {
  * @param position
  * @param angle
  */
-export function setView(scene, position,angle) {
-    console.log(angle,position)
-    if(Object.keys(position).length===3&&Object.keys(angle).length===3){
-        let { heading, pitch, roll } = angle;
-        let {x,y,z} = position
-        scene.camera.setView({
-            destination: new Cesium.Cartesian3(x, y, z),
-            orientation: {
-                heading,
-                pitch,
-                roll
-            }
-        });
-    }else {
-        throw new error("setView 参数不对")
-    }
-
+export function setView(scene, position, angle) {
+  console.log(angle, position);
+  if (Object.keys(position).length === 3 && Object.keys(angle).length === 3) {
+    let { heading, pitch, roll } = angle;
+    let { x, y, z } = position;
+    scene.camera.setView({
+      destination: new Cesium.Cartesian3(x, y, z),
+      orientation: {
+        heading,
+        pitch,
+        roll
+      }
+    });
+  } else {
+    throw new error("setView 参数不对");
+  }
 }

@@ -214,7 +214,7 @@
 
 <script>
 import Cesium from "Cesium";
-import {createCesium, setView} from "../config/Configuration";
+import { createCesium, setView } from "../config/Configuration";
 
 let viewer,
   serverUrl,
@@ -349,7 +349,7 @@ export default {
         Cesium.when(
           promise,
           function(layers) {
-            console.log(layers)
+            console.log(layers);
             if (!scene.pickPositionSupported) {
               alert("不支持深度拾取,属性查询功能无法使用！");
             }
@@ -361,7 +361,7 @@ export default {
             //   pitch: -1.4213836938199456,
             //   roll: 9.769962616701378e-14
             // })
-           let layer = scene.layers.find("Config");
+            let layer = scene.layers.find("Config");
             //设置属性查询参数
             layer.setQueryParameter({
               url:
