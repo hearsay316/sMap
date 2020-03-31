@@ -212,6 +212,7 @@ export default {
       this.search.showSuperSearchInput = false;
       this.isNewDomeTitle ? (this.isNewDomeTitle = false) : void 0;
       !this.isSuperNav ? (this.isSuperNav = true) : void 0;
+      !this.isMeasure ? (this.isMeasure = true) : void 0;
     },
     searchValue(value) {
       this.search.setLocationFilter = this.search.setLocation.filter(item => {
