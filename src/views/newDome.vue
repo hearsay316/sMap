@@ -23,6 +23,7 @@
         -->
 
         <superSingularization
+          v-if="showSuperSingularizationData"
           :superSingularizationData="superSingularizationData"
         ></superSingularization>
       </template>
@@ -518,6 +519,9 @@ export default {
     },
     rescueActive() {
       return this.baseUrlItems[0].active && this.baseUrlItems[1].active;
+    },
+    showSuperSingularizationData() {
+      return Object.keys(this.superSingularizationData).length > 0;
     }
   }
 };
