@@ -18,10 +18,8 @@
     >
       <template v-slot:default>
         <!--单体化的提示框
-
         superSingularizationData 数据参数
         -->
-
         <superSingularization
           v-if="showSuperSingularizationData"
           :superSingularizationData="superSingularizationData"
@@ -79,6 +77,7 @@
           -->
         <popupActiveTitle
           :popupActiveTitleDesc="popupActiveTitleDesc"
+          :popupActiveBg="popupActiveBg"
           v-if="baseUrlThree.active"
         >
           <div class="popupActive-title-left" @click="popupActiveTitle(1)">
@@ -94,6 +93,7 @@
         popupActiveEndDesc  显示的文字
         -->
         <popupActiveTitle
+          :popupActiveBg="popupActiveBg"
           :popupActiveTitleDesc="popupActiveEndDesc"
           v-if="popupActiveTitleDescActive"
         >
@@ -159,6 +159,8 @@ let viewer,
   handlerHeight,
   viewerEntities = [];
 import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
+import bg from "../config/bgConfig.js";
+
 export default {
   name: "newDome",
   data() {
@@ -184,6 +186,7 @@ export default {
       baseUrlItems: [...item1],
       superPlotIndex: -1,
       isRescue: false,
+      popupActiveBg: bg.bg,
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
@@ -197,12 +200,18 @@ export default {
     };
   },
   methods: {
+    /***
+     *
+     * @param search.showSuperSearchInput修改的值
+     */
     modShowSuperSearchInput(value) {
       this.search.showSuperSearchInput = value;
     },
     searchItem(item) {
       setView(viewer.scene, item.position, item.angle);
       this.search.showSuperSearchInput = false;
+      this.isNewDomeTitle ? (this.isNewDomeTitle = false) : void 0;
+      !this.isSuperNav ? (this.isSuperNav = true) : void 0;
     },
     searchValue(value) {
       this.search.setLocationFilter = this.search.setLocation.filter(item => {
@@ -327,16 +336,13 @@ export default {
           : (item.active = 0);
       });
     },
-    clearBaseUrl() {
-      this.baseUrl.forEach(item => {
-        item.active = false;
-      });
-    },
     popupActiveTitle(value) {
+      console.log(value);
       value && this.rescue();
       value ? (this.isSuperNav = false) : void 0;
       this.isRescue = false;
-      this.clearBaseUrl();
+      // 清除所有状态
+      this.clearStatusAll(1, 0);
     },
     async rescue() {
       let isRescue = await viewerCreateFireFighting(
@@ -347,7 +353,7 @@ export default {
         Fire
       );
       this.popupActiveTitleDescActive = true;
-      isRescue && this.clearStatusAll();
+      isRescue && this.clearStatusAll(1, 1);
       isRescue && this.clearEntities(carts);
       let time = setTimeout(() => {
         clearTimeout(time);

@@ -176,4 +176,7 @@ export default {
   color #ffffff
   .superSearch-form-item
     padding 8px 15px
+  .superSearch-form-item:hover{
+    background-color #1bc5a3
+  }
 </style>

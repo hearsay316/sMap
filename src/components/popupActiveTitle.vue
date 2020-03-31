@@ -1,5 +1,5 @@
 <template>
-  <div class="popupActive">
+  <div class="popupActive" :style="{ background: popupActiveStyle }">
     <div class="popupActive-title">
       <img src="../assets/popupActive-g-2.png" />
       <div class="popupActive-title-desc">
@@ -14,7 +14,13 @@
 export default {
   name: "popupActiveTitle",
   props: {
-    popupActiveTitleDesc: String
+    popupActiveTitleDesc: String,
+    popupActiveBg: String
+  },
+  computed: {
+    popupActiveStyle() {
+      return `url("${this.popupActiveBg}")  no-repeat 50% 50%`;
+    }
   }
 };
 </script>
