@@ -11,6 +11,14 @@
             @handlePopupTitleIco="handlePopupTitleIco"
           ></superTitle>
           <div class="controlPanel">
+            <div :class="{ 'controlPanel-bg': isControlPanel }">
+              标绘面板
+            </div>
+            <div :class="{ 'controlPanel-bg': !isControlPanel }">
+              属性面板
+            </div>
+          </div>
+          <div class="controlPanel">
             <div
               @click="handleControlPanel"
               :class="{ 'controlPanel-bg': isControlPanel }"
