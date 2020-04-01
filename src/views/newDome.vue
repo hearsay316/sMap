@@ -5,7 +5,7 @@
       ref="superMap"
       :url="url"
       :position-x-y-z="positionXYZ"
-      :angle="angle"
+      :Angle="angle"
       :Config="Config"
       :earth="earth"
       :createWebgl="createWebgl"
@@ -33,7 +33,7 @@
         @handleClick="handleClick" 点击导航栏的自定义事件
         -->
         <superNav
-          v-if="isSuperNav"
+          v-if="isSuperNav && baseUrl.length > 0"
           :baseUrl="baseUrl"
           :picUrl="picUrl"
           @handleClick="handleClick"
@@ -102,7 +102,7 @@
       </template>
       <template v-slot:measure>
         <superMeasure
-          v-if="isMeasure"
+          v-if="isMeasure && superMeasureData"
           :superMeasureData="superMeasureData"
           @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
           @handleSuperMeasureActive="handleSuperMeasureActive"
@@ -138,8 +138,7 @@
       :RegCesiumClickLayer="RegCesiumClickLayer"
 -->
 <script>
-import { demoConfig, demoSingConfig } from "../config/mapConfig";
-import { setLocation } from "../config/LocationConfig.js";
+import { demoSingConfig } from "../config/mapConfig";
 import {
   viewerCreateFireFighting,
   viewerMountedDeployCart,
@@ -151,7 +150,7 @@ import {
   setView,
   viewerEntitiesAdd
 } from "../config/Configuration";
-import MeasuringConfig from "../config/MeasuringConfig.js";
+//import MeasuringConfig from "../config/MeasuringConfig.js";
 let viewer,
   carts,
   Fire,
@@ -161,8 +160,8 @@ let viewer,
   plottingLayer,
   Plot,
   viewerEntities = [];
-import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
-// import bg from "../config/bgConfig.js";
+//import picUrl, { item1 } from "../config/imgIcoConfig";
+//import bg from "../config/bgConfig.js";
 
 export default {
   name: "newDome",
@@ -173,26 +172,30 @@ export default {
       isMeasure: false,
       search: {
         showSuperSearchInput: false,
-        setLocation: [...setLocation],
+        // setLocation: [...setLocation],
+        setLocation: () =>
+          import(
+            /* webpackChunkName: "LocationConfig", webpackPrefetch: true */ "../config/LocationConfig.js"
+          ),
         setLocationFilter: []
       },
       isNewDomeTitle: true,
-      picUrl: {
-        ...picUrl
-      },
-      superMeasureData: {
-        ...MeasuringConfig
-      },
+      picUrl: {},
+      superMeasureData: "",
       isSuperMeasure: false,
       isSuperNav: false,
-      baseUrl: [...baseUrl],
-      baseUrlItems: [...item1],
+      baseUrl: [],
+      baseUrlItems: [],
       superPlotIndex: -1,
       isRescue: false,
-      popupActiveBg: "xx",
+      popupActiveBg: "111",
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
+      bgConfig: () =>
+        import(
+          /* webpackChunkName: "bgConfig", webpackPrefetch: true */ "../config/bgConfig"
+        ),
       Resources: {
         Active: {
           active: false,
@@ -201,6 +204,38 @@ export default {
         }
       }
     };
+  },
+  watch: {
+    bgConfig: {
+      /*
+       *
+       *拆包 做了动态懒加载
+       * */
+      //import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
+      //  import MeasuringConfig from "../config/MeasuringConfig.js";
+      async handler(value, oldValue) {
+        const imgIcoConfig = () =>
+          import(
+            /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
+          );
+        const MeasuringConfig = () =>
+          import(
+            /* webpackChunkName: "MeasuringConfig", webpackPrefetch: true */ "../config/MeasuringConfig.js"
+          );
+        const res = await value();
+        this.popupActiveBg = res.default.bg;
+        const setLocation = await this.search.setLocation();
+        this.search.setLocation = setLocation.setLocation;
+        const imgIcoConfigRes = await imgIcoConfig();
+        this.picUrl = imgIcoConfigRes.default;
+        this.baseUrl = imgIcoConfigRes.baseUrl;
+        this.baseUrlItems = imgIcoConfigRes.item1;
+        const MeasuringConfigRes = await MeasuringConfig();
+        this.superMeasureData = MeasuringConfigRes.default;
+        console.log(this.superMeasureData);
+      },
+      immediate: true
+    }
   },
   methods: {
     /***
@@ -302,13 +337,20 @@ export default {
       this.handlePopupTitleIco(2);
     },
     handleControlPanelItem(index) {
-      //  // 清除动态绘制
+      // 1  清除动态绘制
       // Plot.plottingLayer.removeAll();
-      // 清除消除的状态
+      // 2  清除消除的状态
       // Plot.plotDrawControl.deactivate();
+      // 3 清除选中的绘制
       index === 1
         ? Plot.plotDrawControl.deactivate()
-        : Plot.plottingLayer.removeAll();
+        : index === 2
+        ? Plot.plottingLayer.removeAll()
+        : index === 3
+        ? Plot.plottingLayer.removeGeoGraphicObject(
+            Plot.plottingLayer.selectedFeature
+          )
+        : void 0;
     },
     handlePopupTitleIco(index) {
       // 控制导航栏的 Plot 高亮显示
@@ -539,10 +581,10 @@ export default {
   },
   computed: {
     baseUrlOne() {
-      return this.baseUrl[1];
+      return this.baseUrl.length > 0 ? this.baseUrl[1] : [];
     },
     baseUrlThree() {
-      return this.baseUrl[3];
+      return this.baseUrl.length > 0 ? this.baseUrl[3] : [];
     },
     rescueActive() {
       return this.baseUrlItems[0].active && this.baseUrlItems[1].active;
@@ -550,12 +592,6 @@ export default {
     showSuperSingularizationData() {
       return Object.keys(this.superSingularizationData).length > 0;
     }
-  },
-  created() {
-    // this.popupActiveBg().then(res => {
-    //   console.log(res);
-    //   this.popupActiveBg = res.default.bg;
-    // });
   }
 };
 </script>

@@ -5,14 +5,16 @@
       backgroundImage: picUrlNavBg
     }"
   >
-    <div
-      @click="handleItem(index)"
-      v-for="(item, index) in baseUrl"
-      :key="item.name"
-    >
-      <!--suppress HtmlUnknownTarget -->
-      <img :src="!item.active ? item.url : item.urlActive" :alt="item.name" />
-    </div>
+    <template v-if="baseUrl.length > 0">
+      <div
+        @click="handleItem(index)"
+        v-for="(item, index) in baseUrl"
+        :key="item.name"
+      >
+        <!--suppress HtmlUnknownTarget -->
+        <img :src="!item.active ? item.url : item.urlActive" :alt="item.name" />
+      </div>
+    </template>
   </div>
 </template>
 

@@ -52,7 +52,16 @@ export default {
       isControlPanel: true
     };
   },
+  mounted() {
+    this.deleteSeleGeo();
+  },
   methods: {
+    deleteSeleGeo() {
+      document.addEventListener("keydown", event => {
+        event.keyCode === 46 && this.handleControlPanelItem(3);
+        event.keyCode === 27 && this.handleControlPanelItem(1);
+      });
+    },
     handleControlPanelItem(index) {
       this.$emit("handleControlPanelItem", index);
     },

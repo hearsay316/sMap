@@ -1,5 +1,5 @@
 <template>
-  <div class="popupActive">
+  <div class="popupActive" :style="{ background: popupActiveStyle }">
     <div class="popupActive-title">
       <img src="../assets/popupActive-g-2.png" />
       <div class="popupActive-title-desc">
@@ -36,7 +36,7 @@ export default {
     bottom 0
     margin auto
     background-color #0e2d5f
-    background url("http://cdn.j6375x.cn/cdn/pic/p-bg.gif")  no-repeat 50% 50%
+    /*background url("http://cdn.j6375x.cn/cdn/pic/p-bg.gif")  no-repeat 50% 50%*/
 .popupActive-title
     position absolute
     height: 100%
