@@ -11,11 +11,11 @@
             @handlePopupTitleIco="handlePopupTitleIco"
           ></superTitle>
           <div class="controlPanel">
-            <div :class="{ 'controlPanel-bg': isControlPanel }">
-              标绘面板
+            <div class="controlPanel-item" @click="handleControlPanelItem(1)">
+              取消绘制
             </div>
-            <div :class="{ 'controlPanel-bg': !isControlPanel }">
-              属性面板
+            <div class="controlPanel-item" @click="handleControlPanelItem(2)">
+              清除绘制
             </div>
           </div>
           <div class="controlPanel">
@@ -53,6 +53,9 @@ export default {
     };
   },
   methods: {
+    handleControlPanelItem(index) {
+      this.$emit("handleControlPanelItem", index);
+    },
     handleControlPanel() {
       this.isControlPanel = !this.isControlPanel;
     },
@@ -80,17 +83,27 @@ export default {
   background-color: RGBA(22, 57, 95, 0.9);
   color #ffffff
 #plotPanel
-  height calc(100% - 56px)
+  height calc(100% - 150px)
   overflow: hidden;
-
+.controlPanel-item{
+  border-top 1px solid rgb(97, 119, 117)
+  border-bottom 1px solid rgb(97, 119, 117)
+}
+.controlPanel>div:first-of-type{
+  border-right  1px solid rgb(97, 119, 117)
+}
 .controlPanel
   display: grid;
   grid-template-columns 50% 50%
   line-height 45px
 .controlPanel-bg
   background-color #0e0e0e
+.controlPanel-item:hover{
+  background-color rgb(59, 127, 213)
+}
+  // 150 +25
 /deep/.datagrid-body
-  height: calc(100vh - 100px) !important
+  height: calc(100vh - 175px) !important
   background-color transparent !important
   overflow-y auto
 /deep/.panel-body

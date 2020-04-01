@@ -68,6 +68,7 @@
          -->
         <superPlot
           :superPlotIndex="superPlotIndex"
+          @handleControlPanelItem="handleControlPanelItem"
           @handlePopupTitleIco="clearTitle"
         ></superPlot>
       </template>
@@ -299,6 +300,15 @@ export default {
       // 控制Plot 隐藏显示
       this.superPlotIndex = -1;
       this.handlePopupTitleIco(2);
+    },
+    handleControlPanelItem(index) {
+      //  // 清除动态绘制
+      // Plot.plottingLayer.removeAll();
+      // 清除消除的状态
+      // Plot.plotDrawControl.deactivate();
+      index === 1
+        ? Plot.plotDrawControl.deactivate()
+        : Plot.plottingLayer.removeAll();
     },
     handlePopupTitleIco(index) {
       // 控制导航栏的 Plot 高亮显示
