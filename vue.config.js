@@ -30,5 +30,6 @@ module.exports = {
       //   port: process.env.port
       // }))
     }
-  }
+  },
+  productionSourceMap:false
 };

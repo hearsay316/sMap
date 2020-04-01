@@ -232,7 +232,6 @@ export default {
         this.baseUrlItems = imgIcoConfigRes.item1;
         const MeasuringConfigRes = await MeasuringConfig();
         this.superMeasureData = MeasuringConfigRes.default;
-        console.log(this.superMeasureData);
       },
       immediate: true
     }
