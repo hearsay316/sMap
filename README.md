@@ -32,11 +32,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
        roll: 9.769962616701378e-14
 ###添加代理
 # git clone http://...
-git config --global http.proxy 'socks5://127.0.0.1:10809'
+git config --global http.proxy 'socks5://127.0.0.1:10808'
 # git clone https://...
-git config --global https.proxy 'socks5://127.0.0.1:10809'
+git config --global https.proxy 'socks5://127.0.0.1:10808'
 # git clone git://...
-git config --global core.gitproxy 'socks5://127.0.0.1:10809'
+git config --global core.gitproxy 'socks5://127.0.0.1:10808'
 ###取消
 git config --global --unset http.proxy
 
