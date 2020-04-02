@@ -1,11 +1,11 @@
 <template>
   <div class="superMap">
-    <div id="superMap"></div>
+    <div class="superMap-item" ref="superMap"></div>
     <slot></slot>
   </div>
 </template>
 
-<!--suppress JSCheckFunctionSignatures -->
+<!--suppress JSCheckFunctionSignatures, NpmUsedModulesInstalled -->
 <script>
 import * as map from "../config/Configuration";
 import Cesium from "Cesium";
@@ -26,7 +26,8 @@ export default {
   },
   async mounted() {
     this.createWebgl && this.createWebgl(this);
-    this.viewer = this.createCesium("superMap");
+    const superMap = this.$refs.superMap;
+    this.viewer = this.createCesium(superMap);
     this.viewer.customInfobox = document.querySelector("#bubble");
     this.mountedWebgl && this.mountedWebgl(this.viewer);
     const scene = this.viewer.scene;
@@ -65,7 +66,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .superMap,
 #superMap {

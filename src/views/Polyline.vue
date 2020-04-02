@@ -209,7 +209,9 @@ export default {
       viewer.zoomTo(viewer.entities);
     },
     webgl2(viewer) {
+      console.log(this.viewer);
       console.log(this.viewer === viewer);
+      console.log(viewer);
       var startLon = -10;
       var endLon = 90;
       var lat = 0;
