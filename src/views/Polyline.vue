@@ -2,6 +2,7 @@
   <div>
     <div id="cesiumContainer"></div>
     <super-map :mounted-webgl="webgl"> </super-map>
+    <super-map :mounted-webgl="webgl2"> </super-map>
   </div>
 </template>
 
@@ -11,12 +12,10 @@ export default {
   methods: {
     webgl(viewer) {
       console.log(viewer);
-
+      this.viewer = viewer;
       var startLon = -10;
       var endLon = 90;
-
       var lat = 0;
-
       var glowingLine = viewer.entities.add({
         name: "Glowing blue line on the surface",
         polyline: {
@@ -208,6 +207,71 @@ export default {
       });
 
       viewer.zoomTo(viewer.entities);
+    },
+    webgl2(viewer) {
+      console.log(this.viewer === viewer);
+      var startLon = -10;
+      var endLon = 90;
+      var lat = 0;
+      var glowingLine = viewer.entities.add({
+        name: "Glowing blue line on the surface",
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArray([
+            startLon,
+            lat,
+            endLon,
+            lat
+          ]),
+          width: 5,
+          //followSurface : true,
+          material: new Cesium.PolylineGlowMaterialProperty({
+            glowPower: 0.2,
+            color: Cesium.Color.YELLOW
+          })
+        }
+      });
+
+      var redLine = viewer.entities.add({
+        name: "Red line on the surface",
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArray([-75, 35, -125, 35]),
+          width: 7,
+          material: Cesium.Color.RED
+        }
+      });
+
+      var glowingLine = viewer.entities.add({
+        name: "Glowing blue line on the surface",
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArray([-75, 37, -125, 37]),
+          width: 10,
+          material: new Cesium.PolylineGlowMaterialProperty({
+            glowPower: 0.2,
+            color: Cesium.Color.BLUE
+          })
+        }
+      });
+
+      var orangeOutlined = viewer.entities.add({
+        name:
+          "Orange line with black outline at height and following the surface",
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+            -75,
+            39,
+            250000,
+            -125,
+            39,
+            250000
+          ]),
+          width: 10,
+          material: new Cesium.PolylineOutlineMaterialProperty({
+            color: Cesium.Color.ORANGE,
+            outlineWidth: 6,
+            outlineColor: Cesium.Color.BLACK
+          })
+        }
+      });
     }
   },
   mounted() {
