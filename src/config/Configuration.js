@@ -73,7 +73,7 @@ export function InitPlot(viewer, serverUrl) {
     plotEditControl,
     plotting
   );
-  //window.scene = undefined;
+  window.scene = undefined;
   window.plotEditControl = undefined;
   // 清除window作用域
   console.log("InitPlot 动态标绘结束");
@@ -402,13 +402,13 @@ function error(desc) {
 /**
  * 注册点击单体化
  * @param layers
- * @param Config
+ * @param config
  */
-export function observeLayer(layers, Config) {
-  let { name, setQueryParameter } = Config;
+export function observeLayer(layers, config) {
+  let { name, setQueryParameter } = config;
   !Array.isArray(layers) && error("layers 不是数组");
   const layer = layers.find(layer => layer.name === name);
-  !layer && error("layer 没有,Config.name 找不到");
+  !layer && error("layer 没有,config.name 找不到");
   let data = {
     keyWord: "SmID",
     ...setQueryParameter
@@ -435,7 +435,7 @@ export function observeLayer(layers, Config) {
  * @param obj
  */
 export function openMap(obj) {
-  let { viewer, url, Config, earth, mountedOpenMap, errorOpenMap } = obj;
+  let { viewer, url, config, earth, mountedOpenMap, errorOpenMap } = obj;
   const { positionXYZ, orientation } = earth;
   const scene = viewer.scene;
   const widget = viewer.cesiumWidget;
@@ -451,8 +451,8 @@ export function openMap(obj) {
             alert("不支持深度拾取,属性查询功能无法使用！");
           }
           // scene.layers获取当前场景的三维切片缓存图层集合。
-          //   layer = scene.layers.find(Config);
-          //   console.log(layers.find(layer => layer.name === Config));
+          //   layer = scene.layers.find(config);
+          //   console.log(layers.find(layer => layer.name === config));
           //   console.log(layer,layers,layer===layers[0])
           // layer(scene, "Test", {
           //   url:
@@ -461,8 +461,8 @@ export function openMap(obj) {
           //   dataSetName: "New_Region",
           //   keyWord: "SmID"
           // });
-          const ConfigName = Config && Config.name;
-          ConfigName && observeLayer(layers, Config);
+          const ConfigName = config && config.name;
+          ConfigName && observeLayer(layers, config);
           const positionConfig = positionXYZ && orientation;
           positionConfig && setViewConfig(viewer, positionXYZ, orientation);
           mountedOpenMap && mountedOpenMap(viewer, layers);
@@ -555,6 +555,7 @@ export function setView(scene, position, angle) {
 export function CesiumClickLayer(viewer, fuc) {
   try {
     viewer.pickEvent.addEventListener(feature => {
+      console.log("CesiumClickLayer 执行了");
       fuc(feature);
     });
   } catch (e) {
@@ -652,7 +653,6 @@ export function viewerHandlerDis(viewer, clampMode, superMeasureData, index) {
   console.log("viewerHandlerDis");
   handlerDis.activeEvt.addEventListener(function(isActive) {
     if (isActive == true) {
-      console.log(222);
       viewer.enableCursorStyle = false;
       viewer._element.style.cursor = "";
       $("body")

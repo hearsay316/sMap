@@ -1,65 +1,67 @@
 <template>
   <div class="superMap">
     <div id="superMap"></div>
-    <div id="bubble" class="bubble">
-      <slot></slot>
-    </div>
-    <slot name="nav"></slot>
-    <slot name="popup"></slot>
-    <slot name="plot"></slot>
-    <slot name="popupActive"></slot>
-    <slot name="popupActiveEnd"></slot>
-    <slot name="measure"></slot>
-    <slot name="search"></slot>
+    <slot></slot>
   </div>
 </template>
 
+<!--suppress JSCheckFunctionSignatures -->
 <script>
 import * as map from "../config/Configuration";
+import Cesium from "Cesium";
 //todo  props需要做验证
 export default {
   name: "superMap",
   props: {
     url: String,
-    Config: Object,
-    positionXYZ: Object,
-    Angle: Object,
+    config: Object,
     earth: Object,
     mountedWebgl: Function,
     createWebgl: Function,
     mountedOpenMap: Function,
     errorOpenMap: Function,
-    RegCesiumClickLayer: Function,
-    RegCesiumClickLeft: Function,
-    RegCesiumClickRight: Function
+    regCesiumClickLayer: Function,
+    regCesiumClickLeft: Function,
+    regCesiumClickRight: Function
   },
   async mounted() {
     this.createWebgl && this.createWebgl(this);
-    let viewer = this.createCesium("superMap");
-    viewer.customInfobox = document.querySelector("#bubble");
-    this.mountedWebgl && this.mountedWebgl(viewer);
-    const scene = viewer.scene;
+    this.viewer = this.createCesium("superMap");
+    this.viewer.customInfobox = document.querySelector("#bubble");
+    this.mountedWebgl && this.mountedWebgl(this.viewer);
+    const scene = this.viewer.scene;
     await this.openMap({
-      viewer,
+      viewer: this.viewer,
       url: this.url,
-      Config: this.Config,
+      config: this.config,
       earth: this.earth,
       mountedOpenMap: this.mountedOpenMap,
       errorOpenMap: this.errorOpenMap
     });
-    this.Config &&
-      this.CesiumClickLayer(viewer, feature => {
-        this.RegCesiumClickLayer && this.RegCesiumClickLayer(feature);
+    this.config &&
+      this.CesiumClickLayer(this.viewer, feature => {
+        this.regCesiumClickLayer && this.regCesiumClickLayer(feature);
       });
-    this.RegCesiumClickLeft &&
-      this.CesiumClickLeft(scene, this.RegCesiumClickLeft);
-    this.RegCesiumClickRight &&
-      this.CesiumClickRight(scene, this.RegCesiumClickRight);
+    this.regCesiumClickLeft &&
+      this.CesiumClickLeft(scene, this.regCesiumClickLeft);
+    this.regCesiumClickRight &&
+      this.CesiumClickRight(scene, this.regCesiumClickRight);
   },
   methods: {
     ...map
   },
-  destroyed() {}
+  destroyed() {
+    console.log("开始destroyed");
+    const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium;
+    const inputHandler = this.viewer.screenSpaceEventHandler;
+    inputHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE);
+    inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    inputHandler.removeInputAction(
+      ScreenSpaceEventType.LEFT_DOUBLE_CLICK,
+      KeyboardEventModifier.SHIFT
+    );
+    this.viewer.destroy && this.viewer.destroy();
+  }
 };
 </script>
 

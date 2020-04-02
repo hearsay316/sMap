@@ -4,43 +4,38 @@
     <super-map
       ref="superMap"
       :url="url"
-      :position-x-y-z="positionXYZ"
-      :Angle="angle"
-      :Config="Config"
+      :config="Config"
       :earth="earth"
       :createWebgl="createWebgl"
       :mountedWebgl="mountedWebgl"
       :mountedOpenMap="mountedOpenMap"
       :errorOpenMap="errorOpenMap"
-      :RegCesiumClickLeft="RegCesiumClickLeft"
-      :RegCesiumClickRight="RegCesiumClickRight"
-      :RegCesiumClickLayer="RegCesiumClickLayer"
+      :regCesiumClickLeft="RegCesiumClickLeft"
+      :regCesiumClickRight="RegCesiumClickRight"
+      :regCesiumClickLayer="RegCesiumClickLayer"
     >
-      <template v-slot:default>
-        <!--单体化的提示框
+      <!--单体化的提示框
         superSingularizationData 数据参数
         -->
+      <div id="bubble" class="bubble">
         <superSingularization
           v-if="showSuperSingularizationData"
           :superSingularizationData="superSingularizationData"
         ></superSingularization>
-      </template>
-      <template v-slot:nav>
-        <!--这个是导航栏
+      </div>
+      <!--这个是导航栏
         v-if="isSuperNav"
         :baseUrl="baseUrl"  导航栏的主要信息 数据
         :picUrl="picUrl"  背景图信息 数据
         @handleClick="handleClick" 点击导航栏的自定义事件
         -->
-        <superNav
-          v-if="isSuperNav && baseUrl.length > 0"
-          :baseUrl="baseUrl"
-          :picUrl="picUrl"
-          @handleClick="handleClick"
-        ></superNav>
-      </template>
-      <template v-slot:popup>
-        <!--  弹出框
+      <superNav
+        v-if="isSuperNav && baseUrl.length > 0"
+        :baseUrl="baseUrl"
+        :picUrl="picUrl"
+        @handleClick="handleClick"
+      ></superNav>
+      <!--  弹出框
           @handlePopupTitleIco 点击隐藏的自定义函数
           v-if="baseUrlOne.active"   baseUrlOne 是导航栏的baseUrl项
           :baseUrlOne="baseUrlOne"  用来if的数据  baseUrlOne 是导航栏的baseUrl项
@@ -52,74 +47,75 @@
           @measureHeight="measureHeight"
           @clearMeasure="clearMeasure"
         -->
-        <superPopup
-          v-if="baseUrlOne.active"
-          :baseUrlOne="baseUrlOne"
-          :baseUrlItems="baseUrlItems"
-          @handlePopupTitleIco="handlePopupTitleIco"
-          @handleClickLists="handleClickLists"
-        ></superPopup>
-      </template>
-      <template v-slot:plot>
-        <!--
+      <superPopup
+        v-if="isBaseUrlOne"
+        :baseUrlOne="baseUrlOne"
+        :baseUrlItems="baseUrlItems"
+        @handlePopupTitleIco="handlePopupTitleIco"
+        @handleClickLists="handleClickLists"
+      ></superPopup>
+      <!--
         标绘面板
          superPlotIndex  定位的z-index值
          @handlePopupTitleIco 点击隐藏的自定义函数
          -->
-        <superPlot
-          :superPlotIndex="superPlotIndex"
-          @handleControlPanelItem="handleControlPanelItem"
-          @handlePopupTitleIco="clearTitle"
-        ></superPlot>
-      </template>
-      <template v-slot:popupActive>
-        <!-- 救援行动启动的弹出框
+      <superPlot
+        :superPlotIndex="superPlotIndex"
+        @handleControlPanelItem="handleControlPanelItem"
+        @handlePopupTitleIco="clearTitle"
+      ></superPlot>
+      <!-- 救援行动启动的弹出框
            popupActiveEndDesc  显示的文字
           -->
-        <popupActiveTitle
-          :popupActiveTitleDesc="popupActiveTitleDesc"
-          :popupActiveBg="popupActiveBg"
-          v-if="baseUrlThree.active"
-        >
-          <div class="popupActive-title-left" @click="popupActiveTitle(1)">
-            是
-          </div>
-          <div class="popupActive-title-right" @click="popupActiveTitle(0)">
-            否
-          </div>
-        </popupActiveTitle>
-      </template>
-      <template v-slot:popupActiveEnd>
-        <!--救援行动结束的体验
+      <popupActiveTitle
+        :popupActiveTitleDesc="popupActiveTitleDesc"
+        :popupActiveBg="popupActiveBg"
+        v-if="baseUrlThree.active"
+      >
+        <div class="popupActive-title-left" @click="popupActiveTitle(1)">
+          是
+        </div>
+        <div class="popupActive-title-right" @click="popupActiveTitle(0)">
+          否
+        </div>
+      </popupActiveTitle>
+      <!--救援行动结束的体验
         popupActiveEndDesc  显示的文字
         -->
-        <popupActiveTitle
-          :popupActiveBg="popupActiveBg"
-          :popupActiveTitleDesc="popupActiveEndDesc"
-          v-if="popupActiveTitleDescActive"
-        >
-        </popupActiveTitle>
-      </template>
-      <template v-slot:measure>
-        <superMeasure
-          v-if="isMeasure && superMeasureData"
-          :superMeasureData="superMeasureData"
-          @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
-          @handleSuperMeasureActive="handleSuperMeasureActive"
-          class="newDome-measure"
-          :isSuperMeasure="isSuperMeasure"
-        >
-        </superMeasure>
-      </template>
-      <template v-slot:search>
-        <superSearch
-          :showSuperSearchInput="search.showSuperSearchInput"
-          :searchData="search.setLocationFilter"
-          @searchItem="searchItem"
-          @searchValue="searchValue"
-          @modShowSuperSearchInput="modShowSuperSearchInput"
-        ></superSearch>
-      </template>
+      <popupActiveTitle
+        :popupActiveBg="popupActiveBg"
+        :popupActiveTitleDesc="popupActiveEndDesc"
+        v-if="popupActiveTitleDescActive"
+      >
+      </popupActiveTitle>
+      <!--
+      superMeasure 工具栏 测距 测高 侧面积  清除
+      superMeasureData : 数据
+      handleSuperMeasureActiveItem: 点击控制测量工具对应执行的方法
+      handleSuperMeasureActive // 控制测量工具的显示和收缩
+      -->
+      <superMeasure
+        v-if="isMeasure"
+        :superMeasureData="superMeasureData"
+        @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
+        @handleSuperMeasureActive="handleSuperMeasureActive"
+        class="newDome-measure"
+      >
+      </superMeasure>
+      <!--      superSearch 搜索
+      search.showSuperSearchInput  是否显示input 框
+      searchData 搜索传入的列表
+      searchItem 点击搜索执行的方法
+      searchValue 搜索data的数据
+      modShowSuperSearchInput 控制是否显示隐藏input的方法
+      -->
+      <superSearch
+        :showSuperSearchInput="search.showSuperSearchInput"
+        :searchData="search.setLocationFilter"
+        @searchItem="searchItem"
+        @searchValue="searchValue"
+        @modShowSuperSearchInput="modShowSuperSearchInput"
+      ></superSearch>
     </super-map>
     <!--首页显示的按钮-->
     <div
@@ -128,6 +124,9 @@
       @click="handleNewDomeTitle"
     >
       进入场景
+    </div>
+    <div class="newDome-test">
+      <router-link to="/">点击换</router-link>
     </div>
   </div>
 </template>
@@ -175,7 +174,6 @@ export default {
       isNewDomeTitle: true,
       picUrl: {},
       superMeasureData: "",
-      isSuperMeasure: false,
       isSuperNav: false,
       baseUrl: [],
       baseUrlItems: [],
@@ -198,6 +196,11 @@ export default {
       }
     };
   },
+  destroyed() {
+    Cesium = undefined;
+    console.log("销毁函数执行");
+    console.log("销毁函数执行");
+  },
   watch: {
     bgConfig: {
       /*
@@ -207,6 +210,7 @@ export default {
       //import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
       //  import MeasuringConfig from "../config/MeasuringConfig.js";
       async handler(value) {
+        console.log("aa");
         const imgIcoConfig = () =>
           import(
             /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
@@ -219,12 +223,16 @@ export default {
         this.popupActiveBg = res.default.bg;
         const setLocation = await this.search.setLocation();
         this.search.setLocation = setLocation.setLocation;
-        const imgIcoConfigRes = await imgIcoConfig();
-        this.picUrl = imgIcoConfigRes.default;
+        let imgIcoConfigRes = await imgIcoConfig();
+        imgIcoConfigRes = JSON.parse(JSON.stringify(imgIcoConfigRes.data()));
+        this.picUrl = imgIcoConfigRes.bgData;
         this.baseUrl = imgIcoConfigRes.baseUrl;
         this.baseUrlItems = imgIcoConfigRes.item1;
-        const MeasuringConfigRes = await MeasuringConfig();
-        this.superMeasureData = MeasuringConfigRes.default;
+        let MeasuringConfigRes = await MeasuringConfig();
+        MeasuringConfigRes = JSON.parse(
+          JSON.stringify(new MeasuringConfigRes.data())
+        );
+        this.superMeasureData = MeasuringConfigRes;
       },
       immediate: true
     }
@@ -379,8 +387,8 @@ export default {
       // 清除所有状态
       this.baseUrl.forEach((item, index) => {
         isNavHandleClick && itemIndex === index
-          ? (item.active = 1)
-          : (item.active = 0);
+          ? (item.active = true)
+          : (item.active = false);
       });
     },
     popupActiveTitle(value) {
@@ -492,6 +500,7 @@ export default {
       plottingLayer.removeAll();
     },
     RegCesiumClickLeft(e, position) {
+      console.log("RegCesiumClickLeft执行了");
       let obj = {
         show: true,
         // point: {
@@ -528,11 +537,8 @@ export default {
     mountedWebgl(v) {
       this.viewer = v;
       this.viewerEntities = [];
-      // this.viewer = v;
-      // console.log(this.viewer);
-      console.log(this);
-      window.scene = this.viewer.scene;
-      window.qaz = scene.Cartesian3;
+      // window.scene = this.viewer.scene;
+      // window.qaz = scene.Cartesian3;
     },
     mountedOpenMap(viewer, layers) {
       try {
@@ -578,7 +584,10 @@ export default {
   },
   computed: {
     baseUrlOne() {
-      return this.baseUrl.length > 0 ? this.baseUrl[1] : [];
+      return this.baseUrl.length > 0 ? this.baseUrl[1] : undefined;
+    },
+    isBaseUrlOne() {
+      return this.baseUrl.length > 0 ? this.baseUrl[1].active : undefined;
     },
     baseUrlThree() {
       return this.baseUrl.length > 0 ? this.baseUrl[3] : [];
@@ -596,6 +605,13 @@ export default {
 <style lang="stylus">
 .newDome .cesium-viewer-navigationContainer
     display none
+.newDome-test
+  position fixed
+  top 100px
+  left 400px
+  width 100px
+  height 100px
+  background-color #00a65a
 .newDome
     position relative
     width:100%

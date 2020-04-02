@@ -794,7 +794,7 @@ Change Log
 * Fixed a bug that caused `Camera.positionCartographic` to be incorrect. [#2838](https://github.com/AnalyticalGraphicsInc/cesium/issues/2838)
 * Fixed calling `Scene.pickPosition` after calling `Scene.drillPick`. [#2813](https://github.com/AnalyticalGraphicsInc/cesium/issues/2813)
 * The globe depth is now rendered during picking when `Scene.depthTestAgainstTerrain` is `true` so objects behind terrain are not picked.
-* Fixed Cesium.js failing to parse in IE 8 and 9. While Cesium doesn't work in IE versions less than 11, this allows for more graceful error handling.
+* Fixed Cesium2.js failing to parse in IE 8 and 9. While Cesium doesn't work in IE versions less than 11, this allows for more graceful error handling.
 
 ### 1.11 - 2015-07-01
 
@@ -1410,7 +1410,7 @@ Beta Releases
 * Fixed a problem that could rarely lead to the camera's `tilt` property being `NaN`.
 * `GeoJsonDataSource` no longer uses the `name` or `title` property of the feature as the dynamic object's name if the value of the property is null.
 * Added `TimeIntervalCollection.isStartIncluded` and `TimeIntervalCollection.isStopIncluded`.
-* Added `Cesium.VERSION` to the combined `Cesium.js` file.
+* Added `Cesium.VERSION` to the combined `Cesium2.js` file.
 * Made general improvements to the [reference documentation](http://cesiumjs.org/refdoc.html).
 * Updated third-party [Tween.js](https://github.com/sole/tween.js/) from r7 to r13.
 * Updated third-party JSDoc 3.3.0-alpha5 to 3.3.0-alpha9.
@@ -1872,7 +1872,7 @@ Beta Releases
   * `DynamicObject.availability` is now a `TimeIntervalCollection` instead of a `TimeInterval`.
   * Removed prototype version of `BoundingSphere.transform`.
   * `Matrix4.multiplyByPoint` now returns a `Cartesian3` instead of a `Cartesian4`.
-* The minified, combined `Cesium.js` file now omits certain `DeveloperError` checks, to increase performance and reduce file size.  When developing your application, we recommend using the unminified version locally for early error detection, then deploying the minified version to production.
+* The minified, combined `Cesium2.js` file now omits certain `DeveloperError` checks, to increase performance and reduce file size.  When developing your application, we recommend using the unminified version locally for early error detection, then deploying the minified version to production.
 * Fixed disabling `CentralBody.enableLighting`.
 * Fixed `Geocoder` flights when following an object.
 * The `Viewer` widget now clears `Geocoder` input when the user clicks the home button.
@@ -2185,7 +2185,7 @@ _This releases fixes 2D and other issues with Chrome 29.0.1547.57 ([#1002](https
 ### b18 - 2013-07-01
 
 * Breaking changes:
-   * Removed `CesiumViewerWidget` and replaced it with a new `Viewer` widget with mixin architecture. This new widget does not depend on Dojo and is part of the combined Cesium.js file. It is intended to be a flexible base widget for easily building robust applications. ([#838](https://github.com/AnalyticalGraphicsInc/cesium/pull/838))
+   * Removed `CesiumViewerWidget` and replaced it with a new `Viewer` widget with mixin architecture. This new widget does not depend on Dojo and is part of the combined Cesium2.js file. It is intended to be a flexible base widget for easily building robust applications. ([#838](https://github.com/AnalyticalGraphicsInc/cesium/pull/838))
    * Changed all widgets to use ECMAScript 5 properties.  All public observable properties now must be accessed and assigned as if they were normal properties, instead of being called as functions.  For example:
       * `clockViewModel.shouldAnimate()` -> `clockViewModel.shouldAnimate`
       * `clockViewModel.shouldAnimate(true);` -> `clockViewModel.shouldAnimate = true;`
@@ -2286,7 +2286,7 @@ _This releases fixes 2D and other issues with Chrome 29.0.1547.57 ([#1002](https
 * Added new `Grid` material.
 * Made `EllipsoidPrimitive` double-sided.
 * Improved rendering performance by minimizing WebGL state calls.
-* Fixed an error in Web Worker creation when loading Cesium.js from a different origin.
+* Fixed an error in Web Worker creation when loading Cesium2.js from a different origin.
 * Fixed `EllipsoidPrimitive` picking and picking objects with materials that have transparent parts.
 * Fixed imagery smearing artifacts on mobile devices and other devices without high-precision fragment shaders.
 
@@ -2342,8 +2342,8 @@ _This releases fixes 2D and other issues with Chrome 29.0.1547.57 ([#1002](https
 ### b13 - 2013-02-01
 
 * Breaking changes:
-   * The combined `Cesium.js` file and other required files are now created in `Build/Cesium` and `Build/CesiumUnminified` folders.
-   * The Web Worker files needed when using the combined `Cesium.js` file are now in a `Workers` subdirectory.
+   * The combined `Cesium2.js` file and other required files are now created in `Build/Cesium` and `Build/CesiumUnminified` folders.
+   * The Web Worker files needed when using the combined `Cesium2.js` file are now in a `Workers` subdirectory.
    * Removed `erosion` property from `Polygon`, `ComplexConicSensorVolume`, `RectangularPyramidSensorVolume`, and `ComplexConicSensorVolume`.  Use the new `Erosion` material.  See the Sandbox Animation example.
    * Removed `setRectangle` and `getRectangle` methods from `ViewportQuad`. Use the new `rectangle` property.
    * Removed `time` parameter from `Scene.initializeFrame`. Instead, pass the time to `Scene.render`.
@@ -2662,7 +2662,7 @@ _This releases fixes 2D and other issues with Chrome 29.0.1547.57 ([#1002](https
 ### b5 - 2012-05-15
 
 * Breaking changes:
-    * Renamed Geoscope to Cesium.  To update your code, change all `Geoscope.*` references to `Cesium.*`, and reference Cesium.js instead of Geoscope.js.
+    * Renamed Geoscope to Cesium.  To update your code, change all `Geoscope.*` references to `Cesium.*`, and reference Cesium2.js instead of Geoscope.js.
     * `CompositePrimitive.addGround` was removed; use `CompositePrimitive.add` instead.  For example, change
 
             primitives.addGround(polygon);
