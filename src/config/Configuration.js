@@ -311,6 +311,7 @@ export function viewerMountedDeployCart(viewer, positionXYZ) {
  */
 export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
   console.log("viewerMountedFire 开始创建火");
+  ArgumentsError("viewerMountedFire", ...arguments);
   let { x, y, z } = MapFireXYZ;
   const scene = viewer.scene;
   const position = Cesium.Cartesian3.fromDegrees(x, y, z);
@@ -831,4 +832,10 @@ export function MountedMapCart(viewer, positionXYZ, length) {
     });
     isCarts.push(cart);
   });
+}
+function ArgumentsError(funName, ...arg) {
+  console.log(arguments);
+  for (let index of arg.keys()) {
+    !arg[index] && console.error(`${funName}的第${index + 1}个参数为空`);
+  }
 }

@@ -58,7 +58,8 @@ export default {
   },
   methods: {
     ...map
-  }
+  },
+  destroyed() {}
 };
 </script>
 

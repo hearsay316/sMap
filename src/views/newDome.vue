@@ -137,6 +137,7 @@
 3 等等..
       :RegCesiumClickLayer="RegCesiumClickLayer"
 -->
+<!--suppress JSUnusedGlobalSymbols, JSUnresolvedFunction, JSUnresolvedVariable -->
 <script>
 import { demoSingConfig } from "../config/mapConfig";
 import {
@@ -151,15 +152,7 @@ import {
   viewerEntitiesAdd
 } from "../config/Configuration";
 //import MeasuringConfig from "../config/MeasuringConfig.js";
-let viewer,
-  carts,
-  Fire,
-  handlerDis,
-  handlerArea,
-  handlerHeight,
-  plottingLayer,
-  Plot,
-  viewerEntities = [];
+
 //import picUrl, { item1 } from "../config/imgIcoConfig";
 //import bg from "../config/bgConfig.js";
 
@@ -213,7 +206,7 @@ export default {
        * */
       //import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
       //  import MeasuringConfig from "../config/MeasuringConfig.js";
-      async handler(value, oldValue) {
+      async handler(value) {
         const imgIcoConfig = () =>
           import(
             /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
@@ -239,13 +232,13 @@ export default {
   methods: {
     /***
      *
-     * @param search.showSuperSearchInput修改的值
+     * @param value.showSuperSearchInput修改的值
      */
     modShowSuperSearchInput(value) {
       this.search.showSuperSearchInput = value;
     },
     searchItem(item) {
-      setView(viewer.scene, item.position, item.angle);
+      setView(this.viewer.scene, item.position, item.angle);
       this.search.showSuperSearchInput = false;
       this.isNewDomeTitle ? (this.isNewDomeTitle = false) : void 0;
       !this.isSuperNav ? (this.isSuperNav = true) : void 0;
@@ -262,44 +255,44 @@ export default {
       return {
         measureDis(index) {
           vm.deActiveAll();
-          handlerDis
+          vm.handlerDis
             ? void 0
-            : (handlerDis = viewerHandlerDis(
-                viewer,
+            : (vm.handlerDis = viewerHandlerDis(
+                vm.viewer,
                 0,
                 vm.superMeasureData,
                 index
               ));
-          handlerDis && handlerDis.activate();
+          vm.handlerDis && vm.handlerDis.activate();
         },
         measureArea(index) {
           vm.deActiveAll();
-          handlerArea
+          vm.handlerArea
             ? void 0
-            : (handlerArea = viewerHandlerArea(
-                viewer,
+            : (vm.handlerArea = viewerHandlerArea(
+                vm.viewer,
                 0,
                 vm.superMeasureData,
                 index
               ));
-          handlerArea && handlerArea.activate();
+          vm.handlerArea && vm.handlerArea.activate();
         },
         measureHeight(index) {
           vm.deActiveAll();
-          handlerHeight
+          vm.handlerHeight
             ? void 0
-            : (handlerHeight = viewerHandlerHeight(
-                viewer,
+            : (vm.handlerHeight = viewerHandlerHeight(
+                vm.viewer,
                 0,
                 vm.superMeasureData,
                 index
               ));
-          handlerHeight && handlerHeight.activate();
+          vm.handlerHeight && vm.handlerHeight.activate();
         },
         clearMeasure() {
-          handlerDis && handlerDis.clear();
-          handlerArea && handlerArea.clear();
-          handlerHeight && handlerHeight.clear();
+          vm.handlerDis && vm.handlerDis.clear();
+          vm.handlerArea && vm.handlerArea.clear();
+          vm.handlerHeight && vm.handlerHeight.clear();
         }
       };
     },
@@ -324,13 +317,13 @@ export default {
       // 首页专场的视角移动
       this.isNewDomeTitle = false;
       // 控制按钮
-      setView(viewer, this.positionXYZ, this.angle);
+      setView(this.viewer, this.positionXYZ, this.angle);
       this.isSuperNav = true;
       // 导航栏显示
       this.isMeasure = true;
       //工具栏显示
     },
-    clearTitle(value) {
+    clearTitle() {
       // 控制Plot 隐藏显示
       this.superPlotIndex = -1;
       this.handlePopupTitleIco(2);
@@ -342,12 +335,12 @@ export default {
       // Plot.plotDrawControl.deactivate();
       // 3 清除选中的绘制
       index === 1
-        ? Plot.plotDrawControl.deactivate()
+        ? this.Plot.plotDrawControl.deactivate()
         : index === 2
-        ? Plot.plottingLayer.removeAll()
+        ? this.Plot.plottingLayer.removeAll()
         : index === 3
-        ? Plot.plottingLayer.removeGeoGraphicObject(
-            Plot.plottingLayer.selectedFeature
+        ? this.Plot.plottingLayer.removeGeoGraphicObject(
+            this.Plot.plottingLayer.selectedFeature
           )
         : void 0;
     },
@@ -359,19 +352,19 @@ export default {
     navHandleClick() {
       let vm = this;
       return {
-        navHandleClick1(itemIndex) {
+        navHandleClick1() {
           return true;
         },
-        navHandleClick2(itemIndex) {
+        navHandleClick2() {
           return (vm.superPlotIndex = 666);
         },
-        navHandleClick3(itemIndex) {
+        navHandleClick3() {
           return vm.rescueActive ? (vm.isRescue = true) : false;
         },
-        navHandleClick0(itemIndex) {
+        navHandleClick0() {
           return true;
         },
-        navHandleClick4(itemIndex) {
+        navHandleClick4() {
           return true;
         }
       };
@@ -400,15 +393,15 @@ export default {
     },
     async rescue() {
       let isRescue = await viewerCreateFireFighting(
-        viewer,
+        this.viewer,
         this.MapFireXYZ,
         this.positionCarts,
-        carts,
-        Fire
+        this.carts,
+        this.fire
       );
       this.popupActiveTitleDescActive = true;
       isRescue && this.clearStatusAll(1, 1);
-      isRescue && this.clearEntities(carts);
+      isRescue && this.clearEntities(this.carts);
       let time = setTimeout(() => {
         clearTimeout(time);
         this.popupActiveTitleDescActive = false;
@@ -426,11 +419,11 @@ export default {
     },
     "Entities[object Array]"(Entities) {
       Entities.forEach(entity => {
-        viewer.entities.remove(entity);
+        this.viewer.entities.remove(entity);
       });
     },
     "Entities[object Object]"(Entities) {
-      viewer.entities.remove(Entities);
+      this.viewer.entities.remove(Entities);
     },
     clearStatusAll(baseUrl, baseUrlItems) {
       baseUrl &&
@@ -461,13 +454,13 @@ export default {
     baseUrlItemsFun() {
       let vm = this;
       return {
-        addFire(index) {
+        addFire() {
           // vm.baseUrlItems[index].active = true;
-          Fire = viewerMountedFire(viewer, vm.MapFireXYZ);
+          vm.fire = viewerMountedFire(vm.viewer, vm.MapFireXYZ);
         },
-        addCarts(index) {
+        addCarts() {
           // vm.baseUrlItems[index].active = true;
-          carts = viewerMountedDeployCart(viewer, vm.positionCarts);
+          vm.carts = viewerMountedDeployCart(vm.viewer, vm.positionCarts);
         },
         addFuc(index) {
           console.log("addFuc");
@@ -475,24 +468,25 @@ export default {
           vm.Resources.Active.index = index;
           vm.Resources.Active.url = vm.baseUrlItems[index].url;
         },
-        clearMeasure(index) {
-          viewerEntities.map(item => {
-            viewer.entities.remove(item);
+        clearMeasure() {
+          vm.viewerEntities.map(item => {
+            vm.viewer.entities.remove(item);
           });
-          carts && vm.clearEntities(carts);
-          Fire && viewer.scene.primitives.remove(Fire.FireParticleSystem);
+          vm.carts && vm.clearEntities(vm.carts);
+          vm.fire &&
+            vm.viewer.scene.primitives.remove(vm.fire.FireParticleSystem);
           vm.clearStatusAll(0, 1);
           // 清除状态
-          Plot.plottingLayer.removeAll();
+          vm.Plot.plottingLayer.removeAll();
           // 清除消除的状态
-          Plot.plotDrawControl.deactivate();
+          vm.Plot.plotDrawControl.deactivate();
         }
       };
     },
     deActiveAll() {
-      handlerDis && handlerDis.deactivate();
-      handlerArea && handlerArea.deactivate();
-      handlerHeight && handlerHeight.deactivate();
+      this.handlerDis && this.handlerDis.deactivate();
+      this.handlerArea && this.handlerArea.deactivate();
+      this.handlerHeight && this.handlerHeight.deactivate();
     },
     clearLayers() {
       plottingLayer.removeAll();
@@ -518,11 +512,11 @@ export default {
       let viewerEntity =
         this.Resources.Active.active &&
         viewerEntitiesAdd(
-          viewer,
+          this.viewer,
           { x: position.x, y: position.y, z: this.Z },
           obj
         );
-      viewerEntities.push(viewerEntity);
+      this.viewerEntities.push(viewerEntity);
       viewerEntity ? (this.Resources.Active.active = false) : void 0;
       viewerEntity
         ? (this.baseUrlItems[this.Resources.Active.index].active = false)
@@ -532,13 +526,17 @@ export default {
       console.log("Right", e, position);
     },
     mountedWebgl(v) {
-      viewer = v;
-      window.scene = viewer.scene;
+      this.viewer = v;
+      this.viewerEntities = [];
+      // this.viewer = v;
+      // console.log(this.viewer);
+      console.log(this);
+      window.scene = this.viewer.scene;
       window.qaz = scene.Cartesian3;
     },
     mountedOpenMap(viewer, layers) {
       try {
-        Plot = InitPlot(viewer, this.serverUrl);
+        this.Plot = InitPlot(viewer, this.serverUrl);
       } catch (e) {
         console.log(e, layers);
       }
