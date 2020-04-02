@@ -183,10 +183,7 @@ export default {
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
-      bgConfig: () =>
-        import(
-          /* webpackChunkName: "bgConfig", webpackPrefetch: true */ "../config/bgConfig"
-        ),
+      bgConfig: "",
       Resources: {
         Active: {
           active: false,
@@ -197,45 +194,35 @@ export default {
     };
   },
   destroyed() {
-    Cesium = undefined;
+    //  Cesium = undefined;
     console.log("销毁函数执行");
     console.log("销毁函数执行");
   },
-  watch: {
-    bgConfig: {
-      /*
-       *
-       *拆包 做了动态懒加载
-       * */
-      //import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
-      //  import MeasuringConfig from "../config/MeasuringConfig.js";
-      async handler(value) {
-        console.log("aa");
-        const imgIcoConfig = () =>
-          import(
-            /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
-          );
-        const MeasuringConfig = () =>
-          import(
-            /* webpackChunkName: "MeasuringConfig", webpackPrefetch: true */ "../config/MeasuringConfig.js"
-          );
-        const res = await value();
-        this.popupActiveBg = res.default.bg;
-        const setLocation = await this.search.setLocation();
-        this.search.setLocation = setLocation.setLocation;
-        let imgIcoConfigRes = await imgIcoConfig();
-        imgIcoConfigRes = JSON.parse(JSON.stringify(imgIcoConfigRes.data()));
-        this.picUrl = imgIcoConfigRes.bgData;
-        this.baseUrl = imgIcoConfigRes.baseUrl;
-        this.baseUrlItems = imgIcoConfigRes.item1;
-        let MeasuringConfigRes = await MeasuringConfig();
-        MeasuringConfigRes = JSON.parse(
-          JSON.stringify(new MeasuringConfigRes.data())
-        );
-        this.superMeasureData = MeasuringConfigRes;
-      },
-      immediate: true
-    }
+  async created() {
+    const imgIcoConfig = () =>
+      import(
+        /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
+      );
+    const MeasuringConfig = () =>
+      import(
+        /* webpackChunkName: "MeasuringConfig", webpackPrefetch: true */ "../config/MeasuringConfig.js"
+      );
+    const res = await import(
+      /* webpackChunkName: "bgConfig", webpackPrefetch: true */ "../config/bgConfig"
+    );
+    this.popupActiveBg = res.default.bg;
+    const setLocation = await this.search.setLocation();
+    this.search.setLocation = setLocation.setLocation;
+    let imgIcoConfigRes = await imgIcoConfig();
+    imgIcoConfigRes = JSON.parse(JSON.stringify(imgIcoConfigRes.data()));
+    this.picUrl = imgIcoConfigRes.bgData;
+    this.baseUrl = imgIcoConfigRes.baseUrl;
+    this.baseUrlItems = imgIcoConfigRes.item1;
+    let MeasuringConfigRes = await MeasuringConfig();
+    MeasuringConfigRes = JSON.parse(
+      JSON.stringify(new MeasuringConfigRes.data())
+    );
+    this.superMeasureData = MeasuringConfigRes;
   },
   methods: {
     /***
