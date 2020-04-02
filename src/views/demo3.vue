@@ -1257,10 +1257,10 @@ __proto__: Object */
       this.$refs.loadingbar.remove();
       try {
         //http://47.103.125.18:8090/iserver/services/3D-tempWorkspace_1/rest/realspace
-        //http://47.103.125.18:8090/iserver/services/3D-userMap-2/rest/realspace/datas/Config.openrealspace
-        //添加S3M图层服务
+        //http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace/datas/Config.openrealspace
+        //添加S3M图层服务 http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace
         var promise = scene.open(
-          "http://47.103.125.18:8090/iserver/services/3D-userMap-2/rest/realspace"
+          "http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace"
         );
         Cesium.when(
           promise,

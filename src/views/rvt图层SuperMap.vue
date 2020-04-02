@@ -1,8 +1,7 @@
 <template>
   <superMap
     :url="url"
-    :Angle="Angle"
-    :positionXYZ="positionXYZ"
+    :earth="positionXYZ"
     :Config="Config"
     :createWebgl="createWebgl"
     :mountedWebgl="mountedWebgl"
@@ -17,16 +16,27 @@
 </template>
 
 <script>
+// import { demoSingConfig } from "../config/mapConfig";
+
 export default {
   name: "rvt图层SuperMap.vue",
   data() {
     return {
       layerTitle: "",
-      url: "http://47.103.125.18:8090/iserver/services/3D-ditie/rest/realspace",
+      url:
+        "http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace",
       positionXYZ: {
-        x: -1209550.6137063126,
-        y: 5655779.937735093,
-        z: 2693085.689269533
+        //地球来的地址
+        positionXYZ: {
+          x: -31907059.63158584,
+          y: 31790256.53609646,
+          z: 6842226.596228782
+        },
+        orientation: {
+          heading: 5.748175488108613,
+          pitch: -1.5279875767724511,
+          roll: 0
+        }
       },
       Config: {
         name: "Test4",
@@ -44,12 +54,6 @@ export default {
         //      dataSetName	    String		         optional数据集名称。
         //      isMerge	        Boolean		         optional该图层是否为合并数据集的，如果是则不用指定数据集名称。
         //      hasGeometry	    Boolean	    false	 optional属性查询返回结果是否包含几何信息。
-      },
-      Angle: {
-        // 位置放置角度
-        heading: 5.470688272479366,
-        pitch: -0.8606068847349784,
-        roll: 7.638334409421077e-14
       }
     };
   },
@@ -63,6 +67,7 @@ export default {
     },
 
     mountedWebgl(viewer) {
+      this.viewer = viewer;
       console.log(viewer, 666);
     },
     mountedOpenMap(viewer, layers) {},

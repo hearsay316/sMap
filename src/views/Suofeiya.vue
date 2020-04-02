@@ -115,7 +115,7 @@ export default {
       sceneLayer;
       try {
         var promise = scene.open(
-          "http://localhost:8090/iserver/services/3D-map/rest/realspace"
+          "http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace"
         );
         Cesium.when(
           promise,

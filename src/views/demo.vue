@@ -477,9 +477,10 @@ export default {
       widget = viewer.cesiumWidget;
       this.$refs.loadingbar.remove();
       try {
+        //http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace
         //添加S3M图层服务
         var promise = scene.open(
-          "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace"
+          "http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace"
         );
         Cesium.when(
           promise,

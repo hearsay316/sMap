@@ -30,14 +30,15 @@ export default {
     this.viewer.customInfobox = document.querySelector("#bubble");
     this.mountedWebgl && this.mountedWebgl(this.viewer);
     const scene = this.viewer.scene;
-    await this.openMap({
-      viewer: this.viewer,
-      url: this.url,
-      config: this.config,
-      earth: this.earth,
-      mountedOpenMap: this.mountedOpenMap,
-      errorOpenMap: this.errorOpenMap
-    });
+    this.url &&
+      (await this.openMap({
+        viewer: this.viewer,
+        url: this.url,
+        config: this.config,
+        earth: this.earth,
+        mountedOpenMap: this.mountedOpenMap,
+        errorOpenMap: this.errorOpenMap
+      }));
     this.config &&
       this.CesiumClickLayer(this.viewer, feature => {
         this.regCesiumClickLayer && this.regCesiumClickLayer(feature);
