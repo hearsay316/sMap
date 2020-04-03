@@ -77,6 +77,52 @@ export default {
       import(
         /* webpackChunkName: "superTitle" */ "../components/superTitle.vue"
       )
+  },
+  mounted() {
+    let urlData = {
+      inputLink: [
+        "colorpicker/css/colorpicker.css",
+        "colorpicker/css/layout.css",
+        "jquery-easyui-1.4.4/css/easyui.css",
+        "zTree/css/zTreeStyle.css"
+      ],
+      inputScript: [
+        "jquery-easyui-1.4.4/jquery.min.js",
+        "jquery-easyui-1.4.4/jquery-ui.js",
+        "jquery-easyui-1.4.4/jquery.easyui.min.js",
+        "colorpicker/js/colorpicker.js",
+        "colorpicker/js/colorpickerEditor.js",
+
+        "colorpicker/js/eye.js",
+        "colorpicker/js/utils.js",
+        "colorpicker/js/layout.js",
+        "zTree/jquery.ztree.core.js",
+
+        "./StylePanel.js",
+        "./PlotPanel.js"
+      ]
+    };
+    /*  urlData.inputLink.forEach(item => {
+      let doc = document.createElement("link");
+      doc.href = "webgl/examples/js/plotPanelControl/" + item;
+      document.head.appendChild(doc);
+      doc.onload = function () {
+        console.log("OK")
+      }
+    });
+    urlData.inputScript.forEach(item => {
+      let doc = document.createElement("script");
+      doc.src = "webgl/examples/js/plotPanelControl/" + item;
+      document.head.appendChild(doc);*/
+    // var script =
+    //   "<" +
+    //   'script type="text/javascript" src="webgl/examples/js/plotPanelControl/' +
+    //   item +
+    //   '"' +
+    //   "><" +
+    //   "/script>";
+    // document.writeln(script);
+    // });
   }
 };
 </script>

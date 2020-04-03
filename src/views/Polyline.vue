@@ -7,6 +7,7 @@
 </template>
 
 <script>
+const Cesium = window.Cesium;
 export default {
   name: "Polylines",
   methods: {

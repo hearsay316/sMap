@@ -28,6 +28,7 @@ export default {
     this.createWebgl && this.createWebgl(this);
     const superMap = this.$refs.superMap;
     this.viewer = this.createCesium(superMap);
+    console.log(this.viewer);
     this.viewer.customInfobox = document.querySelector("#bubble");
     this.mountedWebgl && this.mountedWebgl(this.viewer);
     const scene = this.viewer.scene;
@@ -69,6 +70,9 @@ export default {
 <style scoped>
 .superMap,
 #superMap {
+  height: 100%;
+}
+.superMap-item {
   height: 100%;
 }
 #bubble {
