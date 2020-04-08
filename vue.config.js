@@ -22,7 +22,7 @@ module.exports = {
       initPlotPanel: "initPlotPanel",
       StylePanel: "StylePanel"
     };
-    if (process.env.VUE_APP_ENV === 'production') {
+    if (process.env.VUE_APP_ENV === "production") {
       // config.plugins.push(new UploadSshPlugin({
       //   host: process.env.host,
       //   username: process.env.name,
@@ -31,5 +31,5 @@ module.exports = {
       // }))
     }
   },
-  productionSourceMap:false
+  productionSourceMap: false
 };

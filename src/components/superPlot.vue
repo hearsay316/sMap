@@ -73,29 +73,18 @@ export default {
     },
     link(url) {
       return new Promise((resolve, reject) => {
+        console.log("zhge ");
         const link = document.createElement("link");
-        if (link.readyState) {
-          //IE
-          link.onreadystatechange = function() {
-            if (
-              script.readyState == "loaded" ||
-              script.readyState == "complete"
-            ) {
-              link.onreadystatechange = null;
-              resolve(1);
-            }
-          };
-        } else {
-          //Others
-          link.onload = function() {
-            resolve(1);
-          };
-          link.onerror = function() {
-            reject(0);
-          };
-        }
+        link.rel = "stylesheet";
+        link.onload = function() {
+          console.log("zheg cdc");
+          resolve(1);
+        };
+        link.onerror = function() {
+          reject(0);
+        };
         link.href = "webgl/examples/js/plotPanelControl/" + url;
-        document.getElementsByTagName("head")[0].appendChild(script);
+        document.getElementsByTagName("head")[0].appendChild(link);
       });
     },
     script(url) {
@@ -156,22 +145,63 @@ export default {
         "./PlotPanel.js"
       ]
     };
+
+    let Data = [
+      [
+        "colorpicker/css/colorpicker.css",
+        "colorpicker/css/layout.css",
+        "jquery-easyui-1.4.4/css/easyui.css",
+        "zTree/css/zTreeStyle.css"
+      ],
+      [
+        "jquery-easyui-1.4.4/jquery.min.js",
+        "jquery-easyui-1.4.4/jquery-ui.js",
+        "jquery-easyui-1.4.4/jquery.easyui.min.js",
+        "colorpicker/js/colorpicker.js",
+        "colorpicker/js/colorpickerEditor.js",
+        "colorpicker/js/eye.js",
+        "colorpicker/js/utils.js",
+        "colorpicker/js/layout.js",
+        "zTree/jquery.ztree.core.js",
+        "./StylePanel.js",
+        "./PlotPanel.js"
+      ]
+    ];
     function scriptAdd(arr) {
-      const index = 0;
-      async function next(arr, index, status) {
-        console.log(arr, index);
-        if (arr.length == index) return "成功";
-        let data = await vm.script(arr[index++]);
-        console.log(data);
-        if (data === 1) {
-          return await next(arr, index);
+      let index = 0,
+        dataIndex = 0;
+      async function next(arr, index, dataIndex) {
+        console.log(arr, index, dataIndex);
+        if (
+          arr.length === index + 1 &&
+          arr[arr.length - 1].length === dataIndex
+        ) {
+          return "成功";
+        }
+        if (index === 0) {
+          console.log("ddddd", arr[index]);
+          if (arr[index].length === dataIndex) {
+            return next(arr, ++index, 0);
+          }
+          console.log(dataIndex, arr[index].length);
+          let data = await vm.link(arr[index][dataIndex++]);
+          if (data === 1) {
+            return await next(arr, index, dataIndex);
+          }
+        }
+        if (index === 1) {
+          let data = await vm.script(arr[index][dataIndex++]);
+          console.log(data);
+          if (data === 1) {
+            return await next(arr, index, dataIndex);
+          }
         }
       }
-      return next(arr, index);
+      return next(arr, index, dataIndex);
     }
-    scriptAdd(urlData.inputScript).then(
+    scriptAdd(Data).then(
       res => {
-        console.log(res);
+        console.log(res, "低洼的地方");
         this.$emit("initPlot");
       },
       error => {
