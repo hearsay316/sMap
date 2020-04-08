@@ -63,6 +63,7 @@
         :superPlotIndex="superPlotIndex"
         @handleControlPanelItem="handleControlPanelItem"
         @handlePopupTitleIco="clearTitle"
+        @initPlot="myInitPlot"
       ></superPlot>
       <!-- 救援行动启动的弹出框
            popupActiveEndDesc  显示的文字
@@ -527,11 +528,12 @@ export default {
       // window.scene = this.viewer.scene;
       // window.qaz = scene.Cartesian3;
     },
-    mountedOpenMap(viewer, layers) {
+    mountedOpenMap(viewer, layers) {},
+    myInitPlot() {
       try {
-        this.Plot = InitPlot(viewer, this.serverUrl);
+        this.Plot = InitPlot(this.viewer, this.serverUrl);
       } catch (e) {
-        console.log(e, layers);
+        console.log(e);
       }
     },
     createWebgl(vm) {
@@ -607,7 +609,7 @@ export default {
   .newDome-title
       position absolute
       top 20px
-      width 64px
+      width 84px
       height 64px
       line-height 64px
       border-radius 8px

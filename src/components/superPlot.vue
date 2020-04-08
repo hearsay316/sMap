@@ -70,6 +70,61 @@ export default {
     },
     handlePopupTitleIco(value) {
       this.$emit("handlePopupTitleIco", value);
+    },
+    link(url) {
+      return new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        if (link.readyState) {
+          //IE
+          link.onreadystatechange = function() {
+            if (
+              script.readyState == "loaded" ||
+              script.readyState == "complete"
+            ) {
+              link.onreadystatechange = null;
+              resolve(1);
+            }
+          };
+        } else {
+          //Others
+          link.onload = function() {
+            resolve(1);
+          };
+          link.onerror = function() {
+            reject(0);
+          };
+        }
+        link.href = "webgl/examples/js/plotPanelControl/" + url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+      });
+    },
+    script(url) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        if (script.readyState) {
+          //IE
+          script.onreadystatechange = function() {
+            if (
+              script.readyState == "loaded" ||
+              script.readyState == "complete"
+            ) {
+              script.onreadystatechange = null;
+              resolve(1);
+            }
+          };
+        } else {
+          //Others
+          script.onload = function() {
+            resolve(1);
+          };
+          script.onerror = function() {
+            reject(0);
+          };
+        }
+        script.src = "webgl/examples/js/plotPanelControl/" + url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+      });
     }
   },
   components: {
@@ -78,7 +133,8 @@ export default {
         /* webpackChunkName: "superTitle" */ "../components/superTitle.vue"
       )
   },
-  mounted() {
+  created() {
+    const vm = this;
     let urlData = {
       inputLink: [
         "colorpicker/css/colorpicker.css",
@@ -92,36 +148,51 @@ export default {
         "jquery-easyui-1.4.4/jquery.easyui.min.js",
         "colorpicker/js/colorpicker.js",
         "colorpicker/js/colorpickerEditor.js",
-
         "colorpicker/js/eye.js",
         "colorpicker/js/utils.js",
         "colorpicker/js/layout.js",
         "zTree/jquery.ztree.core.js",
-
         "./StylePanel.js",
         "./PlotPanel.js"
       ]
     };
-    /*  urlData.inputLink.forEach(item => {
-      let doc = document.createElement("link");
-      doc.href = "webgl/examples/js/plotPanelControl/" + item;
-      document.head.appendChild(doc);
-      doc.onload = function () {
-        console.log("OK")
+    function scriptAdd(arr) {
+      const index = 0;
+      async function next(arr, index, status) {
+        console.log(arr, index);
+        if (arr.length == index) return "成功";
+        let data = await vm.script(arr[index++]);
+        console.log(data);
+        if (data === 1) {
+          return await next(arr, index);
+        }
       }
-    });
-    urlData.inputScript.forEach(item => {
-      let doc = document.createElement("script");
-      doc.src = "webgl/examples/js/plotPanelControl/" + item;
-      document.head.appendChild(doc);*/
-    // var script =
-    //   "<" +
-    //   'script type="text/javascript" src="webgl/examples/js/plotPanelControl/' +
-    //   item +
-    //   '"' +
-    //   "><" +
-    //   "/script>";
-    // document.writeln(script);
+      return next(arr, index);
+    }
+    scriptAdd(urlData.inputScript).then(
+      res => {
+        console.log(res);
+        this.$emit("initPlot");
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    // urlData.inputLink.forEach(item => {
+    //   let doc = document.createElement("link");
+    //   doc.onload = function() {
+    //     console.log("OK");
+    //   };
+    //   doc.href = "webgl/examples/js/plotPanelControl/" + item;
+    //   document.head.appendChild(doc);
+    // });
+    // urlData.inputScript.forEach(item => {
+    //   let doc = document.createElement("script");
+    //   doc.onload = function() {
+    //     console.log("OK");
+    //   };
+    //   doc.src = "webgl/examples/js/plotPanelControl/" + item;
+    //   document.head.appendChild(doc);
     // });
   }
 };

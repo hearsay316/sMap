@@ -1,49 +1,47 @@
 import Cesium from "Cesium";
 // import initPlotPanel from "initPlotPanel";
 // import StylePanel from "StylePanel";
-let urlData = {
-  inputLink: [
-    "colorpicker/css/colorpicker.css",
-    "colorpicker/css/layout.css",
-    "jquery-easyui-1.4.4/css/easyui.css",
-    "zTree/css/zTreeStyle.css"
-  ],
-  inputScript: [
-    "jquery-easyui-1.4.4/jquery.min.js",
-    "jquery-easyui-1.4.4/jquery-ui.js",
-    "jquery-easyui-1.4.4/jquery.easyui.min.js",
-    "colorpicker/js/colorpicker.js",
-    "colorpicker/js/colorpickerEditor.js",
-
-    "colorpicker/js/eye.js",
-    "colorpicker/js/utils.js",
-    "colorpicker/js/layout.js",
-    "zTree/jquery.ztree.core.js",
-
-    "./StylePanel.js",
-    "./PlotPanel.js"
-  ]
-};
-urlData.inputLink.forEach(item => {
-  var link =
-    "<" +
-    'link rel="stylesheet" type="text/css" media="screen,projection" href="webgl/examples/js/plotPanelControl/' +
-    item +
-    '"' +
-    "><" +
-    "/>";
-  document.writeln(link);
-});
-urlData.inputScript.forEach(item => {
-  var script =
-    "<" +
-    'script type="text/javascript" src="webgl/examples/js/plotPanelControl/' +
-    item +
-    '"' +
-    "><" +
-    "/script>";
-  document.writeln(script);
-});
+// let urlData = {
+//   inputLink: [
+//     "colorpicker/css/colorpicker.css",
+//     "colorpicker/css/layout.css",
+//     "jquery-easyui-1.4.4/css/easyui.css",
+//     "zTree/css/zTreeStyle.css"
+//   ],
+//   inputScript: [
+//     "jquery-easyui-1.4.4/jquery.min.js",
+//     "jquery-easyui-1.4.4/jquery-ui.js",
+//     "jquery-easyui-1.4.4/jquery.easyui.min.js",
+//     "colorpicker/js/colorpicker.js",
+//     "colorpicker/js/colorpickerEditor.js",
+//     "colorpicker/js/eye.js",
+//     "colorpicker/js/utils.js",
+//     "colorpicker/js/layout.js",
+//     "zTree/jquery.ztree.core.js",
+//     "./StylePanel.js",
+//     "./PlotPanel.js"
+//   ]
+// };
+// urlData.inputLink.forEach(item => {
+//   var link =
+//     "<" +
+//     'link rel="stylesheet" type="text/css" media="screen,projection" href="webgl/examples/js/plotPanelControl/' +
+//     item +
+//     '"' +
+//     "><" +
+//     "/>";
+//   document.writeln(link);
+// });
+// urlData.inputScript.forEach(item => {
+//   var script =
+//     "<" +
+//     'script type="text/javascript" src="webgl/examples/js/plotPanelControl/' +
+//     item +
+//     '"' +
+//     "><" +
+//     "/script>";
+//   document.writeln(script);
+// });
 /**
  * 创建Cesium 实例
  * @param idName
