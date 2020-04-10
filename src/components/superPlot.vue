@@ -1,38 +1,35 @@
 <template>
   <div class="superPlot" :style="{ zIndex: superPlotIndex }">
-    <div
-      class="easyui-panel"
-      style="position:absolute;top:0px;bottom:0px;left:0px;right:0px;width: 100%;height: 100%"
-    >
-      <div class="easyui-tabs" style="width: 100%;height: 100%">
-        <div>
-          <superTitle
-            :superTitleDesc="superTitleDesc"
-            @handlePopupTitleIco="handlePopupTitleIco"
-          ></superTitle>
-          <div class="controlPanel">
-            <div class="controlPanel-item" @click="handleControlPanelItem(1)">
-              取消绘制
-            </div>
-            <div class="controlPanel-item" @click="handleControlPanelItem(2)">
-              清除绘制
-            </div>
-          </div>
-          <div class="controlPanel">
-            <div
-              @click="handleControlPanel"
-              :class="{ 'controlPanel-bg': isControlPanel }"
-            >
-              标绘面板
-            </div>
-            <div
-              @click="handleControlPanel"
-              :class="{ 'controlPanel-bg': !isControlPanel }"
-            >
-              属性面板
-            </div>
-          </div>
+    <div class="superPlot-config">
+      <superTitle
+        :superTitleDesc="superTitleDesc"
+        @handlePopupTitleIco="handlePopupTitleIco"
+      ></superTitle>
+      <div class="controlPanel">
+        <div class="controlPanel-item" @click="handleControlPanelItem(1)">
+          取消绘制
         </div>
+        <div class="controlPanel-item" @click="handleControlPanelItem(2)">
+          清除绘制
+        </div>
+      </div>
+      <!--      <div class="controlPanel">-->
+      <!--        <div-->
+      <!--          @click="handleControlPanel"-->
+      <!--          :class="{ 'controlPanel-bg': isControlPanel }"-->
+      <!--        >-->
+      <!--          标绘面板-->
+      <!--        </div>-->
+      <!--        <div-->
+      <!--          @click="handleControlPanel"-->
+      <!--          :class="{ 'controlPanel-bg': !isControlPanel }"-->
+      <!--        >-->
+      <!--          属性面板-->
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
+    <div class="easyui-panel">
+      <div class="easyui-tabs" style="width: 100%;height: 100%">
         <div id="plotPanel" v-show="isControlPanel" title="标绘面板"></div>
         <div id="stylePanel" title="属性面板"></div>
       </div>
@@ -73,11 +70,9 @@ export default {
     },
     link(url) {
       return new Promise((resolve, reject) => {
-        console.log("zhge ");
         const link = document.createElement("link");
         link.rel = "stylesheet";
         link.onload = function() {
-          console.log("zheg cdc");
           resolve(1);
         };
         link.onerror = function() {
@@ -124,28 +119,6 @@ export default {
   },
   created() {
     const vm = this;
-    let urlData = {
-      inputLink: [
-        "colorpicker/css/colorpicker.css",
-        "colorpicker/css/layout.css",
-        "jquery-easyui-1.4.4/css/easyui.css",
-        "zTree/css/zTreeStyle.css"
-      ],
-      inputScript: [
-        "jquery-easyui-1.4.4/jquery.min.js",
-        "jquery-easyui-1.4.4/jquery-ui.js",
-        "jquery-easyui-1.4.4/jquery.easyui.min.js",
-        "colorpicker/js/colorpicker.js",
-        "colorpicker/js/colorpickerEditor.js",
-        "colorpicker/js/eye.js",
-        "colorpicker/js/utils.js",
-        "colorpicker/js/layout.js",
-        "zTree/jquery.ztree.core.js",
-        "./StylePanel.js",
-        "./PlotPanel.js"
-      ]
-    };
-
     let Data = [
       [
         "colorpicker/css/colorpicker.css",
@@ -238,6 +211,11 @@ export default {
   top: 0
   background-color: RGBA(22, 57, 95, 0.9);
   color #ffffff
+.superPlot-config
+  width 100%
+  position absolute
+  top 0
+  left 0
 #plotPanel
   height calc(100% - 150px)
   overflow: hidden;
@@ -257,6 +235,18 @@ export default {
 .controlPanel-item:hover{
   background-color rgb(59, 127, 213)
 }
+.easyui-panel{
+  height: calc(100vh - 175px) !important
+  position: absolute;
+  top: 104px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+}
+.easyui-panel > div {
+  height:100% !important
+}
   // 150 +25
 /deep/.datagrid-body
   height: calc(100vh - 175px) !important
@@ -264,6 +254,7 @@ export default {
   overflow-y auto
 /deep/.panel-body
   background-color transparent
+  color #ffffff
 /deep/.datagrid-btable
   color #ffffff
 /deep/.propertygrid .datagrid-group
