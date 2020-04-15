@@ -174,29 +174,12 @@ export default {
     }
     scriptAdd(Data).then(
       res => {
-        console.log(res, "低洼的地方");
         this.$emit("initPlot");
       },
       error => {
         console.log(error);
       }
     );
-    // urlData.inputLink.forEach(item => {
-    //   let doc = document.createElement("link");
-    //   doc.onload = function() {
-    //     console.log("OK");
-    //   };
-    //   doc.href = "webgl/examples/js/plotPanelControl/" + item;
-    //   document.head.appendChild(doc);
-    // });
-    // urlData.inputScript.forEach(item => {
-    //   let doc = document.createElement("script");
-    //   doc.onload = function() {
-    //     console.log("OK");
-    //   };
-    //   doc.src = "webgl/examples/js/plotPanelControl/" + item;
-    //   document.head.appendChild(doc);
-    // });
   }
 };
 </script>
@@ -236,18 +219,9 @@ export default {
   background-color rgb(59, 127, 213)
 }
 .easyui-panel{
-  height: calc(100vh - 175px) !important
-  position: absolute;
-  top: 104px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  width: 100%;
+  height 100%
 }
-.easyui-panel > div {
-  height:100% !important
-}
-  // 150 +25
+
 /deep/.datagrid-body
   height: calc(100vh - 175px) !important
   background-color transparent !important
@@ -276,5 +250,33 @@ export default {
 }
 /deep/#plotPanel>div:nth-of-type(2)>div{
   overflow-y auto important
+}
+.superPlot > /deep/.panel{
+  height calc(100vh  - 104px)
+  position: absolute;
+  top: 104px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+/deep/ .tabs-wrap> .tabs{
+  width 248px
+  display grid
+  grid-template-columns 50% 50%
+  padding: 0;
+}
+/deep/.tabs >li >a{
+  width: 100%
+  border: 0px;
+  padding: 0px;
+}
+
+/deep/.tabs-header {
+
+}
+/deep/ .tabs-wrap> .tabs > .tabs-first{
+  margin:0
+  padding: 0
 }
 </style>
