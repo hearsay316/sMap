@@ -109,6 +109,34 @@ export default {
         script.src = "webgl/examples/js/plotPanelControl/" + url;
         document.getElementsByTagName("head")[0].appendChild(script);
       });
+    },
+    scriptAdd(arr) {
+      const vm = this;
+      let index = 0,
+        dataIndex = 0;
+      async function next(arr, index, dataIndex) {
+        if (
+          arr.length === index + 1 &&
+          arr[arr.length - 1].length === dataIndex
+        ) {
+          return { type: 1 };
+        }
+        if (arr[index].length === dataIndex) {
+          return next(arr, ++index, 0);
+        }
+        let data = await vm.processUrl(arr[index][dataIndex++]);
+        if (data === 1) {
+          return await next(arr, index, dataIndex);
+        }
+      }
+      return next(arr, index, dataIndex);
+    },
+    processUrl(url) {
+      return url.includes(".css")
+        ? this.link(url)
+        : url.includes(".js")
+        ? this.script(url)
+        : void 0;
     }
   },
   components: {
@@ -118,7 +146,6 @@ export default {
       )
   },
   created() {
-    const vm = this;
     let Data = [
       [
         "colorpicker/css/colorpicker.css",
@@ -140,39 +167,8 @@ export default {
         "./PlotPanel.js"
       ]
     ];
-    function scriptAdd(arr) {
-      let index = 0,
-        dataIndex = 0;
-      async function next(arr, index, dataIndex) {
-        console.log(arr, index, dataIndex);
-        if (
-          arr.length === index + 1 &&
-          arr[arr.length - 1].length === dataIndex
-        ) {
-          return "成功";
-        }
-        if (index === 0) {
-          console.log("ddddd", arr[index]);
-          if (arr[index].length === dataIndex) {
-            return next(arr, ++index, 0);
-          }
-          console.log(dataIndex, arr[index].length);
-          let data = await vm.link(arr[index][dataIndex++]);
-          if (data === 1) {
-            return await next(arr, index, dataIndex);
-          }
-        }
-        if (index === 1) {
-          let data = await vm.script(arr[index][dataIndex++]);
-          console.log(data);
-          if (data === 1) {
-            return await next(arr, index, dataIndex);
-          }
-        }
-      }
-      return next(arr, index, dataIndex);
-    }
-    scriptAdd(Data).then(
+
+    this.scriptAdd(Data).then(
       res => {
         this.$emit("initPlot");
       },

@@ -13,6 +13,7 @@ import Cesium from "Cesium";
 export default {
   name: "superMap",
   props: {
+    path: String,
     url: String,
     config: Object,
     earth: Object,
@@ -25,32 +26,74 @@ export default {
     regCesiumClickRight: Function
   },
   async mounted() {
-    this.createWebgl && this.createWebgl(this);
-    const superMap = this.$refs.superMap;
-    this.viewer = this.createCesium(superMap);
-    console.log(this.viewer);
-    this.viewer.customInfobox = document.querySelector("#bubble");
-    this.mountedWebgl && this.mountedWebgl(this.viewer);
-    const scene = this.viewer.scene;
-    this.url &&
-      (await this.openMap({
-        viewer: this.viewer,
-        url: this.url,
-        config: this.config,
-        earth: this.earth,
-        mountedOpenMap: this.mountedOpenMap,
-        errorOpenMap: this.errorOpenMap
-      }));
-    this.config &&
-      this.CesiumClickLayer(this.viewer, feature => {
-        this.regCesiumClickLayer && this.regCesiumClickLayer(feature);
-      });
-    this.regCesiumClickLeft &&
-      this.CesiumClickLeft(scene, this.regCesiumClickLeft);
-    this.regCesiumClickRight &&
-      this.CesiumClickRight(scene, this.regCesiumClickRight);
+    await this.Init();
   },
   methods: {
+    async Init() {
+      // 开始封装动态加载 _Cesium
+      console.log(this._Cesium(), this);
+      // 创建createWebgl之前的用户传来的函数
+      this.createWebgl && this.createWebgl(this);
+      // 获取dom
+      const superMap = this.$refs.superMap;
+      // 创建 三维实例
+      this.viewer = this.createCesium(superMap);
+      // 绑定 创建单体化弹框的dom
+      this.viewer.customInfobox = document.querySelector("#bubble");
+      // 创建三维之后
+      this.mountedWebgl && this.mountedWebgl(this.viewer);
+      const scene = this.viewer.scene;
+      // 打开三维模型
+      // 这个是不是应该用promise 重写?
+      this.url &&
+        (await this.openMap({
+          viewer: this.viewer, //视图实例 ,千万不要把视图实例绑定在data上
+          url: this.url, //  url
+          config: this.config, // config配置
+          earth: this.earth, // 跳转的三位模式
+          mountedOpenMap: this.mountedOpenMap, // 创建之后执行的函数
+          errorOpenMap: this.errorOpenMap // 报错之后的回调
+        }));
+      // 注册单体化点击事件
+      this.config &&
+        this.CesiumClickLayer(this.viewer, feature => {
+          this.regCesiumClickLayer && this.regCesiumClickLayer(feature);
+        });
+      // 左键
+      this.regCesiumClickLeft &&
+        this.CesiumClickLeft(scene, this.regCesiumClickLeft);
+      // 右键
+      this.regCesiumClickRight &&
+        this.CesiumClickRight(scene, this.regCesiumClickRight);
+    },
+    script(url) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        if (script.readyState) {
+          //IE
+          script.onreadystatechange = function() {
+            if (
+              script.readyState == "loaded" ||
+              script.readyState == "complete"
+            ) {
+              script.onreadystatechange = null;
+              resolve(1);
+            }
+          };
+        } else {
+          //Others
+          script.onload = function() {
+            resolve(1);
+          };
+          script.onerror = function() {
+            reject(0);
+          };
+        }
+        script.src = "webgl/examples/js/plotPanelControl/" + url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+      });
+    },
     ...map
   },
   destroyed() {

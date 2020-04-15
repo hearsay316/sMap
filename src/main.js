@@ -6,7 +6,9 @@ import "./plugins/element.js";
 
 Vue.config.productionTip = false;
 import superMap from "./packages/index";
-Vue.use(superMap);
+Vue.use(superMap, {
+  path: "zhge shi dizhi "
+});
 new Vue({
   store,
   router,
