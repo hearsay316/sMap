@@ -542,7 +542,6 @@ export default {
     mountedOpenMap(viewer, layers) {},
     myInitPlot() {
       try {
-        console.log(typeof this.Cesium != "undefined", this.Cesium);
         //global.Cesium
         if (typeof this.Cesium != "undefined") {
           this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);

@@ -37,32 +37,22 @@ export default {
         "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
       ]
     ];
-    console.log();
+    console.log("开始加载Cesium函数");
     typeof Cesium === "undefined" &&
       this.scriptAdd(arr).then(async res => {
-        console.log(typeof Cesium, "顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶");
+        console.log("完成加载Cesium函数");
         global.Cesium = Cesium;
         this.$refs.superMap && (await this.Init(window.Cesium));
       });
-    // 开始封装动态加载 _Cesium
-    console.log(this._Cesium(), this);
   },
   methods: {
     async Init(Cesium) {
-      //http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js
-      // if (this.$refs.superMap) {
-      //   return;
-      // }
       // 创建createWebgl之前的用户传来的函数
       this.createWebgl && this.createWebgl(this);
       // 获取dom
       const superMap = this.$refs.superMap;
       // 创建 三维实例
       this.viewer = this.createCesium(superMap, Cesium);
-      console.log(
-        this.viewer,
-        "this.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewer"
-      );
       // 绑定 创建单体化弹框的dom
       this.viewer.customInfobox = document.querySelector("#bubble");
       // 创建三维之后
@@ -142,7 +132,7 @@ export default {
       let index = 0,
         dataIndex = 0;
       async function next(arr, index, dataIndex) {
-        console.log(arr, index, dataIndex);
+        console.log("开始加载_Cesium");
         if (
           arr.length === index + 1 &&
           arr[arr.length - 1].length === dataIndex
