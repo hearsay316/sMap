@@ -33,6 +33,12 @@ export default {
   async created() {
     let arr = [
       [
+        "http://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
+        "webgl/examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
+        "http://at.alicdn.com/t/font_1711360_ju54515e55a.css",
+        "http://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
+        "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
+
         "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
         "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
       ]
@@ -94,7 +100,8 @@ export default {
         link.onerror = function() {
           reject(0);
         };
-        link.href = "webgl/examples/js/plotPanelControl/" + url;
+        //"webgl/examples/js/plotPanelControl/"
+        link.href = url;
         document.getElementsByTagName("head")[0].appendChild(link);
       });
     },
