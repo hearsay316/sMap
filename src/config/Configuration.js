@@ -288,9 +288,9 @@ export function viewerCreateFireFighting(
       if (index === 100) {
         clearInterval(time);
         let Waters = carts.map(cart => {
-          return viewerMountedWater(viewer, cart, Fire);
+          return viewerMountedWater(viewer, cart, Fire, Cesium);
         });
-        lookFire(viewer.scene);
+        lookFire(viewer.scene, Cesium);
         viewerDestroyedFire(viewer, Fire, Waters)
           .then(res => {
             resolve(res);
@@ -511,10 +511,11 @@ export function openMap(obj, Cesium) {
           //   keyWord: "SmID"
           // });
           const ConfigName = config && config.name;
-          ConfigName && observeLayer(layers, config);
+          ConfigName && observeLayer(layers, config, Cesium);
           const positionConfig = positionXYZ && orientation;
-          positionConfig && setViewConfig(viewer, positionXYZ, orientation);
-          mountedOpenMap && mountedOpenMap(viewer, layers);
+          positionConfig &&
+            setViewConfig(viewer, positionXYZ, orientation, Cesium);
+          mountedOpenMap && mountedOpenMap(viewer, layers, Cesium);
 
           resolve(layers);
           console.log("openUrl 结束");
@@ -544,6 +545,7 @@ export function openMap(obj, Cesium) {
  * @param viewer
  * @param positionXYZ
  * @param orientation
+ * @param Cesium
  */
 export function setViewConfig(viewer, positionXYZ, orientation, Cesium) {
   console.log("setViewConfig 开始");
@@ -556,7 +558,8 @@ export function setViewConfig(viewer, positionXYZ, orientation, Cesium) {
       heading,
       pitch,
       roll
-    }
+    },
+    Cesium
   );
   console.log("setViewConfig 结束");
 }
