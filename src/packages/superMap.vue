@@ -8,7 +8,7 @@
 <!--suppress JSCheckFunctionSignatures, NpmUsedModulesInstalled -->
 <script>
 import * as map from "../config/Configuration";
-import Cesium from "Cesium";
+// import Cesium from "Cesium";
 //todo  props需要做验证
 export default {
   name: "superMap",
@@ -26,27 +26,36 @@ export default {
     regCesiumClickRight: Function
   },
   async mounted() {
-    await this.Init();
+    // await this.Init();
+  },
+  async created() {
+    let arr = [["http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js"]];
+    typeof Cesium != "undefined" &&
+      this.scriptAdd(arr).then(async res => {
+        console.log(typeof Cesium, "顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶");
+        await this.Init(window.Cesium);
+      });
+    // 开始封装动态加载 _Cesium
+    console.log(this._Cesium(), this);
   },
   methods: {
-    async Init() {
+    async Init(Cesium) {
       //http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js
-      let arr = [["http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js"]];
-      let res = await this.scriptAdd(arr);
-      console.log(res);
-      // 开始封装动态加载 _Cesium
-      console.log(this._Cesium(), this);
+
       // 创建createWebgl之前的用户传来的函数
       this.createWebgl && this.createWebgl(this);
       // 获取dom
       const superMap = this.$refs.superMap;
       // 创建 三维实例
-      this.viewer = res && res.type === 1 && this.createCesium(superMap);
-      console.log(this.viewer);
+      this.viewer = this.createCesium(superMap, Cesium);
+      console.log(
+        this.viewer,
+        "this.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewerthis.viewer"
+      );
       // 绑定 创建单体化弹框的dom
       this.viewer.customInfobox = document.querySelector("#bubble");
       // 创建三维之后
-      this.mountedWebgl && this.mountedWebgl(this.viewer);
+      this.mountedWebgl && this.mountedWebgl(this.viewer, Cesium);
       const scene = this.viewer.scene;
       // 打开三维模型
       // 这个是不是应该用promise 重写?
@@ -66,10 +75,10 @@ export default {
         });
       // 左键
       this.regCesiumClickLeft &&
-        this.CesiumClickLeft(scene, this.regCesiumClickLeft);
+        this.CesiumClickLeft(scene, this.regCesiumClickLeft, Cesium);
       // 右键
       this.regCesiumClickRight &&
-        this.CesiumClickRight(scene, this.regCesiumClickRight);
+        this.CesiumClickRight(scene, this.regCesiumClickRight, Cesium);
     },
     link(url) {
       return new Promise((resolve, reject) => {

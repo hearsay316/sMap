@@ -18,7 +18,7 @@ module.exports = {
   },
   configureWebpack: config => {
     config.externals = {
-      Cesium: "Cesium",
+      // Cesium: "Cesium",
       initPlotPanel: "initPlotPanel",
       StylePanel: "StylePanel"
     };

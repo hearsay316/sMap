@@ -7,11 +7,11 @@
 </template>
 
 <script>
-const Cesium = window.Cesium;
+// const Cesium = window.Cesium;
 export default {
   name: "Polylines",
   methods: {
-    webgl(viewer) {
+    webgl(viewer, Cesium) {
       console.log(viewer);
       this.viewer = viewer;
       var startLon = -10;
@@ -210,9 +210,6 @@ export default {
       viewer.zoomTo(viewer.entities);
     },
     webgl2(viewer) {
-      console.log(this.viewer);
-      console.log(this.viewer === viewer);
-      console.log(viewer);
       var startLon = -10;
       var endLon = 90;
       var lat = 0;

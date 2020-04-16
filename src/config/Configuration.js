@@ -1,4 +1,4 @@
-import Cesium from "Cesium";
+// import Cesium from "Cesium";
 // import initPlotPanel from "initPlotPanel";
 // import StylePanel from "StylePanel";
 // let urlData = {
@@ -42,12 +42,13 @@ import Cesium from "Cesium";
 //     "/script>";
 //   document.writeln(script);
 // });
+
 /**
  * 创建Cesium 实例
  * @param idName
  * @returns {Cesium.Viewer}  idName div  id的值
  */
-export function createCesium(idName) {
+export function createCesium(idName, Cesium) {
   return new Cesium.Viewer(idName);
 }
 //todo 需要重构
@@ -55,7 +56,7 @@ export function createCesium(idName) {
  * 移动相机 坐标
  * @param scene
  */
-function lookFire(scene) {
+function lookFire(scene, Cesium) {
   try {
     if (scene.camera) {
       scene.camera.setView({
@@ -85,7 +86,7 @@ function lookFire(scene) {
  * @returns {{plottingLayer: Cesium.PlottingLayer, plotDrawControl: Cesium.PlotDrawControl, plotting: (*|module:zrender/ZRender), plotEditControl: Cesium.PlotEditControl, stylePanel}}
  * @constructor
  */
-export function InitPlot(viewer, serverUrl) {
+export function InitPlot(viewer, serverUrl, Cesium) {
   console.log("InitPlot 动态标绘开始");
   if (!viewer) {
     return;
@@ -135,7 +136,7 @@ export function InitPlot(viewer, serverUrl) {
  * @param Fire
  * @returns {*}
  */
-export function viewerMountedWater(viewer, cart, Fire) {
+export function viewerMountedWater(viewer, cart, Fire, Cesium) {
   let scene = viewer.scene;
   let emitterModelMatrix = new Cesium.Matrix4();
   let translation = new Cesium.Cartesian3();
@@ -260,7 +261,8 @@ export function viewerCreateFireFighting(
   MapFireXYZ,
   positionXYZ,
   carts,
-  Fire
+  Fire,
+  Cesium
 ) {
   console.log(viewer, MapFireXYZ, positionXYZ, carts);
   return new Promise((resolve, reject) => {
@@ -317,7 +319,7 @@ export function viewerCreateFireFighting(
  * @param positionXYZ 坐标
  * @returns {[]}  返回创建小车的实例  (用来销毁小车)
  */
-export function viewerMountedDeployCart(viewer, positionXYZ) {
+export function viewerMountedDeployCart(viewer, positionXYZ, Cesium) {
   console.log("viewerMountedDeployCart 开始创建小车");
   let userCarts = [];
   positionXYZ.forEach(xyz => {
@@ -350,7 +352,12 @@ export function viewerMountedDeployCart(viewer, positionXYZ) {
  * @param MapFireXYZ 火的坐标 创建火元素
  * @param primitivesConfig 配置参数
  */
-export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
+export function viewerMountedFire(
+  viewer,
+  MapFireXYZ,
+  primitivesConfig,
+  Cesium
+) {
   console.log("viewerMountedFire 开始创建火");
   ArgumentsError("viewerMountedFire", ...arguments);
   let { x, y, z } = MapFireXYZ;
@@ -413,7 +420,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
   viewer.scene.preUpdate.addEventListener(function(scene, time) {
     FireParticleSystem.modelMatrix = computeModelMatrix(FireEntity, time);
     // Account for any changes to the emitter model matrix.
-    FireParticleSystem.emitterModelMatrix = computeEmitterModelMatrix();
+    FireParticleSystem.emitterModelMatrix = computeEmitterModelMatrix(Cesium);
   });
   console.log("viewerMountedFire 创建火完毕");
 
@@ -430,7 +437,7 @@ export function viewerMountedFire(viewer, MapFireXYZ, primitivesConfig) {
  * @param obj
  * @returns {*}
  */
-export function viewerEntitiesAdd(viewer, { x, y, z }, obj) {
+export function viewerEntitiesAdd(viewer, { x, y, z }, obj, Cesium) {
   var position = Cesium.Cartesian3.fromDegrees(x, y, z);
   return viewer.entities.add({
     ...obj,
@@ -445,7 +452,7 @@ function error(desc) {
  * @param layers
  * @param config
  */
-export function observeLayer(layers, config) {
+export function observeLayer(layers, config, Cesium) {
   let { name, setQueryParameter } = config;
   !Array.isArray(layers) && error("layers 不是数组");
   const layer = layers.find(layer => layer.name === name);
@@ -475,7 +482,7 @@ export function observeLayer(layers, config) {
  * @returns {Promise<unknown>}
  * @param obj
  */
-export function openMap(obj) {
+export function openMap(obj, Cesium) {
   let { viewer, url, config, earth, mountedOpenMap, errorOpenMap } = obj;
   const { positionXYZ, orientation } = earth;
   const scene = viewer.scene;
@@ -537,7 +544,7 @@ export function openMap(obj) {
  * @param positionXYZ
  * @param orientation
  */
-export function setViewConfig(viewer, positionXYZ, orientation) {
+export function setViewConfig(viewer, positionXYZ, orientation, Cesium) {
   console.log("setViewConfig 开始");
   let { x, y, z } = positionXYZ;
   let { heading, pitch, roll } = orientation;
@@ -568,7 +575,7 @@ export function setViewConfig(viewer, positionXYZ, orientation) {
 //         roll
 //     }
 // });
-export function setView(scene, position, angle) {
+export function setView(scene, position, angle, Cesium) {
   console.log("setView 开始");
   if (Object.keys(position).length === 3 && Object.keys(angle).length === 3) {
     let { heading, pitch, roll } = angle;
@@ -610,7 +617,7 @@ export function CesiumClickLayer(viewer, fuc) {
  * @param func  LEFT_CLICK canvas 点击事件
  * @constructor
  */
-export function CesiumClickLeft(scene, func) {
+export function CesiumClickLeft(scene, func, Cesium) {
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function(e) {
     /**
@@ -650,7 +657,7 @@ export function CesiumClickLeft(scene, func) {
  * @param func  RIGHT_CLICK canvas 右鼠标点击事件
  * @constructor
  */
-export function CesiumClickRight(scene, func) {
+export function CesiumClickRight(scene, func, Cesium) {
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(function(e) {
     let positions = scene.pickPosition(e.position);
@@ -674,7 +681,13 @@ function computeModelMatrix(entity, time) {
  *
  * @param clampMode 初始化测量距离
  */
-export function viewerHandlerDis(viewer, clampMode, superMeasureData, index) {
+export function viewerHandlerDis(
+  viewer,
+  clampMode,
+  superMeasureData,
+  index,
+  Cesium
+) {
   // let vm = this;
   //初始化测量距离
   console.log("viewerHandlerDis初始化测量距离");
@@ -714,10 +727,17 @@ export function viewerHandlerDis(viewer, clampMode, superMeasureData, index) {
  *
  * @param viewer
  * @param clampMode//初始化测量面积
- * @param baseUrlItem1
+ * @param superMeasureData
  * @param index
+ * @param Cesium
  */
-export function viewerHandlerArea(viewer, clampMode, superMeasureData, index) {
+export function viewerHandlerArea(
+  viewer,
+  clampMode,
+  superMeasureData,
+  index,
+  Cesium
+) {
   console.log("viewerHandlerArea 开始");
   // let vm = this;
   //初始化测量面积
@@ -761,7 +781,8 @@ export function viewerHandlerHeight(
   viewer,
   clampMode,
   superMeasureData,
-  index
+  index,
+  Cesium
 ) {
   console.log("viewerHandlerHeight 开始 ");
   // let vm = this;
@@ -806,7 +827,7 @@ export function viewerHandlerHeight(
   return handlerHeight;
 }
 // 改变粒子系统的位置
-function computeEmitterModelMatrix() {
+function computeEmitterModelMatrix(Cesium) {
   let emitterModelMatrix = new Cesium.Matrix4();
   let translation = new Cesium.Cartesian3();
   let rotation = new Cesium.Quaternion();
