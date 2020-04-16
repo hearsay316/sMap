@@ -29,11 +29,17 @@ export default {
     // await this.Init();
   },
   async created() {
-    let arr = [["http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js"]];
+    let arr = [
+      [
+        "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
+        "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
+      ]
+    ];
     console.log();
     typeof Cesium === "undefined" &&
       this.scriptAdd(arr).then(async res => {
         console.log(typeof Cesium, "顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶");
+        global.Cesium = Cesium;
         await this.Init(window.Cesium);
       });
     // 开始封装动态加载 _Cesium

@@ -87,13 +87,14 @@ function lookFire(scene, Cesium) {
  * @constructor
  */
 export function InitPlot(viewer, serverUrl, Cesium) {
-  console.log("InitPlot 动态标绘开始");
+  console.log("InitPlot 动态标绘开始", Cesium);
   if (!viewer) {
     return;
   }
   // 挂在全局方法
   let scene = viewer.scene;
   window.scene = scene;
+  console.log(window.Cesium);
   const plottingLayer = new Cesium.PlottingLayer(scene, "plottingLayer");
   scene.layers.add(plottingLayer);
   const plotEditControl = new Cesium.PlotEditControl(scene, plottingLayer); //编辑控件
@@ -355,8 +356,8 @@ export function viewerMountedDeployCart(viewer, positionXYZ, Cesium) {
 export function viewerMountedFire(
   viewer,
   MapFireXYZ,
-  primitivesConfig,
-  Cesium
+  Cesium,
+  primitivesConfig
 ) {
   console.log("viewerMountedFire 开始创建火");
   ArgumentsError("viewerMountedFire", ...arguments);

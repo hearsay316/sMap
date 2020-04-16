@@ -234,7 +234,7 @@ export default {
       this.search.showSuperSearchInput = value;
     },
     searchItem(item) {
-      setView(this.viewer.scene, item.position, item.angle);
+      setView(this.viewer.scene, item.position, item.angle, this.Cesium);
       this.search.showSuperSearchInput = false;
       this.isNewDomeTitle ? (this.isNewDomeTitle = false) : void 0;
       !this.isSuperNav ? (this.isSuperNav = true) : void 0;
@@ -257,7 +257,8 @@ export default {
                 vm.viewer,
                 0,
                 vm.superMeasureData,
-                index
+                index,
+                vm.Cesium
               ));
           vm.handlerDis && vm.handlerDis.activate();
         },
@@ -269,7 +270,8 @@ export default {
                 vm.viewer,
                 0,
                 vm.superMeasureData,
-                index
+                index,
+                vm.Cesium
               ));
           vm.handlerArea && vm.handlerArea.activate();
         },
@@ -281,7 +283,8 @@ export default {
                 vm.viewer,
                 0,
                 vm.superMeasureData,
-                index
+                index,
+                vm.Cesium
               ));
           vm.handlerHeight && vm.handlerHeight.activate();
         },
@@ -313,7 +316,7 @@ export default {
       // 首页专场的视角移动
       this.isNewDomeTitle = false;
       // 控制按钮
-      setView(this.viewer, this.positionXYZ, this.angle);
+      setView(this.viewer, this.positionXYZ, this.angle, this.Cesium);
       this.isSuperNav = true;
       // 导航栏显示
       this.isMeasure = true;
@@ -393,7 +396,8 @@ export default {
         this.MapFireXYZ,
         this.positionCarts,
         this.carts,
-        this.fire
+        this.fire,
+        this.Cesium
       );
       this.popupActiveTitleDescActive = true;
       isRescue && this.clearStatusAll(1, 1);
@@ -452,11 +456,16 @@ export default {
       return {
         addFire() {
           // vm.baseUrlItems[index].active = true;
-          vm.fire = viewerMountedFire(vm.viewer, vm.MapFireXYZ);
+          console.log(vm.Cesium);
+          vm.fire = viewerMountedFire(vm.viewer, vm.MapFireXYZ, vm.Cesium);
         },
         addCarts() {
           // vm.baseUrlItems[index].active = true;
-          vm.carts = viewerMountedDeployCart(vm.viewer, vm.positionCarts);
+          vm.carts = viewerMountedDeployCart(
+            vm.viewer,
+            vm.positionCarts,
+            vm.Cesium
+          );
         },
         addFuc(index) {
           console.log("addFuc");
@@ -511,7 +520,8 @@ export default {
         viewerEntitiesAdd(
           this.viewer,
           { x: position.x, y: position.y, z: this.Z },
-          obj
+          obj,
+          this.Cesium
         );
       this.viewerEntities.push(viewerEntity);
       viewerEntity ? (this.Resources.Active.active = false) : void 0;
@@ -532,7 +542,11 @@ export default {
     mountedOpenMap(viewer, layers) {},
     myInitPlot() {
       try {
-        this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
+        console.log(typeof this.Cesium != "undefined", this.Cesium);
+        //global.Cesium
+        if (typeof this.Cesium != "undefined") {
+          this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
+        }
       } catch (e) {
         console.log(e);
       }
