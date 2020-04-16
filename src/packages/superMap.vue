@@ -30,7 +30,8 @@ export default {
   },
   async created() {
     let arr = [["http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js"]];
-    typeof Cesium != "undefined" &&
+    console.log();
+    typeof Cesium === "undefined" &&
       this.scriptAdd(arr).then(async res => {
         console.log(typeof Cesium, "顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶");
         await this.Init(window.Cesium);
@@ -60,14 +61,17 @@ export default {
       // 打开三维模型
       // 这个是不是应该用promise 重写?
       this.url &&
-        (await this.openMap({
-          viewer: this.viewer, //视图实例 ,千万不要把视图实例绑定在data上
-          url: this.url, //  url
-          config: this.config, // config配置
-          earth: this.earth, // 跳转的三位模式
-          mountedOpenMap: this.mountedOpenMap, // 创建之后执行的函数
-          errorOpenMap: this.errorOpenMap // 报错之后的回调
-        }));
+        (await this.openMap(
+          {
+            viewer: this.viewer, //视图实例 ,千万不要把视图实例绑定在data上
+            url: this.url, //  url
+            config: this.config, // config配置
+            earth: this.earth, // 跳转的三位模式
+            mountedOpenMap: this.mountedOpenMap, // 创建之后执行的函数
+            errorOpenMap: this.errorOpenMap // 报错之后的回调
+          },
+          Cesium
+        ));
       // 注册单体化点击事件
       this.config &&
         this.CesiumClickLayer(this.viewer, feature => {

@@ -522,8 +522,9 @@ export default {
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);
     },
-    mountedWebgl(v) {
+    mountedWebgl(v, C) {
       this.viewer = v;
+      this.Cesium = C;
       this.viewerEntities = [];
       // window.scene = this.viewer.scene;
       // window.qaz = scene.Cartesian3;
@@ -531,7 +532,7 @@ export default {
     mountedOpenMap(viewer, layers) {},
     myInitPlot() {
       try {
-        this.Plot = InitPlot(this.viewer, this.serverUrl);
+        this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
       } catch (e) {
         console.log(e);
       }
