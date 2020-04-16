@@ -107,7 +107,7 @@ export default {
           };
         }
         script.src = "webgl/examples/js/plotPanelControl/" + url;
-        document.getElementsByTagName("head")[0].appendChild(script);
+        document.getElementsByTagName("body")[0].appendChild(script);
       });
     },
     scriptAdd(arr) {

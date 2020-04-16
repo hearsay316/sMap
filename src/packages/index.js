@@ -2,6 +2,7 @@
 
 import superMap from "./superMap.vue";
 const install = (Vue, options) => {
+  // 每次都能返回一个新的options
   Vue.prototype._Cesium = () => options;
   Vue.component(superMap.name, superMap);
 };

@@ -28,9 +28,10 @@ export default {
   async mounted() {
     typeof Cesium != "undefined" &&
       this.$refs.superMap &&
-      (await this.Init(Cesium));
+      (await this.Init(Cesium)); // 切换页面js 已经创建 所以就不用在创建dom 直接执行渲染代码
   },
   async created() {
+    // css从上到下会有覆盖,所以要和写在页面中的时候相反
     let arr = [
       [
         "http://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
@@ -38,7 +39,6 @@ export default {
         "http://at.alicdn.com/t/font_1711360_ju54515e55a.css",
         "http://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
         "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
-
         "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
         "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
       ]
@@ -131,7 +131,7 @@ export default {
         }
         //"webgl/examples/js/plotPanelControl/"
         script.src = url;
-        document.getElementsByTagName("head")[0].appendChild(script);
+        document.getElementsByTagName("body")[0].appendChild(script);
       });
     },
     scriptAdd(arr) {
@@ -166,16 +166,17 @@ export default {
     ...map
   },
   destroyed() {
-    // console.log("开始destroyed");
-    // const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium;
-    // const inputHandler = this.viewer.screenSpaceEventHandler;
-    // inputHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE);
-    // inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-    // inputHandler.removeInputAction(
-    //   ScreenSpaceEventType.LEFT_DOUBLE_CLICK,
-    //   KeyboardEventModifier.SHIFT
-    // );
-    // this.viewer.destroy && this.viewer.destroy();
+    console.log("开始destroyed");
+    const { ScreenSpaceEventType, KeyboardEventModifier } = Cesium;
+    const inputHandler = this.viewer.screenSpaceEventHandler;
+    inputHandler.removeInputAction(ScreenSpaceEventType.MOUSE_MOVE);
+    inputHandler.removeInputAction(ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    inputHandler.removeInputAction(
+      ScreenSpaceEventType.LEFT_DOUBLE_CLICK,
+      KeyboardEventModifier.SHIFT
+    );
+    this.viewer.destroy && this.viewer.destroy();
+    console.log("删除页面的数据防止数据出错");
   }
 };
 </script>
