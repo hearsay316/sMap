@@ -568,6 +568,7 @@ export function setViewConfig(viewer, positionXYZ, orientation, Cesium) {
  * @param scene
  * @param position
  * @param angle
+ * @param Cesium
  */
 //设置相机位置，定位至模型
 // scene.camera.setView({

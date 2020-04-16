@@ -26,7 +26,9 @@ export default {
     regCesiumClickRight: Function
   },
   async mounted() {
-    // await this.Init();
+    typeof Cesium != "undefined" &&
+      this.$refs.superMap &&
+      (await this.Init(Cesium));
   },
   async created() {
     let arr = [
@@ -40,7 +42,7 @@ export default {
       this.scriptAdd(arr).then(async res => {
         console.log(typeof Cesium, "顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶");
         global.Cesium = Cesium;
-        await this.Init(window.Cesium);
+        this.$refs.superMap && (await this.Init(window.Cesium));
       });
     // 开始封装动态加载 _Cesium
     console.log(this._Cesium(), this);
@@ -48,7 +50,9 @@ export default {
   methods: {
     async Init(Cesium) {
       //http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js
-
+      // if (this.$refs.superMap) {
+      //   return;
+      // }
       // 创建createWebgl之前的用户传来的函数
       this.createWebgl && this.createWebgl(this);
       // 获取dom
