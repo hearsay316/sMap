@@ -1,7 +1,7 @@
 Modifications Log
 ==========
-Modifications copyright (C) 2016 <北京超图软件股份有限公司>
-* **Core**下修改：
+Modifications copyright (C) 2016 <锟斤拷锟斤拷锟斤拷图锟斤拷锟斤拷锟缴凤拷锟斤拷锟睫癸拷司>
+* **Core**锟斤拷锟睫改ｏ拷
 	* AssociativeArray.js 
 	* CesiumTerrainProvider.js
 	* FeatureDetection.js
@@ -9,17 +9,17 @@ Modifications copyright (C) 2016 <北京超图软件股份有限公司>
 	* Quaternion.js
 	* ScreenSpaceEventHandler.js
 	
-* **DataSources**下修改：	
+* **DataSources**锟斤拷锟睫改ｏ拷	
 	* Entity.js
 	* GeoJsonDataSource.js
 	* KmlDataSource.js
 	
-* **Renderer**下修改：
+* **Renderer**锟斤拷锟睫改ｏ拷
 	* AutomaticUniforms.js 
 	* Context.js 
 	* PickFramebuffer.js 
 
-* **Scene**下修改：
+* **Scene**锟斤拷锟睫改ｏ拷
 	* Camera.js 
 	* CreditDisplay.js 
 	* FrameState.js 
@@ -31,10 +31,10 @@ Modifications copyright (C) 2016 <北京超图软件股份有限公司>
 	* Scene.js
 	* ScreenSpaceCameraController.js
 	* WebMapTileServiceImageryProvider.js
-* **Shaders**下修改：
+* **Shaders**锟斤拷锟睫改ｏ拷
 	GlobeFS.glsl
 	GlobeVS.glsl
-* **Widgets\Viewer**下修改：
+* **Widgets\Viewer**锟斤拷锟睫改ｏ拷
 	* Viewer.js
 
 
