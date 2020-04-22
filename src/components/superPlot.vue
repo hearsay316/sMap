@@ -50,9 +50,13 @@ export default {
     };
   },
   mounted() {
-    this.deleteSeleGeo();
+    this.Init();
   },
   methods: {
+    Init() {
+      this.deleteSeleGeo();
+      this.resourcesMounted();
+    },
     deleteSeleGeo() {
       document.addEventListener("keydown", event => {
         event.keyCode === 46 && this.handleControlPanelItem(3);
@@ -137,6 +141,38 @@ export default {
         : url.includes(".js")
         ? this.script(url)
         : void 0;
+    },
+    resourcesMounted() {
+      /*这个顺序不能乱, 是根据script标签的加载顺序调成的,测试自会后是加载到vue的mounted函数可以适应同页面多组件多渲染不冲突(待确认)*/
+      let Data = [
+        [
+          "colorpicker/css/colorpicker.css",
+          "colorpicker/css/layout.css",
+          "jquery-easyui-1.4.4/css/easyui.css",
+          "zTree/css/zTreeStyle.css"
+        ],
+        [
+          "jquery-easyui-1.4.4/jquery.min.js",
+          "jquery-easyui-1.4.4/jquery-ui.js",
+          "jquery-easyui-1.4.4/jquery.easyui.min.js",
+          "colorpicker/js/colorpicker.js",
+          "colorpicker/js/colorpickerEditor.js",
+          "colorpicker/js/eye.js",
+          "colorpicker/js/utils.js",
+          "colorpicker/js/layout.js",
+          "zTree/jquery.ztree.core.js",
+          "./StylePanel.js",
+          "./PlotPanel.js"
+        ]
+      ];
+      this.scriptAdd(Data).then(
+        res => {
+          this.$emit("initPlot");
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   },
   components: {
@@ -145,38 +181,7 @@ export default {
         /* webpackChunkName: "superTitle" */ "../components/superTitle.vue"
       )
   },
-  created() {
-    let Data = [
-      [
-        "colorpicker/css/colorpicker.css",
-        "colorpicker/css/layout.css",
-        "jquery-easyui-1.4.4/css/easyui.css",
-        "zTree/css/zTreeStyle.css"
-      ],
-      [
-        "jquery-easyui-1.4.4/jquery.min.js",
-        "jquery-easyui-1.4.4/jquery-ui.js",
-        "jquery-easyui-1.4.4/jquery.easyui.min.js",
-        "colorpicker/js/colorpicker.js",
-        "colorpicker/js/colorpickerEditor.js",
-        "colorpicker/js/eye.js",
-        "colorpicker/js/utils.js",
-        "colorpicker/js/layout.js",
-        "zTree/jquery.ztree.core.js",
-        "./StylePanel.js",
-        "./PlotPanel.js"
-      ]
-    ];
-
-    this.scriptAdd(Data).then(
-      res => {
-        this.$emit("initPlot");
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
+  created() {}
 };
 </script>
 

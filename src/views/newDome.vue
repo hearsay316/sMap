@@ -65,9 +65,9 @@
         @handlePopupTitleIco="clearTitle"
         @initPlot="myInitPlot"
       ></superPlot>
-      <!-- 救援行动启动的弹出框
-           popupActiveEndDesc  显示的文字
-          -->
+      <div class="newDome-test">
+        <router-link to="/">点击换</router-link>
+      </div>
       <popupActiveTitle
         :popupActiveTitleDesc="popupActiveTitleDesc"
         :popupActiveBg="popupActiveBg"
@@ -126,9 +126,9 @@
     >
       进入场景
     </div>
-    <div class="newDome-test">
-      <router-link to="/">点击换</router-link>
-    </div>
+    <!--    <div class="newDome-test">-->
+    <!--      <router-link to="/">点击换</router-link>-->
+    <!--    </div>-->
   </div>
 </template>
 <!--

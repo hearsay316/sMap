@@ -139,7 +139,7 @@ export default {
       let index = 0,
         dataIndex = 0;
       async function next(arr, index, dataIndex) {
-        console.log("开始加载_Cesium");
+        console.log("正在开始加载_Cesium");
         if (
           arr.length === index + 1 &&
           arr[arr.length - 1].length === dataIndex
