@@ -427,16 +427,18 @@ export default {
       this.viewer.entities.remove(Entities);
     },
     clearStatusAll(baseUrl, baseUrlItems) {
+      // 清除baseUrl的值全部设置false
       baseUrl &&
         this.baseUrl.forEach(item => {
           item.active = false;
         });
-
+      // 清除baseUrlItems的值全部设置成false
       baseUrlItems &&
         this.baseUrlItems.forEach(item => {
           item.active = false;
         });
     },
+    // superPopup 的列表的执行的函数回调
     handleClickLists(index) {
       let arrFUnc = [
         "addMedical",
@@ -445,14 +447,20 @@ export default {
         "addSupplies",
         "addCommand"
       ];
+      // 获取函数名字
       let baseUrlItemFucName = this.baseUrlItems[index]?.fun;
+      // 获取函数体
       let fuc = this.baseUrlItemsFun();
+      //  判断index 为7 indexthis.baseUrlItems[index].active  清除一下
       index !== 7 ? (this.baseUrlItems[index].active = true) : void 0;
+      // 如何能找到这个函数名的函数体 就把他执行了 else 执行的默认函数
       arrFUnc.includes(baseUrlItemFucName)
         ? fuc.addFuc(index)
         : fuc[baseUrlItemFucName](index);
     },
+    //handleClickLists 所有函数体
     baseUrlItemsFun() {
+      // 存一下this
       let vm = this;
       return {
         addFire() {
@@ -489,13 +497,11 @@ export default {
         }
       };
     },
+    //handler测距 测高 测面积的清除
     deActiveAll() {
       this.handlerDis && this.handlerDis.deactivate();
       this.handlerArea && this.handlerArea.deactivate();
       this.handlerHeight && this.handlerHeight.deactivate();
-    },
-    clearLayers() {
-      plottingLayer.removeAll();
     },
     RegCesiumClickLeft(e, position) {
       console.log("RegCesiumClickLeft执行了");
@@ -534,21 +540,26 @@ export default {
       console.log("Right", e, position);
     },
     mountedWebgl(v, C) {
+      // 把viewer 挂在this 上
       this.viewer = v;
+      // 把Cesium 挂在 this
       this.Cesium = C;
       this.viewerEntities = [];
+      // 回调myInitPlot Plot是动态加载的js 执行需要在回调之后,所以我们要回调三次
       this.myInitPlot(v, C);
       // window.scene = this.viewer.scene;
       // window.qaz = scene.Cartesian3;
     },
+    // 打开地图的回调
     mountedOpenMap(viewer, layers) {
       this.myInitPlot();
     },
+    // 创建动态绘标
     myInitPlot(v, C) {
       //global.Cesium 需要try 一下不然报错 需要改动成封装到组件里
       try {
         console.log(this.superPlotTime);
-        if (this.superPlotTime == 2) {
+        if (this.superPlotTime === 2) {
           if (typeof this.Cesium != "undefined") {
             this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
           }
@@ -558,10 +569,13 @@ export default {
         console.log(e);
       }
     },
+    // 创建webgl的之前又vm 可以调用里面的方法
     createWebgl(vm) {
       // vm是 superMap的this
     },
+    // 错误的error
     errorOpenMap(e) {},
+    // 创建鼠标的动态事件 (单体化)
     RegCesiumClickLayer(feature) {
       this.superSingularizationData = {
         ...this.search.setLocation[feature.SMID - 0 - 1]
