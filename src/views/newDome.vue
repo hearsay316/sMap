@@ -179,6 +179,7 @@ export default {
       baseUrl: [],
       baseUrlItems: [],
       superPlotIndex: -1,
+      superPlotTime: 0,
       isRescue: false,
       popupActiveBg: "111",
       popupActiveEndDesc: "总攻结束",
@@ -536,16 +537,23 @@ export default {
       this.viewer = v;
       this.Cesium = C;
       this.viewerEntities = [];
+      this.myInitPlot(v, C);
       // window.scene = this.viewer.scene;
       // window.qaz = scene.Cartesian3;
     },
-    mountedOpenMap(viewer, layers) {},
-    myInitPlot() {
+    mountedOpenMap(viewer, layers) {
+      this.myInitPlot();
+    },
+    myInitPlot(v, C) {
+      //global.Cesium 需要try 一下不然报错 需要改动成封装到组件里
       try {
-        //global.Cesium
-        if (typeof this.Cesium != "undefined") {
-          this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
+        console.log(this.superPlotTime);
+        if (this.superPlotTime == 2) {
+          if (typeof this.Cesium != "undefined") {
+            this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
+          }
         }
+        this.superPlotTime += 1;
       } catch (e) {
         console.log(e);
       }

@@ -111,7 +111,7 @@ export default {
           };
         }
         script.src = "webgl/examples/js/plotPanelControl/" + url;
-        document.getElementsByTagName("body")[0].appendChild(script);
+        document.getElementsByTagName("head")[0].appendChild(script);
       });
     },
     scriptAdd(arr) {
@@ -220,7 +220,13 @@ export default {
   background-color rgb(59, 127, 213)
 }
 .easyui-panel{
-  height 100%
+  height calc(100vh  - 104px)
+  position: absolute;
+  top: 104px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 /deep/.datagrid-body
@@ -252,7 +258,7 @@ export default {
 /deep/#plotPanel>div:nth-of-type(2)>div{
   overflow-y auto important
 }
-.superPlot > /deep/.panel{
+/*.superPlot > /deep/.panel{
   height calc(100vh  - 104px)
   position: absolute;
   top: 104px;
@@ -260,7 +266,7 @@ export default {
   left: 0;
   right: 0;
   width: 100%;
-}
+}*/
 /deep/ .tabs-wrap> .tabs{
   width 248px
   display grid
