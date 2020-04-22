@@ -76,6 +76,7 @@ export default {
       return new Promise((resolve, reject) => {
         const link = document.createElement("link");
         link.rel = "stylesheet";
+        link.className = "superMapPlotLink";
         link.onload = function() {
           resolve(1);
         };
@@ -90,6 +91,7 @@ export default {
       return new Promise((resolve, reject) => {
         const script = document.createElement("script");
         script.type = "text/javascript";
+        script.className = "superMapPlotScript";
         if (script.readyState) {
           //IE
           script.onreadystatechange = function() {
@@ -111,9 +113,9 @@ export default {
           };
         }
         script.src = "webgl/examples/js/plotPanelControl/" + url;
-        document.getElementsByTagName("head")[0].appendChild(script);
+        document.getElementsByTagName("body")[0].appendChild(script);
       });
-    },
+    }, // 递归是
     scriptAdd(arr) {
       const vm = this;
       let index = 0,
@@ -135,6 +137,13 @@ export default {
       }
       return next(arr, index, dataIndex);
     },
+    // 并发
+    urlUp(arr) {
+      const promiseArr = arr.map(item => {
+        return this.processUrl(item);
+      });
+      return Promise.all(promiseArr);
+    },
     processUrl(url) {
       return url.includes(".css")
         ? this.link(url)
@@ -145,34 +154,33 @@ export default {
     resourcesMounted() {
       /*这个顺序不能乱, 是根据script标签的加载顺序调成的,测试自会后是加载到vue的mounted函数可以适应同页面多组件多渲染不冲突(待确认)*/
       let Data = [
-        [
-          "colorpicker/css/colorpicker.css",
-          "colorpicker/css/layout.css",
-          "jquery-easyui-1.4.4/css/easyui.css",
-          "zTree/css/zTreeStyle.css"
-        ],
-        [
-          "jquery-easyui-1.4.4/jquery.min.js",
-          "jquery-easyui-1.4.4/jquery-ui.js",
-          "jquery-easyui-1.4.4/jquery.easyui.min.js",
-          "colorpicker/js/colorpicker.js",
-          "colorpicker/js/colorpickerEditor.js",
-          "colorpicker/js/eye.js",
-          "colorpicker/js/utils.js",
-          "colorpicker/js/layout.js",
-          "zTree/jquery.ztree.core.js",
-          "./StylePanel.js",
-          "./PlotPanel.js"
-        ]
+        "colorpicker/css/colorpicker.css",
+        "colorpicker/css/layout.css",
+        "jquery-easyui-1.4.4/css/easyui.css",
+        "zTree/css/zTreeStyle.css",
+        "jquery-easyui-1.4.4/jquery.min.js",
+        "jquery-easyui-1.4.4/jquery-ui.js",
+        "jquery-easyui-1.4.4/jquery.easyui.min.js",
+        "colorpicker/js/colorpicker.js",
+        "colorpicker/js/colorpickerEditor.js",
+        "colorpicker/js/eye.js",
+        "colorpicker/js/utils.js",
+        "colorpicker/js/layout.js",
+        "zTree/jquery.ztree.core.js",
+        "./StylePanel.js",
+        "./PlotPanel.js"
       ];
-      this.scriptAdd(Data).then(
-        res => {
-          this.$emit("initPlot");
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      // 当页面加载完成才开始执行这个
+      setTimeout(() => {
+        this.urlUp(Data).then(
+          res => {
+            this.$emit("initPlot");
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      }, 1000);
     }
   },
   components: {
@@ -181,7 +189,18 @@ export default {
         /* webpackChunkName: "superTitle" */ "../components/superTitle.vue"
       )
   },
-  created() {}
+  created() {},
+  destroyed() {
+    console.log("删除成功");
+    let arrLink = document.querySelectorAll(".superMapPlotLink");
+    let arrScript = document.querySelectorAll(".superMapPlotScript");
+    arrLink.forEach(link => {
+      document.getElementsByTagName("head")[0].removeChild(link);
+    });
+    arrScript.forEach(script => {
+      document.getElementsByTagName("body")[0].removeChild(script);
+    });
+  }
 };
 </script>
 

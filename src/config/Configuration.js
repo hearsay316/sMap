@@ -115,8 +115,8 @@ export function InitPlot(viewer, serverUrl, Cesium) {
     plotEditControl,
     plotting
   );
-  window.scene = undefined;
-  window.plotEditControl = undefined;
+  // window.scene = undefined;
+  // window.plotEditControl = undefined;
   // 清除window作用域
   console.log("InitPlot 动态标绘结束");
 
