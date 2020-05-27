@@ -65,9 +65,9 @@
         @handlePopupTitleIco="clearTitle"
         @initPlot="myInitPlot"
       ></superPlot>
-      <div class="newDome-test">
-        <router-link to="/">点击换</router-link>
-      </div>
+      <!--      <div class="newDome-test">-->
+      <!--        <router-link to="/">点击换</router-link>-->
+      <!--      </div>-->
       <popupActiveTitle
         :popupActiveTitleDesc="popupActiveTitleDesc"
         :popupActiveBg="popupActiveBg"
