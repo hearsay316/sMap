@@ -1,30 +1,35 @@
 <template>
   <div class="superPlot" :style="{ zIndex: superPlotIndex }">
-    <div
-      class="easyui-panel"
-      style="position:absolute;top:0px;bottom:0px;left:0px;right:0px;width: 100%;height: 100%"
-    >
-      <div class="easyui-tabs" style="width: 100%;height: 100%">
-        <div>
-          <superTitle
-            :superTitleDesc="superTitleDesc"
-            @handlePopupTitleIco="handlePopupTitleIco"
-          ></superTitle>
-          <div class="controlPanel">
-            <div
-              @click="handleControlPanel"
-              :class="{ 'controlPanel-bg': isControlPanel }"
-            >
-              标绘面板
-            </div>
-            <div
-              @click="handleControlPanel"
-              :class="{ 'controlPanel-bg': !isControlPanel }"
-            >
-              属性面板
-            </div>
-          </div>
+    <div class="superPlot-config">
+      <superTitle
+        :superTitleDesc="superTitleDesc"
+        @handlePopupTitleIco="handlePopupTitleIco"
+      ></superTitle>
+      <div class="controlPanel">
+        <div class="controlPanel-item" @click="handleControlPanelItem(1)">
+          取消绘制
         </div>
+        <div class="controlPanel-item" @click="handleControlPanelItem(2)">
+          清除绘制
+        </div>
+      </div>
+      <!--      <div class="controlPanel">-->
+      <!--        <div-->
+      <!--          @click="handleControlPanel"-->
+      <!--          :class="{ 'controlPanel-bg': isControlPanel }"-->
+      <!--        >-->
+      <!--          标绘面板-->
+      <!--        </div>-->
+      <!--        <div-->
+      <!--          @click="handleControlPanel"-->
+      <!--          :class="{ 'controlPanel-bg': !isControlPanel }"-->
+      <!--        >-->
+      <!--          属性面板-->
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
+    <div class="easyui-panel">
+      <div class="easyui-tabs" style="width: 100%;height: 100%">
         <div id="plotPanel" v-show="isControlPanel" title="标绘面板"></div>
         <div id="stylePanel" title="属性面板"></div>
       </div>
@@ -44,12 +49,138 @@ export default {
       isControlPanel: true
     };
   },
+  mounted() {
+    this.Init();
+  },
   methods: {
+    Init() {
+      this.deleteSeleGeo();
+      this.resourcesMounted();
+    },
+    deleteSeleGeo() {
+      document.addEventListener("keydown", event => {
+        event.keyCode === 46 && this.handleControlPanelItem(3);
+        event.keyCode === 27 && this.handleControlPanelItem(1);
+      });
+    },
+    handleControlPanelItem(index) {
+      this.$emit("handleControlPanelItem", index);
+    },
     handleControlPanel() {
       this.isControlPanel = !this.isControlPanel;
     },
     handlePopupTitleIco(value) {
       this.$emit("handlePopupTitleIco", value);
+    },
+    link(url) {
+      return new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.className = "superMapPlotLink";
+        link.onload = function() {
+          resolve(1);
+        };
+        link.onerror = function() {
+          reject(0);
+        };
+        link.href = "webgl/examples/js/plotPanelControl/" + url;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      });
+    },
+    script(url) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.className = "superMapPlotScript";
+        if (script.readyState) {
+          //IE
+          script.onreadystatechange = function() {
+            if (
+              script.readyState == "loaded" ||
+              script.readyState == "complete"
+            ) {
+              script.onreadystatechange = null;
+              resolve(1);
+            }
+          };
+        } else {
+          //Others
+          script.onload = function() {
+            resolve(1);
+          };
+          script.onerror = function() {
+            reject(0);
+          };
+        }
+        script.src = "webgl/examples/js/plotPanelControl/" + url;
+        document.getElementsByTagName("body")[0].appendChild(script);
+      });
+    }, // 递归是
+    scriptAdd(arr) {
+      const vm = this;
+      let index = 0,
+        dataIndex = 0;
+      async function next(arr, index, dataIndex) {
+        if (
+          arr.length === index + 1 &&
+          arr[arr.length - 1].length === dataIndex
+        ) {
+          return { type: 1 };
+        }
+        if (arr[index].length === dataIndex) {
+          return next(arr, ++index, 0);
+        }
+        let data = await vm.processUrl(arr[index][dataIndex++]);
+        if (data === 1) {
+          return await next(arr, index, dataIndex);
+        }
+      }
+      return next(arr, index, dataIndex);
+    },
+    // 并发
+    urlUp(arr) {
+      const promiseArr = arr.map(item => {
+        return this.processUrl(item);
+      });
+      return Promise.all(promiseArr);
+    },
+    processUrl(url) {
+      return url.includes(".css")
+        ? this.link(url)
+        : url.includes(".js")
+        ? this.script(url)
+        : void 0;
+    },
+    resourcesMounted() {
+      /*这个顺序不能乱, 是根据script标签的加载顺序调成的,测试自会后是加载到vue的mounted函数可以适应同页面多组件多渲染不冲突(待确认)*/
+      let Data = [
+        "colorpicker/css/colorpicker.css",
+        "colorpicker/css/layout.css",
+        "jquery-easyui-1.4.4/css/easyui.css",
+        "zTree/css/zTreeStyle.css",
+        "jquery-easyui-1.4.4/jquery.min.js",
+        "jquery-easyui-1.4.4/jquery-ui.js",
+        "jquery-easyui-1.4.4/jquery.easyui.min.js",
+        "colorpicker/js/colorpicker.js",
+        "colorpicker/js/colorpickerEditor.js",
+        "colorpicker/js/eye.js",
+        "colorpicker/js/utils.js",
+        "colorpicker/js/layout.js",
+        "zTree/jquery.ztree.core.js",
+        "./StylePanel.js",
+        "./PlotPanel.js"
+      ];
+      // 当页面加载完成才开始执行这个
+      setTimeout(() => {
+        this.urlUp(Data).then(
+          res => {
+            this.$emit("initPlot");
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      }, 1000);
     }
   },
   components: {
@@ -57,6 +188,18 @@ export default {
       import(
         /* webpackChunkName: "superTitle" */ "../components/superTitle.vue"
       )
+  },
+  created() {},
+  destroyed() {
+    console.log("删除成功");
+    let arrLink = document.querySelectorAll(".superMapPlotLink");
+    let arrScript = document.querySelectorAll(".superMapPlotScript");
+    arrLink.forEach(link => {
+      document.getElementsByTagName("head")[0].removeChild(link);
+    });
+    arrScript.forEach(script => {
+      document.getElementsByTagName("body")[0].removeChild(script);
+    });
   }
 };
 </script>
@@ -71,22 +214,47 @@ export default {
   top: 0
   background-color: RGBA(22, 57, 95, 0.9);
   color #ffffff
+.superPlot-config
+  width 100%
+  position absolute
+  top 0
+  left 0
 #plotPanel
-  height calc(100% - 56px)
+  height calc(100% - 150px)
   overflow: hidden;
-
+.controlPanel-item{
+  border-top 1px solid rgb(97, 119, 117)
+  border-bottom 1px solid rgb(97, 119, 117)
+}
+.controlPanel>div:first-of-type{
+  border-right  1px solid rgb(97, 119, 117)
+}
 .controlPanel
   display: grid;
   grid-template-columns 50% 50%
   line-height 45px
 .controlPanel-bg
   background-color #0e0e0e
+.controlPanel-item:hover{
+  background-color rgb(59, 127, 213)
+}
+.easyui-panel{
+  height calc(100vh  - 104px)
+  position: absolute;
+  top: 104px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
 /deep/.datagrid-body
-  height: calc(100vh - 100px) !important
+  height: calc(100vh - 175px) !important
   background-color transparent !important
   overflow-y auto
 /deep/.panel-body
   background-color transparent
+  color #ffffff
 /deep/.datagrid-btable
   color #ffffff
 /deep/.propertygrid .datagrid-group
@@ -108,5 +276,33 @@ export default {
 }
 /deep/#plotPanel>div:nth-of-type(2)>div{
   overflow-y auto important
+}
+/*.superPlot > /deep/.panel{
+  height calc(100vh  - 104px)
+  position: absolute;
+  top: 104px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}*/
+/deep/ .tabs-wrap> .tabs{
+  width 248px
+  display grid
+  grid-template-columns 50% 50%
+  padding: 0;
+}
+/deep/.tabs >li >a{
+  width: 100%
+  border: 0px;
+  padding: 0px;
+}
+
+/deep/.tabs-header {
+
+}
+/deep/ .tabs-wrap> .tabs > .tabs-first{
+  margin:0
+  padding: 0
 }
 </style>

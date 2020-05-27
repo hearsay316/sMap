@@ -6,7 +6,10 @@ import "./plugins/element.js";
 
 Vue.config.productionTip = false;
 import superMap from "./packages/index";
-Vue.use(superMap);
+Vue.use(superMap, {
+  path: "zhge shi dizhi "
+});
+console.log("main.js开始");
 new Vue({
   store,
   router,

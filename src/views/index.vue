@@ -8,6 +8,7 @@
         <img :src="item.meta.icon" :alt="item.meta.title" />
       </div>
     </template>
+    ok
   </div>
 </template>
 

@@ -1,10 +1,15 @@
 <template>
   <div class="rvt">
     <div id="cesiumContainer"></div>
+    <div class="rvt-test">
+      <router-link to="/newDome">切换</router-link>
+    </div>
   </div>
 </template>
 
 <script>
+import { demoSingConfig } from "../config/mapConfig";
+
 let viewer, scene;
 import * as map from "../config/Configuration";
 export default {
@@ -12,7 +17,7 @@ export default {
   data() {
     return {
       url:
-        "http://47.103.125.18:8090/iserver/services/3D-userMap/rest/realspace",
+        "http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace",
       positionXYZ: {
         x: -1209550.6137063126,
         y: 5655779.937735093,
@@ -27,14 +32,18 @@ export default {
     };
   },
   async mounted(obj) {
+    this.Config = demoSingConfig.Config;
     viewer = this.createCesium("cesiumContainer");
     scene = viewer.scene;
+    //{ viewer, url, config, earth, mountedOpenMap, errorOpenMap }
     await this.openMap({
       viewer,
       url: this.url,
-      Config: this.Config,
-      positionXYZ: this.positionXYZ,
-      Angle: this.Angle
+      config: this.Config,
+      earth: {
+        positionXYZ: this.positionXYZ,
+        orientation: this.Angle
+      }
     });
   },
   methods: {
@@ -43,4 +52,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.rvt-test {
+  position: fixed;
+  top: 200px;
+  left: 300px;
+}
+</style>

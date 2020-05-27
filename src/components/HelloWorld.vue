@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// import("../assets/Cesium/Cesium.js") ;
 export default {
   name: "HelloWorld",
   props: {

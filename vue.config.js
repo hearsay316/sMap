@@ -18,11 +18,11 @@ module.exports = {
   },
   configureWebpack: config => {
     config.externals = {
-      Cesium: "Cesium",
+      // Cesium: "Cesium",
       initPlotPanel: "initPlotPanel",
       StylePanel: "StylePanel"
     };
-    if (process.env.VUE_APP_ENV === 'production') {
+    if (process.env.VUE_APP_ENV === "production") {
       // config.plugins.push(new UploadSshPlugin({
       //   host: process.env.host,
       //   username: process.env.name,
@@ -30,5 +30,6 @@ module.exports = {
       //   port: process.env.port
       // }))
     }
-  }
+  },
+  productionSourceMap: false
 };

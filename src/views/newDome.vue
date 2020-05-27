@@ -4,43 +4,38 @@
     <super-map
       ref="superMap"
       :url="url"
-      :position-x-y-z="positionXYZ"
-      :angle="angle"
-      :Config="Config"
+      :config="Config"
       :earth="earth"
       :createWebgl="createWebgl"
       :mountedWebgl="mountedWebgl"
       :mountedOpenMap="mountedOpenMap"
       :errorOpenMap="errorOpenMap"
-      :RegCesiumClickLeft="RegCesiumClickLeft"
-      :RegCesiumClickRight="RegCesiumClickRight"
-      :RegCesiumClickLayer="RegCesiumClickLayer"
+      :regCesiumClickLeft="RegCesiumClickLeft"
+      :regCesiumClickRight="RegCesiumClickRight"
+      :regCesiumClickLayer="RegCesiumClickLayer"
     >
-      <template v-slot:default>
-        <!--单体化的提示框
+      <!--单体化的提示框
         superSingularizationData 数据参数
         -->
+      <div id="bubble" class="bubble">
         <superSingularization
           v-if="showSuperSingularizationData"
           :superSingularizationData="superSingularizationData"
         ></superSingularization>
-      </template>
-      <template v-slot:nav>
-        <!--这个是导航栏
+      </div>
+      <!--这个是导航栏
         v-if="isSuperNav"
         :baseUrl="baseUrl"  导航栏的主要信息 数据
         :picUrl="picUrl"  背景图信息 数据
         @handleClick="handleClick" 点击导航栏的自定义事件
         -->
-        <superNav
-          v-if="isSuperNav"
-          :baseUrl="baseUrl"
-          :picUrl="picUrl"
-          @handleClick="handleClick"
-        ></superNav>
-      </template>
-      <template v-slot:popup>
-        <!--  弹出框
+      <superNav
+        v-if="isSuperNav && baseUrl.length > 0"
+        :baseUrl="baseUrl"
+        :picUrl="picUrl"
+        @handleClick="handleClick"
+      ></superNav>
+      <!--  弹出框
           @handlePopupTitleIco 点击隐藏的自定义函数
           v-if="baseUrlOne.active"   baseUrlOne 是导航栏的baseUrl项
           :baseUrlOne="baseUrlOne"  用来if的数据  baseUrlOne 是导航栏的baseUrl项
@@ -52,73 +47,76 @@
           @measureHeight="measureHeight"
           @clearMeasure="clearMeasure"
         -->
-        <superPopup
-          v-if="baseUrlOne.active"
-          :baseUrlOne="baseUrlOne"
-          :baseUrlItems="baseUrlItems"
-          @handlePopupTitleIco="handlePopupTitleIco"
-          @handleClickLists="handleClickLists"
-        ></superPopup>
-      </template>
-      <template v-slot:plot>
-        <!--
+      <superPopup
+        v-if="isBaseUrlOne"
+        :baseUrlOne="baseUrlOne"
+        :baseUrlItems="baseUrlItems"
+        @handlePopupTitleIco="handlePopupTitleIco"
+        @handleClickLists="handleClickLists"
+      ></superPopup>
+      <!--
         标绘面板
          superPlotIndex  定位的z-index值
          @handlePopupTitleIco 点击隐藏的自定义函数
          -->
-        <superPlot
-          :superPlotIndex="superPlotIndex"
-          @handlePopupTitleIco="clearTitle"
-        ></superPlot>
-      </template>
-      <template v-slot:popupActive>
-        <!-- 救援行动启动的弹出框
-           popupActiveEndDesc  显示的文字
-          -->
-        <popupActiveTitle
-          :popupActiveTitleDesc="popupActiveTitleDesc"
-          :popupActiveBg="popupActiveBg"
-          v-if="baseUrlThree.active"
-        >
-          <div class="popupActive-title-left" @click="popupActiveTitle(1)">
-            是
-          </div>
-          <div class="popupActive-title-right" @click="popupActiveTitle(0)">
-            否
-          </div>
-        </popupActiveTitle>
-      </template>
-      <template v-slot:popupActiveEnd>
-        <!--救援行动结束的体验
+      <superPlot
+        :superPlotIndex="superPlotIndex"
+        @handleControlPanelItem="handleControlPanelItem"
+        @handlePopupTitleIco="clearTitle"
+        @initPlot="myInitPlot"
+      ></superPlot>
+      <!--      <div class="newDome-test">-->
+      <!--        <router-link to="/">点击换</router-link>-->
+      <!--      </div>-->
+      <popupActiveTitle
+        :popupActiveTitleDesc="popupActiveTitleDesc"
+        :popupActiveBg="popupActiveBg"
+        v-if="baseUrlThree.active"
+      >
+        <div class="popupActive-title-left" @click="popupActiveTitle(1)">
+          是
+        </div>
+        <div class="popupActive-title-right" @click="popupActiveTitle(0)">
+          否
+        </div>
+      </popupActiveTitle>
+      <!--救援行动结束的体验
         popupActiveEndDesc  显示的文字
         -->
-        <popupActiveTitle
-          :popupActiveBg="popupActiveBg"
-          :popupActiveTitleDesc="popupActiveEndDesc"
-          v-if="popupActiveTitleDescActive"
-        >
-        </popupActiveTitle>
-      </template>
-      <template v-slot:measure>
-        <superMeasure
-          v-if="isMeasure"
-          :superMeasureData="superMeasureData"
-          @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
-          @handleSuperMeasureActive="handleSuperMeasureActive"
-          class="newDome-measure"
-          :isSuperMeasure="isSuperMeasure"
-        >
-        </superMeasure>
-      </template>
-      <template v-slot:search>
-        <superSearch
-          :showSuperSearchInput="search.showSuperSearchInput"
-          :searchData="search.setLocationFilter"
-          @searchItem="searchItem"
-          @searchValue="searchValue"
-          @modShowSuperSearchInput="modShowSuperSearchInput"
-        ></superSearch>
-      </template>
+      <popupActiveTitle
+        :popupActiveBg="popupActiveBg"
+        :popupActiveTitleDesc="popupActiveEndDesc"
+        v-if="popupActiveTitleDescActive"
+      >
+      </popupActiveTitle>
+      <!--
+      superMeasure 工具栏 测距 测高 侧面积  清除
+      superMeasureData : 数据
+      handleSuperMeasureActiveItem: 点击控制测量工具对应执行的方法
+      handleSuperMeasureActive // 控制测量工具的显示和收缩
+      -->
+      <superMeasure
+        v-if="isMeasure"
+        :superMeasureData="superMeasureData"
+        @handleSuperMeasureActiveItem="handleSuperMeasureActiveItem"
+        @handleSuperMeasureActive="handleSuperMeasureActive"
+        class="newDome-measure"
+      >
+      </superMeasure>
+      <!--      superSearch 搜索
+      search.showSuperSearchInput  是否显示input 框
+      searchData 搜索传入的列表
+      searchItem 点击搜索执行的方法
+      searchValue 搜索data的数据
+      modShowSuperSearchInput 控制是否显示隐藏input的方法
+      -->
+      <superSearch
+        :showSuperSearchInput="search.showSuperSearchInput"
+        :searchData="search.setLocationFilter"
+        @searchItem="searchItem"
+        @searchValue="searchValue"
+        @modShowSuperSearchInput="modShowSuperSearchInput"
+      ></superSearch>
     </super-map>
     <!--首页显示的按钮-->
     <div
@@ -128,6 +126,9 @@
     >
       进入场景
     </div>
+    <!--    <div class="newDome-test">-->
+    <!--      <router-link to="/">点击换</router-link>-->
+    <!--    </div>-->
   </div>
 </template>
 <!--
@@ -136,9 +137,9 @@
 3 等等..
       :RegCesiumClickLayer="RegCesiumClickLayer"
 -->
+<!--suppress JSUnusedGlobalSymbols, JSUnresolvedFunction, JSUnresolvedVariable -->
 <script>
-import { demoConfig, demoSingConfig } from "../config/mapConfig";
-import { setLocation } from "../config/LocationConfig.js";
+import { demoSingConfig } from "../config/mapConfig";
 import {
   viewerCreateFireFighting,
   viewerMountedDeployCart,
@@ -150,16 +151,10 @@ import {
   setView,
   viewerEntitiesAdd
 } from "../config/Configuration";
-import MeasuringConfig from "../config/MeasuringConfig.js";
-let viewer,
-  carts,
-  Fire,
-  handlerDis,
-  handlerArea,
-  handlerHeight,
-  viewerEntities = [];
-import picUrl, { baseUrl, item1 } from "../config/imgIcoConfig";
-// import bg from "../config/bgConfig.js";
+//import MeasuringConfig from "../config/MeasuringConfig.js";
+
+//import picUrl, { item1 } from "../config/imgIcoConfig";
+//import bg from "../config/bgConfig.js";
 
 export default {
   name: "newDome",
@@ -170,26 +165,27 @@ export default {
       isMeasure: false,
       search: {
         showSuperSearchInput: false,
-        setLocation: [...setLocation],
+        // setLocation: [...setLocation],
+        setLocation: () =>
+          import(
+            /* webpackChunkName: "LocationConfig", webpackPrefetch: true */ "../config/LocationConfig.js"
+          ),
         setLocationFilter: []
       },
       isNewDomeTitle: true,
-      picUrl: {
-        ...picUrl
-      },
-      superMeasureData: {
-        ...MeasuringConfig
-      },
-      isSuperMeasure: false,
+      picUrl: {},
+      superMeasureData: "",
       isSuperNav: false,
-      baseUrl: [...baseUrl],
-      baseUrlItems: [...item1],
+      baseUrl: [],
+      baseUrlItems: [],
       superPlotIndex: -1,
+      superPlotTime: 0,
       isRescue: false,
-      popupActiveBg: "xx",
+      popupActiveBg: "111",
       popupActiveEndDesc: "总攻结束",
       popupActiveTitleDesc: "是否发起总攻",
       popupActiveTitleDescActive: false,
+      bgConfig: "",
       Resources: {
         Active: {
           active: false,
@@ -199,16 +195,47 @@ export default {
       }
     };
   },
+  destroyed() {
+    //  Cesium = undefined;
+    console.log("销毁函数执行");
+    console.log("销毁函数执行");
+  },
+  async created() {
+    const imgIcoConfig = () =>
+      import(
+        /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
+      );
+    const MeasuringConfig = () =>
+      import(
+        /* webpackChunkName: "MeasuringConfig", webpackPrefetch: true */ "../config/MeasuringConfig.js"
+      );
+    const res = await import(
+      /* webpackChunkName: "bgConfig", webpackPrefetch: true */ "../config/bgConfig"
+    );
+    this.popupActiveBg = res.default.bg;
+    const setLocation = await this.search.setLocation();
+    this.search.setLocation = setLocation.setLocation;
+    let imgIcoConfigRes = await imgIcoConfig();
+    imgIcoConfigRes = JSON.parse(JSON.stringify(imgIcoConfigRes.data()));
+    this.picUrl = imgIcoConfigRes.bgData;
+    this.baseUrl = imgIcoConfigRes.baseUrl;
+    this.baseUrlItems = imgIcoConfigRes.item1;
+    let MeasuringConfigRes = await MeasuringConfig();
+    MeasuringConfigRes = JSON.parse(
+      JSON.stringify(new MeasuringConfigRes.data())
+    );
+    this.superMeasureData = MeasuringConfigRes;
+  },
   methods: {
     /***
      *
-     * @param search.showSuperSearchInput修改的值
+     * @param value.showSuperSearchInput修改的值
      */
     modShowSuperSearchInput(value) {
       this.search.showSuperSearchInput = value;
     },
     searchItem(item) {
-      setView(viewer.scene, item.position, item.angle);
+      setView(this.viewer.scene, item.position, item.angle, this.Cesium);
       this.search.showSuperSearchInput = false;
       this.isNewDomeTitle ? (this.isNewDomeTitle = false) : void 0;
       !this.isSuperNav ? (this.isSuperNav = true) : void 0;
@@ -225,44 +252,47 @@ export default {
       return {
         measureDis(index) {
           vm.deActiveAll();
-          handlerDis
+          vm.handlerDis
             ? void 0
-            : (handlerDis = viewerHandlerDis(
-                viewer,
+            : (vm.handlerDis = viewerHandlerDis(
+                vm.viewer,
                 0,
                 vm.superMeasureData,
-                index
+                index,
+                vm.Cesium
               ));
-          handlerDis && handlerDis.activate();
+          vm.handlerDis && vm.handlerDis.activate();
         },
         measureArea(index) {
           vm.deActiveAll();
-          handlerArea
+          vm.handlerArea
             ? void 0
-            : (handlerArea = viewerHandlerArea(
-                viewer,
+            : (vm.handlerArea = viewerHandlerArea(
+                vm.viewer,
                 0,
                 vm.superMeasureData,
-                index
+                index,
+                vm.Cesium
               ));
-          handlerArea && handlerArea.activate();
+          vm.handlerArea && vm.handlerArea.activate();
         },
         measureHeight(index) {
           vm.deActiveAll();
-          handlerHeight
+          vm.handlerHeight
             ? void 0
-            : (handlerHeight = viewerHandlerHeight(
-                viewer,
+            : (vm.handlerHeight = viewerHandlerHeight(
+                vm.viewer,
                 0,
                 vm.superMeasureData,
-                index
+                index,
+                vm.Cesium
               ));
-          handlerHeight && handlerHeight.activate();
+          vm.handlerHeight && vm.handlerHeight.activate();
         },
         clearMeasure() {
-          handlerDis && handlerDis.clear();
-          handlerArea && handlerArea.clear();
-          handlerHeight && handlerHeight.clear();
+          vm.handlerDis && vm.handlerDis.clear();
+          vm.handlerArea && vm.handlerArea.clear();
+          vm.handlerHeight && vm.handlerHeight.clear();
         }
       };
     },
@@ -287,16 +317,32 @@ export default {
       // 首页专场的视角移动
       this.isNewDomeTitle = false;
       // 控制按钮
-      setView(viewer, this.positionXYZ, this.angle);
+      setView(this.viewer, this.positionXYZ, this.angle, this.Cesium);
       this.isSuperNav = true;
       // 导航栏显示
       this.isMeasure = true;
       //工具栏显示
     },
-    clearTitle(value) {
+    clearTitle() {
       // 控制Plot 隐藏显示
       this.superPlotIndex = -1;
       this.handlePopupTitleIco(2);
+    },
+    handleControlPanelItem(index) {
+      // 1  清除动态绘制
+      // Plot.plottingLayer.removeAll();
+      // 2  清除消除的状态
+      // Plot.plotDrawControl.deactivate();
+      // 3 清除选中的绘制
+      index === 1
+        ? this.Plot.plotDrawControl.deactivate()
+        : index === 2
+        ? this.Plot.plottingLayer.removeAll()
+        : index === 3
+        ? this.Plot.plottingLayer.removeGeoGraphicObject(
+            this.Plot.plottingLayer.selectedFeature
+          )
+        : void 0;
     },
     handlePopupTitleIco(index) {
       // 控制导航栏的 Plot 高亮显示
@@ -306,19 +352,19 @@ export default {
     navHandleClick() {
       let vm = this;
       return {
-        navHandleClick1(itemIndex) {
+        navHandleClick1() {
           return true;
         },
-        navHandleClick2(itemIndex) {
+        navHandleClick2() {
           return (vm.superPlotIndex = 666);
         },
-        navHandleClick3(itemIndex) {
+        navHandleClick3() {
           return vm.rescueActive ? (vm.isRescue = true) : false;
         },
-        navHandleClick0(itemIndex) {
+        navHandleClick0() {
           return true;
         },
-        navHandleClick4(itemIndex) {
+        navHandleClick4() {
           return true;
         }
       };
@@ -333,8 +379,8 @@ export default {
       // 清除所有状态
       this.baseUrl.forEach((item, index) => {
         isNavHandleClick && itemIndex === index
-          ? (item.active = 1)
-          : (item.active = 0);
+          ? (item.active = true)
+          : (item.active = false);
       });
     },
     popupActiveTitle(value) {
@@ -347,15 +393,16 @@ export default {
     },
     async rescue() {
       let isRescue = await viewerCreateFireFighting(
-        viewer,
+        this.viewer,
         this.MapFireXYZ,
         this.positionCarts,
-        carts,
-        Fire
+        this.carts,
+        this.fire,
+        this.Cesium
       );
       this.popupActiveTitleDescActive = true;
       isRescue && this.clearStatusAll(1, 1);
-      isRescue && this.clearEntities(carts);
+      isRescue && this.clearEntities(this.carts);
       let time = setTimeout(() => {
         clearTimeout(time);
         this.popupActiveTitleDescActive = false;
@@ -373,23 +420,25 @@ export default {
     },
     "Entities[object Array]"(Entities) {
       Entities.forEach(entity => {
-        viewer.entities.remove(entity);
+        this.viewer.entities.remove(entity);
       });
     },
     "Entities[object Object]"(Entities) {
-      viewer.entities.remove(Entities);
+      this.viewer.entities.remove(Entities);
     },
     clearStatusAll(baseUrl, baseUrlItems) {
+      // 清除baseUrl的值全部设置false
       baseUrl &&
         this.baseUrl.forEach(item => {
           item.active = false;
         });
-
+      // 清除baseUrlItems的值全部设置成false
       baseUrlItems &&
         this.baseUrlItems.forEach(item => {
           item.active = false;
         });
     },
+    // superPopup 的列表的执行的函数回调
     handleClickLists(index) {
       let arrFUnc = [
         "addMedical",
@@ -398,23 +447,34 @@ export default {
         "addSupplies",
         "addCommand"
       ];
+      // 获取函数名字
       let baseUrlItemFucName = this.baseUrlItems[index]?.fun;
+      // 获取函数体
       let fuc = this.baseUrlItemsFun();
+      //  判断index 为7 indexthis.baseUrlItems[index].active  清除一下
       index !== 7 ? (this.baseUrlItems[index].active = true) : void 0;
+      // 如何能找到这个函数名的函数体 就把他执行了 else 执行的默认函数
       arrFUnc.includes(baseUrlItemFucName)
         ? fuc.addFuc(index)
         : fuc[baseUrlItemFucName](index);
     },
+    //handleClickLists 所有函数体
     baseUrlItemsFun() {
+      // 存一下this
       let vm = this;
       return {
-        addFire(index) {
+        addFire() {
           // vm.baseUrlItems[index].active = true;
-          Fire = viewerMountedFire(viewer, vm.MapFireXYZ);
+          console.log(vm.Cesium);
+          vm.fire = viewerMountedFire(vm.viewer, vm.MapFireXYZ, vm.Cesium);
         },
-        addCarts(index) {
+        addCarts() {
           // vm.baseUrlItems[index].active = true;
-          carts = viewerMountedDeployCart(viewer, vm.positionCarts);
+          vm.carts = viewerMountedDeployCart(
+            vm.viewer,
+            vm.positionCarts,
+            vm.Cesium
+          );
         },
         addFuc(index) {
           console.log("addFuc");
@@ -422,22 +482,29 @@ export default {
           vm.Resources.Active.index = index;
           vm.Resources.Active.url = vm.baseUrlItems[index].url;
         },
-        clearMeasure(index) {
-          viewerEntities.map(item => {
-            viewer.entities.remove(item);
+        clearMeasure() {
+          vm.viewerEntities.map(item => {
+            vm.viewer.entities.remove(item);
           });
-          carts && vm.clearEntities(carts);
-          Fire && viewer.scene.primitives.remove(Fire.FireParticleSystem);
+          vm.carts && vm.clearEntities(vm.carts);
+          vm.fire &&
+            vm.viewer.scene.primitives.remove(vm.fire.FireParticleSystem);
           vm.clearStatusAll(0, 1);
+          // 清除状态
+          vm.Plot.plottingLayer.removeAll();
+          // 清除消除的状态
+          vm.Plot.plotDrawControl.deactivate();
         }
       };
     },
+    //handler测距 测高 测面积的清除
     deActiveAll() {
-      handlerDis && handlerDis.deactivate();
-      handlerArea && handlerArea.deactivate();
-      handlerHeight && handlerHeight.deactivate();
+      this.handlerDis && this.handlerDis.deactivate();
+      this.handlerArea && this.handlerArea.deactivate();
+      this.handlerHeight && this.handlerHeight.deactivate();
     },
     RegCesiumClickLeft(e, position) {
+      console.log("RegCesiumClickLeft执行了");
       let obj = {
         show: true,
         // point: {
@@ -458,11 +525,12 @@ export default {
       let viewerEntity =
         this.Resources.Active.active &&
         viewerEntitiesAdd(
-          viewer,
+          this.viewer,
           { x: position.x, y: position.y, z: this.Z },
-          obj
+          obj,
+          this.Cesium
         );
-      viewerEntities.push(viewerEntity);
+      this.viewerEntities.push(viewerEntity);
       viewerEntity ? (this.Resources.Active.active = false) : void 0;
       viewerEntity
         ? (this.baseUrlItems[this.Resources.Active.index].active = false)
@@ -471,22 +539,43 @@ export default {
     RegCesiumClickRight(e, position) {
       console.log("Right", e, position);
     },
-    mountedWebgl(v) {
-      viewer = v;
-      window.scene = viewer.scene;
-      window.qaz = scene.Cartesian3;
+    mountedWebgl(v, C) {
+      // 把viewer 挂在this 上
+      this.viewer = v;
+      // 把Cesium 挂在 this
+      this.Cesium = C;
+      this.viewerEntities = [];
+      // 回调myInitPlot Plot是动态加载的js 执行需要在回调之后,所以我们要回调三次
+      this.myInitPlot(v, C);
+      // window.scene = this.viewer.scene;
+      // window.qaz = scene.Cartesian3;
     },
+    // 打开地图的回调
     mountedOpenMap(viewer, layers) {
+      this.myInitPlot();
+    },
+    // 创建动态绘标
+    myInitPlot(v, C) {
+      //global.Cesium 需要try 一下不然报错 需要改动成封装到组件里
       try {
-        InitPlot(viewer, this.serverUrl);
+        console.log(this.superPlotTime);
+        if (this.superPlotTime === 2) {
+          if (typeof this.Cesium != "undefined") {
+            this.Plot = InitPlot(this.viewer, this.serverUrl, this.Cesium);
+          }
+        }
+        this.superPlotTime += 1;
       } catch (e) {
-        console.log(e, layers);
+        console.log(e);
       }
     },
+    // 创建webgl的之前又vm 可以调用里面的方法
     createWebgl(vm) {
       // vm是 superMap的this
     },
+    // 错误的error
     errorOpenMap(e) {},
+    // 创建鼠标的动态事件 (单体化)
     RegCesiumClickLayer(feature) {
       this.superSingularizationData = {
         ...this.search.setLocation[feature.SMID - 0 - 1]
@@ -520,10 +609,13 @@ export default {
   },
   computed: {
     baseUrlOne() {
-      return this.baseUrl[1];
+      return this.baseUrl.length > 0 ? this.baseUrl[1] : undefined;
+    },
+    isBaseUrlOne() {
+      return this.baseUrl.length > 0 ? this.baseUrl[1].active : undefined;
     },
     baseUrlThree() {
-      return this.baseUrl[3];
+      return this.baseUrl.length > 0 ? this.baseUrl[3] : [];
     },
     rescueActive() {
       return this.baseUrlItems[0].active && this.baseUrlItems[1].active;
@@ -531,12 +623,6 @@ export default {
     showSuperSingularizationData() {
       return Object.keys(this.superSingularizationData).length > 0;
     }
-  },
-  created() {
-    // this.popupActiveBg().then(res => {
-    //   console.log(res);
-    //   this.popupActiveBg = res.default.bg;
-    // });
   }
 };
 </script>
@@ -544,6 +630,13 @@ export default {
 <style lang="stylus">
 .newDome .cesium-viewer-navigationContainer
     display none
+.newDome-test
+  position fixed
+  top 100px
+  left 400px
+  width 100px
+  height 100px
+  background-color #00a65a
 .newDome
     position relative
     width:100%
@@ -552,7 +645,7 @@ export default {
   .newDome-title
       position absolute
       top 20px
-      width 64px
+      width 84px
       height 64px
       line-height 64px
       border-radius 8px
