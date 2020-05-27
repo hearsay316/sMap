@@ -116,23 +116,18 @@ export default {
         document.getElementsByTagName("body")[0].appendChild(script);
       });
     }, // 递归是
-    scriptAdd(arr) {
+    urlUpRecursive(arr) {
       const vm = this;
       let index = 0,
         dataIndex = 0;
-      async function next(arr, index, dataIndex) {
-        if (
-          arr.length === index + 1 &&
-          arr[arr.length - 1].length === dataIndex
-        ) {
+      async function next(arr, index) {
+        console.log(index, "indexindexindex");
+        if (arr.length === index) {
           return { type: 1 };
         }
-        if (arr[index].length === dataIndex) {
-          return next(arr, ++index, 0);
-        }
-        let data = await vm.processUrl(arr[index][dataIndex++]);
+        let data = await vm.processUrl(arr[index++]);
         if (data === 1) {
-          return await next(arr, index, dataIndex);
+          return await next(arr, index);
         }
       }
       return next(arr, index, dataIndex);
@@ -172,7 +167,7 @@ export default {
       ];
       // 当页面加载完成才开始执行这个
       setTimeout(() => {
-        this.urlUp(Data).then(
+        this.urlUpRecursive(Data).then(
           res => {
             this.$emit("initPlot");
           },

@@ -35,7 +35,7 @@ export default {
     let arr = [
       [
         "https://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
-        "webgl/examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
+        "https://cdn.j6375x.cn/cdn/superMap//examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
         "https://at.alicdn.com/t/font_1711360_ju54515e55a.css",
         "https://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
         "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
