@@ -34,13 +34,13 @@ export default {
     // css从上到下会有覆盖,所以要和写在页面中的时候相反
     let arr = [
       [
-        "http://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
+        "https://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
         "webgl/examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
-        "http://at.alicdn.com/t/font_1711360_ju54515e55a.css",
-        "http://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
-        "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
-        "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
-        "http://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
+        "https://at.alicdn.com/t/font_1711360_ju54515e55a.css",
+        "https://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
+        "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
+        "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
+        "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
       ]
     ];
     console.log("开始加载Cesium函数");
