@@ -1,15 +1,16 @@
 stages:
   - buildProd
-cache:
-  key:  "%CI_BUILD_REF_NAME%"
-  paths:
-   - node_modules/
+#cache:
+#  key:  "%CI_BUILD_REF_NAME%"
+#  paths:
+#   - node_modules/
 prod:
   stage: buildProd
   only:
     - release
   script:
     - cnpm i;
+    - git remote set-head origin release;
     - npm run build;
     - rm -rf /home/www/webgl/*;
     - cp -r dist/* /home/www/webgl;
