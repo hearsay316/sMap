@@ -24,7 +24,7 @@ export default {
     return {
       layerTitle: "",
       url:
-        "http://47.103.125.18:8090/iserver/services/3D-supermap03261643/rest/realspace",
+        "https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace",
       positionXYZ: {
         //地球来的地址
         positionXYZ: {
@@ -42,7 +42,7 @@ export default {
         name: "Test4",
         setQueryParameter: {
           url:
-            "http://47.103.125.18:8090/iserver/services/data-ditie/rest/data",
+            "https://47.103.125.18:8443/iserver/services/data-ditie/rest/data",
           isMerge: true,
           dataSourceName: "Test4"
         }

@@ -504,7 +504,7 @@ export function openMap(obj, Cesium) {
           //   console.log(layer,layers,layer===layers[0])
           // layer(scene, "Test", {
           //   url:
-          //     "http://47.103.125.18:8090/iserver/services/data-userMap/rest/data",
+          //     "https://47.103.125.18:8443/iserver/services/data-userMap/rest/data",
           //   dataSourceName: "testMap",
           //   dataSetName: "New_Region",
           //   keyWord: "SmID"
