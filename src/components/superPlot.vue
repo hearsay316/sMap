@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       superTitleDesc: "路径规划",
-      isControlPanel: true
+      isControlPanel: true,
+      resourcesMountedTime: null
     };
   },
   mounted() {
@@ -147,6 +148,7 @@ export default {
         : void 0;
     },
     resourcesMounted() {
+      clearInterval(this.resourcesMountedTime);
       /*这个顺序不能乱, 是根据script标签的加载顺序调成的,测试自会后是加载到vue的mounted函数可以适应同页面多组件多渲染不冲突(待确认)*/
       let Data = [
         "colorpicker/css/colorpicker.css",
@@ -165,8 +167,9 @@ export default {
         "./StylePanel.js",
         "./PlotPanel.js"
       ];
-      // 当页面加载完成才开始执行这个
-      setTimeout(() => {
+      console.log(typeof Cesium === "object", 'typeof Cesium === "object"');
+      if (typeof Cesium === "object") {
+        console.log(this.resourcesMountedTime);
         this.urlUpRecursive(Data).then(
           res => {
             this.$emit("initPlot");
@@ -175,7 +178,11 @@ export default {
             console.log(error);
           }
         );
-      }, 1000);
+      } else {
+        this.resourcesMountedTime = setInterval(() => {
+          this.resourcesMounted();
+        }, 100);
+      }
     }
   },
   components: {

@@ -201,32 +201,36 @@ export default {
     console.log("销毁函数执行");
   },
   async created() {
-    const imgIcoConfig = () =>
-      import(
-        /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
-      );
-    const MeasuringConfig = () =>
-      import(
-        /* webpackChunkName: "MeasuringConfig", webpackPrefetch: true */ "../config/MeasuringConfig.js"
-      );
-    const res = await import(
-      /* webpackChunkName: "bgConfig", webpackPrefetch: true */ "../config/bgConfig"
-    );
-    this.popupActiveBg = res.default.bg;
-    const setLocation = await this.search.setLocation();
-    this.search.setLocation = setLocation.setLocation;
-    let imgIcoConfigRes = await imgIcoConfig();
-    imgIcoConfigRes = JSON.parse(JSON.stringify(imgIcoConfigRes.data()));
-    this.picUrl = imgIcoConfigRes.bgData;
-    this.baseUrl = imgIcoConfigRes.baseUrl;
-    this.baseUrlItems = imgIcoConfigRes.item1;
-    let MeasuringConfigRes = await MeasuringConfig();
-    MeasuringConfigRes = JSON.parse(
-      JSON.stringify(new MeasuringConfigRes.data())
-    );
-    this.superMeasureData = MeasuringConfigRes;
+    await this.init();
   },
   methods: {
+    async init() {
+      // 初始化函数
+      const imgIcoConfig = () =>
+        import(
+          /* webpackChunkName: "imgIcoConfig", webpackPrefetch: true */ "../config/imgIcoConfig"
+        );
+      const MeasuringConfig = () =>
+        import(
+          /* webpackChunkName: "MeasuringConfig", webpackPrefetch: true */ "../config/MeasuringConfig.js"
+        );
+      const res = await import(
+        /* webpackChunkName: "bgConfig", webpackPrefetch: true */ "../config/bgConfig"
+      );
+      this.popupActiveBg = res.default.bg;
+      const setLocation = await this.search.setLocation();
+      this.search.setLocation = setLocation.setLocation;
+      let imgIcoConfigRes = await imgIcoConfig();
+      imgIcoConfigRes = JSON.parse(JSON.stringify(imgIcoConfigRes.data()));
+      this.picUrl = imgIcoConfigRes.bgData;
+      this.baseUrl = imgIcoConfigRes.baseUrl;
+      this.baseUrlItems = imgIcoConfigRes.item1;
+      let MeasuringConfigRes = await MeasuringConfig();
+      MeasuringConfigRes = JSON.parse(
+        JSON.stringify(new MeasuringConfigRes.data())
+      );
+      this.superMeasureData = MeasuringConfigRes;
+    },
     /***
      *
      * @param value.showSuperSearchInput修改的值
@@ -631,28 +635,28 @@ export default {
 .newDome .cesium-viewer-navigationContainer
     display none
 .newDome-test
-  position fixed
-  top 100px
-  left 400px
-  width 100px
-  height 100px
-  background-color #00a65a
+    position fixed
+    top 100px
+    left 400px
+    width 100px
+    height 100px
+    background-color #00a65a
 .newDome
     position relative
     width:100%
     height:100%
     overflow hidden
   .newDome-title
-      position absolute
-      top 20px
-      width 84px
-      height 64px
-      line-height 64px
-      border-radius 8px
-      color #ffffff
-      background-color #0e2d5f
+    position absolute
+    top 20px
+    width 84px
+    height 64px
+    line-height 64px
+    border-radius 8px
+    color #ffffff
+    background-color #0e2d5f
   .newDome-title:hover
-      box-shadow 3px 2px 20px #213d96
+    box-shadow 3px 2px 20px #213d96
   .newDome-measure
     position absolute
     top 10px
