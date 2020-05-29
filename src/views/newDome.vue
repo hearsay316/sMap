@@ -585,6 +585,28 @@ export default {
         ...this.search.setLocation[feature.SMID - 0 - 1]
           .superSingularizationData
       };
+    },
+    clearObj(obj) {
+      if (typeof obj !== "object") {
+        return;
+      }
+      let arr = Object.keys(obj);
+      let len = Object.keys(obj).length;
+      for (let i = 0; i < len; i++) {
+        let item = arr[i];
+        if (Object.prototype.toString.call(obj[item]) === "[object String]") {
+          obj[item] = "";
+        }
+        if (Object.prototype.toString.call(obj[item]) === "[object Number]") {
+          obj[item] = 0;
+        }
+        if (Object.prototype.toString.call(obj[item]) === "[object Object]") {
+          this.clearObj(obj[item]);
+        }
+        if (Object.prototype.toString.call(obj[item]) === "[object Array]") {
+          obj[item] = [];
+        }
+      }
     }
   },
   components: {
