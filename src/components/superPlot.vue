@@ -121,6 +121,7 @@ export default {
       const vm = this;
       let index = 0;
       async function next(arr, index) {
+        console.log(index, "index");
         if (arr.length === index) {
           return { type: 1 };
         }
@@ -167,6 +168,11 @@ export default {
       ];
       console.log(typeof Cesium === "object", 'typeof Cesium === "object"');
       if (typeof Cesium === "object") {
+        try {
+          console.log(Object.keys(Cesium).length);
+        } catch (e) {
+          console.log(e);
+        }
         console.log(this.resourcesMountedTime);
         this.urlUpRecursive(Data).then(
           res => {
@@ -246,10 +252,13 @@ export default {
   left: 0;
   right: 0;
   width: 100%;
+  overflow hidden
 }
-
+/deep/.datagrid-view{
+    height: calc(100vh - 138px) !important
+}
 /deep/.datagrid-body
-  height: calc(100vh - 175px) !important
+  height: calc(100vh - 164px) !important
   background-color transparent !important
   overflow-y auto
 /deep/.panel-body
