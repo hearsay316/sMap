@@ -102,7 +102,7 @@ function analysisSymbolTree(symbolLibManager) {
   return treeData;
 }
 
-function createDrawNodes(treeNode, iconNode, drawControl, serverUrl) {
+async function createDrawNodes(treeNode, iconNode, drawControl, serverUrl) {
   var drawNodeClick = function() {
     if (drawControl !== null) {
       drawControl.deactivate();
@@ -142,6 +142,11 @@ function createDrawNodes(treeNode, iconNode, drawControl, serverUrl) {
         //图片
         var img = document.createElement("img");
         let isHttp = drawData[i].icon.includes("http:");
+        // try {
+        //   await fetch(drawData[i].icon);
+        // } catch (e) {
+        //
+        // }
         if (isHttp) {
           let subStr = new RegExp("http", "i"); //创建正则表达式对象,不区分大小写
           drawData[i].icon = drawData[i].icon.replace(subStr, "https"); //把'is'替换为空字符串
@@ -150,11 +155,9 @@ function createDrawNodes(treeNode, iconNode, drawControl, serverUrl) {
         //文本
         var text = document.createElement("div");
         text.innerHTML = drawData[i].symbolName;
-
         drawNode.appendChild(img);
         drawNode.appendChild(text);
         td.appendChild(drawNode);
-
         tr.appendChild(td);
       }
       i++;

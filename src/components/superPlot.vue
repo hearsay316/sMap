@@ -121,7 +121,6 @@ export default {
       const vm = this;
       let index = 0;
       async function next(arr, index) {
-        console.log(index, "index");
         if (arr.length === index) {
           return { type: 1 };
         }
@@ -147,7 +146,7 @@ export default {
         : void 0;
     },
     resourcesMounted() {
-      clearInterval(this.resourcesMountedTime);
+      this.resourcesMountedTime && clearInterval(this.resourcesMountedTime);
       /*这个顺序不能乱, 是根据script标签的加载顺序调成的,测试自会后是加载到vue的mounted函数可以适应同页面多组件多渲染不冲突(待确认)*/
       let Data = [
         "colorpicker/css/colorpicker.css",
@@ -168,15 +167,10 @@ export default {
       ];
       console.log(typeof Cesium === "object", 'typeof Cesium === "object"');
       if (typeof Cesium === "object") {
-        try {
-          console.log(Object.keys(Cesium).length);
-        } catch (e) {
-          console.log(e);
-        }
-        console.log(this.resourcesMountedTime);
         this.urlUpRecursive(Data).then(
           res => {
             this.$emit("initPlot");
+            this.resourcesMountedTime = null;
           },
           error => {
             console.log(error);
