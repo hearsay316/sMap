@@ -119,10 +119,8 @@ export default {
     }, // 递归是
     urlUpRecursive(arr) {
       const vm = this;
-      let index = 0,
-        dataIndex = 0;
+      let index = 0;
       async function next(arr, index) {
-        console.log(index, "indexindexindex");
         if (arr.length === index) {
           return { type: 1 };
         }
@@ -131,7 +129,7 @@ export default {
           return await next(arr, index);
         }
       }
-      return next(arr, index, dataIndex);
+      return next(arr, index);
     },
     // 并发
     urlUp(arr) {
