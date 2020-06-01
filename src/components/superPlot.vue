@@ -69,9 +69,7 @@ export default {
     superPlotIsCesiumInit(newP) {
       this.superPlotIsCesiumUse = true;
       console.log(new Date(), 1);
-      // this.resourcesMounted()
       const basePathInit = this.basePathInit();
-      this.$emit("initPlot");
       this.urlUpRecursive(basePathInit).then(
         res => {
           this.$emit("initPlot");
@@ -113,13 +111,24 @@ export default {
     },
     handleControlPanel(type) {
       this.isControlPanel = !this.isControlPanel;
-      if (type === "stylePanel") {
-        this.$refs.plotPanel.style.display = "none";
-        this.$refs.stylePanel.parentNode.style.display = "block";
-      }
-      if (type === "plotPanel") {
-        this.$refs.plotPanel.style.display = "block";
-        this.$refs.stylePanel.parentNode.style.display = "none";
+      console.log(this.$refs.plotPanel);
+      let panel = this.$refs.stylePanel.parentNode.className;
+      if (panel === "panel") {
+        if (type === "stylePanel") {
+          this.$refs.plotPanel.style.display = "none";
+          this.$refs.stylePanel.parentNode.style.display = "block";
+        }
+        if (type === "plotPanel") {
+          this.$refs.plotPanel.style.display = "block";
+          this.$refs.stylePanel.parentNode.style.display = "none";
+        }
+      } else {
+        if (type === "stylePanel") {
+          this.$refs.plotPanel.style.display = "none";
+        }
+        if (type === "plotPanel") {
+          this.$refs.plotPanel.style.display = "block";
+        }
       }
     },
     handlePopupTitleIco(value) {

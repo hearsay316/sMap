@@ -105,7 +105,6 @@ export function InitPlot(viewer, serverUrl, Cesium) {
   });
 
   const plotting = Cesium.Plotting.getInstance(serverUrl, scene);
-
   const stylePanel = new StylePanel("stylePanel", plotEditControl, plotting);
   // 标绘面板
   initPlotPanel(
