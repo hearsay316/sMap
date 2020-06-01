@@ -26,32 +26,29 @@ export default {
     regCesiumClickRight: Function
   },
   async mounted() {
-    typeof Cesium != "undefined" &&
-      this.$refs.superMap &&
-      (await this.Init(Cesium)); // 切换页面js 已经创建 所以就不用在创建dom 直接执行渲染代码
+    await this.createCesiumInit();
   },
-  async created() {
-    // css从上到下会有覆盖,所以要和写在页面中的时候相反
-    console.log(this._Cesium, "_Cesium_Cesium_Cesium");
-    let arr = [
-      "https://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
-      "https://cdn.j6375x.cn/cdn/superMap//examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
-      "https://at.alicdn.com/t/font_1711360_ju54515e55a.css",
-      "https://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
-      "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
-      "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
-      "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
-    ];
-    let basePathInit = this.basePathInit();
-    console.log("开始加载Cesium函数", basePathInit, arr);
-    typeof Cesium === "undefined" &&
-      this.urlUpRecursive(basePathInit).then(async res => {
-        console.log("完成加载Cesium函数");
-        global.Cesium = Cesium;
-        this.$refs.superMap && (await this.Init(window.Cesium));
-      });
-  },
+  async created() {},
   methods: {
+    async createCesiumInit() {
+      // typeof Cesium != "undefined" &&
+      //   this.$refs.superMap &&
+      //   (await this.Init(Cesium)); // 切换页面js 已经创建 所以就不用在创建dom 直接执行渲染代码
+      // css从上到下会有覆盖,所以要和写在页面中的时候相反
+      let basePathInit = this.basePathInit();
+      console.log("开始加载Cesium函数");
+      if (typeof Cesium === "undefined") {
+        try {
+          await this.urlUpRecursive(basePathInit);
+          global.Cesium = Cesium;
+          this.$refs.superMap && (await this.Init(window.Cesium));
+        } catch (e) {
+          console.log("加载Cesium函数失败");
+        }
+      } else {
+        this.$refs.superMap && (await this.Init(window.Cesium));
+      }
+    },
     basePathInit() {
       const { path } = this._Cesium();
       if (!path) {
@@ -62,13 +59,12 @@ export default {
     },
     "path[object String]"() {},
     "path[object Array]"(path) {
-      console.log(path, "dddddddddddddddddd");
       // url正则
-      const URL_REGULAR_EXPRESSION = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
-      const objExp = new RegExp(URL_REGULAR_EXPRESSION);
-      path.map(url => {
-        console.log(objExp.test(url), "dddddddddddddddddd");
-      });
+      // const URL_REGULAR_EXPRESSION = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+      // const objExp = new RegExp(URL_REGULAR_EXPRESSION);
+      // path.map(url => {
+      //   console.log(objExp.test(url), "dddddddddddddddddd");
+      // });
       return path;
     },
     async Init(Cesium) {
@@ -188,6 +184,7 @@ export default {
       ScreenSpaceEventType.LEFT_DOUBLE_CLICK,
       KeyboardEventModifier.SHIFT
     );
+    //window.Cesium = undefined;
     this.viewer.destroy && this.viewer.destroy();
     console.log("删除页面的数据防止数据出错");
   }

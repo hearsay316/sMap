@@ -1,6 +1,5 @@
 function initPlotPanel(div, serverUrl, drawControl, plotEditControl, plotting) {
   var plotPanel = document.getElementById(div);
-
   var treeNodeStyle = document.createElement("div");
   treeNodeStyle.style.height = "50%";
   treeNodeStyle.style.width = "100%";

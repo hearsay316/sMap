@@ -13,25 +13,25 @@
           清除绘制
         </div>
       </div>
-      <!--      <div class="controlPanel">-->
-      <!--        <div-->
-      <!--          @click="handleControlPanel"-->
-      <!--          :class="{ 'controlPanel-bg': isControlPanel }"-->
-      <!--        >-->
-      <!--          标绘面板-->
-      <!--        </div>-->
-      <!--        <div-->
-      <!--          @click="handleControlPanel"-->
-      <!--          :class="{ 'controlPanel-bg': !isControlPanel }"-->
-      <!--        >-->
-      <!--          属性面板-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div class="controlPanel">
+        <div
+          @click="handleControlPanel('plotPanel')"
+          :class="{ 'controlPanel-bg': isControlPanel }"
+        >
+          标绘面板
+        </div>
+        <div
+          @click="handleControlPanel('stylePanel')"
+          :class="{ 'controlPanel-bg': !isControlPanel }"
+        >
+          属性面板
+        </div>
+      </div>
     </div>
     <div class="easyui-panel">
       <div class="easyui-tabs" style="width: 100%;height: 100%">
-        <div id="plotPanel" v-show="isControlPanel" title="标绘面板"></div>
-        <div id="stylePanel" title="属性面板"></div>
+        <div ref="plotPanel" id="plotPanel" title="标绘面板"></div>
+        <div ref="stylePanel" id="stylePanel" title="属性面板"></div>
       </div>
     </div>
   </div>
@@ -40,19 +40,6 @@
 <script>
 export default {
   name: "superPlot",
-  props: {
-    superPlotIndex: Number,
-    superPlotIsCesium: Boolean
-  },
-  watch: {
-    superPlotIsCesium: {
-      handler: function(newP, old) {
-        console.log(newP, old, "newP,oldnewP,oldnewP,old");
-      },
-      deep: true,
-      immediate: true
-    }
-  },
   data() {
     return {
       superTitleDesc: "路径规划",
@@ -61,10 +48,40 @@ export default {
       superPlotIsCesiumUse: false
     };
   },
+  props: {
+    superPlotIndex: Number,
+    superPlotIsCesium: Boolean
+  },
+  watch: {
+    superPlotIsCesium: {
+      handler: function(newP, old) {
+        newP && !this.superPlotIsCesiumUse && this.superPlotIsCesiumInit(newP);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+
   mounted() {
     this.Init();
   },
   methods: {
+    superPlotIsCesiumInit(newP) {
+      this.superPlotIsCesiumUse = true;
+      console.log(new Date(), 1);
+      // this.resourcesMounted()
+      const basePathInit = this.basePathInit();
+      this.$emit("initPlot");
+      this.urlUpRecursive(basePathInit).then(
+        res => {
+          this.$emit("initPlot");
+          this.resourcesMountedTime = null;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
     basePathInit() {
       const { plotBasePath } = this._Cesium();
       if (!plotBasePath) {
@@ -76,18 +93,14 @@ export default {
     },
     "plotBasePath[object String]"() {},
     "plotBasePath[object Array]"(path) {
-      console.log(path, "dddddddddddddddddd");
       // url正则
       const URL_REGULAR_EXPRESSION = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
       const objExp = new RegExp(URL_REGULAR_EXPRESSION);
-      path.map(url => {
-        console.log(objExp.test(url), "dddddddddddddddddd");
-      });
       return path;
     },
     Init() {
       this.deleteSeleGeo();
-      this.resourcesMounted();
+      // this.resourcesMounted();
     },
     deleteSeleGeo() {
       document.addEventListener("keydown", event => {
@@ -98,8 +111,16 @@ export default {
     handleControlPanelItem(index) {
       this.$emit("handleControlPanelItem", index);
     },
-    handleControlPanel() {
+    handleControlPanel(type) {
       this.isControlPanel = !this.isControlPanel;
+      if (type === "stylePanel") {
+        this.$refs.plotPanel.style.display = "none";
+        this.$refs.stylePanel.parentNode.style.display = "block";
+      }
+      if (type === "plotPanel") {
+        this.$refs.plotPanel.style.display = "block";
+        this.$refs.stylePanel.parentNode.style.display = "none";
+      }
     },
     handlePopupTitleIco(value) {
       this.$emit("handlePopupTitleIco", value);
@@ -197,8 +218,8 @@ export default {
         "./PlotPanel.js"
       ];
       const basePathInit = this.basePathInit();
-      console.log(typeof Cesium === "object", 'typeof Cesium === "object"');
       if (typeof Cesium === "object") {
+        console.log(new Date(), 2);
         this.urlUpRecursive(basePathInit).then(
           res => {
             this.$emit("initPlot");
@@ -232,6 +253,7 @@ export default {
     arrScript.forEach(script => {
       document.getElementsByTagName("body")[0].removeChild(script);
     });
+    console.log("删除成功");
   }
 };
 </script>
@@ -252,7 +274,7 @@ export default {
   top 0
   left 0
 #plotPanel
-  height calc(100% - 150px)
+  height calc(100vh  - 147px)!important
   overflow: hidden;
 .controlPanel-item{
   border-top 1px solid rgb(97, 119, 117)
@@ -271,22 +293,15 @@ export default {
   background-color rgb(59, 127, 213)
 }
 .easyui-panel{
-  height calc(100vh  - 104px)
+  height calc(100vh  - 147px)
   position: absolute;
-  top: 104px;
+  top: 147px;
   bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
   overflow hidden
 }
-/deep/.datagrid-view{
-    height: calc(100vh - 138px) !important
-}
-/deep/.datagrid-body
-  height: calc(100vh - 164px) !important
-  background-color transparent !important
-  overflow-y auto
 /deep/.panel-body
   background-color transparent
   color #ffffff
@@ -295,13 +310,25 @@ export default {
 /deep/.propertygrid .datagrid-group
   background-color transparent
   color #ffffff
-/deep/#stylePanel
-    width 250px
 /deep/.ztree li a
   color #ffffff
+/deep/.tabs-panels{
+  height calc(100vh  - 152px)!important
+}
+/deep/.datagrid-view{
+    height: calc(100vh - 138px) !important
+}
+  // 147+25 72
+/deep/.datagrid-body
+  height: calc(100vh - 180px) !important
+  background-color transparent !important
+  overflow-y auto
+
+/deep/#stylePanel
+    width 250px
+
 /deep/#plotPanel>div:nth-of-type(1){
   overflow hidden !important
-
 }
 /deep/#plotPanel>div:nth-of-type(2){
   overflow hidden !important
@@ -312,15 +339,7 @@ export default {
 /deep/#plotPanel>div:nth-of-type(2)>div{
   overflow-y auto important
 }
-/*.superPlot > /deep/.panel{
-  height calc(100vh  - 104px)
-  position: absolute;
-  top: 104px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-}*/
+
 /deep/ .tabs-wrap> .tabs{
   width 248px
   display grid
@@ -333,11 +352,15 @@ export default {
   padding: 0px;
 }
 
-/deep/.tabs-header {
 
-}
 /deep/ .tabs-wrap> .tabs > .tabs-first{
   margin:0
   padding: 0
+}
+/deep/.tabs-header {
+  display none
+}
+/deep/#plotPanel tr {
+  height 30px!important
 }
 </style>
