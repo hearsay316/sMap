@@ -111,7 +111,6 @@ export default {
     },
     handleControlPanel(type) {
       this.isControlPanel = !this.isControlPanel;
-      console.log(this.$refs.plotPanel);
       let panel = this.$refs.stylePanel.parentNode.className;
       if (panel === "panel") {
         if (type === "stylePanel") {
