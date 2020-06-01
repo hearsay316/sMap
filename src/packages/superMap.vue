@@ -32,26 +32,45 @@ export default {
   },
   async created() {
     // css从上到下会有覆盖,所以要和写在页面中的时候相反
+    console.log(this._Cesium, "_Cesium_Cesium_Cesium");
     let arr = [
-      [
-        "https://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
-        "https://cdn.j6375x.cn/cdn/superMap//examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
-        "https://at.alicdn.com/t/font_1711360_ju54515e55a.css",
-        "https://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
-        "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
-        "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
-        "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
-      ]
+      "https://cdn.j6375x.cn/cdn/superMap/examples/css/sideBar.css",
+      "https://cdn.j6375x.cn/cdn/superMap//examples/js/plotPanelControl/colorpicker/css/colorpicker.css",
+      "https://at.alicdn.com/t/font_1711360_ju54515e55a.css",
+      "https://cdn.j6375x.cn/cdn/superMap/examples/css/pretty.css",
+      "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Widgets/widgets.css",
+      "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/Cesium.js",
+      "https://cdn.j6375x.cn/cdn/superMap/Build/Cesium/ThirdParty/Workers/PlotAlgo/PlotAlgoInclude.js"
     ];
-    console.log("开始加载Cesium函数");
+    let basePathInit = this.basePathInit();
+    console.log("开始加载Cesium函数", basePathInit, arr);
     typeof Cesium === "undefined" &&
-      this.scriptAdd(arr).then(async res => {
+      this.scriptAdd(basePathInit).then(async res => {
         console.log("完成加载Cesium函数");
         global.Cesium = Cesium;
         this.$refs.superMap && (await this.Init(window.Cesium));
       });
   },
   methods: {
+    basePathInit() {
+      const { path } = this._Cesium();
+      if (!path) {
+        throw new Error("path 错误");
+      }
+      let fucType = "path" + Object.prototype.toString.call(path);
+      return typeof this[fucType] === "function" && this[fucType](path);
+    },
+    "path[object String]"() {},
+    "path[object Array]"(path) {
+      console.log(path, "dddddddddddddddddd");
+      // url正则
+      const URL_REGULAR_EXPRESSION = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+      const objExp = new RegExp(URL_REGULAR_EXPRESSION);
+      path.map(url => {
+        console.log(objExp.test(url), "dddddddddddddddddd");
+      });
+      return path;
+    },
     async Init(Cesium) {
       // 创建createWebgl之前的用户传来的函数
       this.createWebgl && this.createWebgl(this);
