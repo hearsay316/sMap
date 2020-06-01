@@ -61,6 +61,7 @@
          -->
       <superPlot
         :superPlotIndex="superPlotIndex"
+        :superPlotIsCesium="superPlotIsCesium"
         @handleControlPanelItem="handleControlPanelItem"
         @handlePopupTitleIco="clearTitle"
         @initPlot="myInitPlot"
@@ -180,6 +181,7 @@ export default {
       baseUrlItems: [],
       superPlotIndex: -1,
       superPlotTime: 0,
+      superPlotIsCesium: false,
       isRescue: false,
       popupActiveBg: "111",
       popupActiveEndDesc: "总攻结束",
@@ -548,6 +550,7 @@ export default {
       this.viewer = v;
       // 把Cesium 挂在 this
       this.Cesium = C;
+      this.superPlotIsCesium = true;
       this.viewerEntities = [];
       // 回调myInitPlot Plot是动态加载的js 执行需要在回调之后,所以我们要回调三次
       this.myInitPlot(v, C);

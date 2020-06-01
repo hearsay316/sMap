@@ -45,7 +45,7 @@ export default {
     let basePathInit = this.basePathInit();
     console.log("开始加载Cesium函数", basePathInit, arr);
     typeof Cesium === "undefined" &&
-      this.scriptAdd(basePathInit).then(async res => {
+      this.urlUpRecursive(basePathInit).then(async res => {
         console.log("完成加载Cesium函数");
         global.Cesium = Cesium;
         this.$refs.superMap && (await this.Init(window.Cesium));
@@ -153,27 +153,21 @@ export default {
         document.getElementsByTagName("body")[0].appendChild(script);
       });
     },
-    scriptAdd(arr) {
+    urlUpRecursive(arr) {
       const vm = this;
-      let index = 0,
-        dataIndex = 0;
-      async function next(arr, index, dataIndex) {
+      let index = 0;
+      async function next(arr, index) {
         console.log("正在开始加载_Cesium");
-        if (
-          arr.length === index + 1 &&
-          arr[arr.length - 1].length === dataIndex
-        ) {
+        if (arr.length === index) {
           return { type: 1 };
         }
-        if (arr[index].length === dataIndex) {
-          return next(arr, ++index, 0);
-        }
-        let data = await vm.processUrl(arr[index][dataIndex++]);
+
+        let data = await vm.processUrl(arr[index++]);
         if (data === 1) {
-          return await next(arr, index, dataIndex);
+          return await next(arr, index);
         }
       }
-      return next(arr, index, dataIndex);
+      return next(arr, index);
     },
     processUrl(url) {
       return url.includes(".css")

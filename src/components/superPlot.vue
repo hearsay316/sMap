@@ -41,19 +41,50 @@
 export default {
   name: "superPlot",
   props: {
-    superPlotIndex: Number
+    superPlotIndex: Number,
+    superPlotIsCesium: Boolean
+  },
+  watch: {
+    superPlotIsCesium: {
+      handler: function(newP, old) {
+        console.log(newP, old, "newP,oldnewP,oldnewP,old");
+      },
+      deep: true,
+      immediate: true
+    }
   },
   data() {
     return {
       superTitleDesc: "路径规划",
       isControlPanel: true,
-      resourcesMountedTime: null
+      resourcesMountedTime: null,
+      superPlotIsCesiumUse: false
     };
   },
   mounted() {
     this.Init();
   },
   methods: {
+    basePathInit() {
+      const { plotBasePath } = this._Cesium();
+      if (!plotBasePath) {
+        throw new Error("plotBasePath 错误");
+      }
+      let fucType =
+        "plotBasePath" + Object.prototype.toString.call(plotBasePath);
+      return typeof this[fucType] === "function" && this[fucType](plotBasePath);
+    },
+    "plotBasePath[object String]"() {},
+    "plotBasePath[object Array]"(path) {
+      console.log(path, "dddddddddddddddddd");
+      // url正则
+      const URL_REGULAR_EXPRESSION = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+      const objExp = new RegExp(URL_REGULAR_EXPRESSION);
+      path.map(url => {
+        console.log(objExp.test(url), "dddddddddddddddddd");
+      });
+      return path;
+    },
     Init() {
       this.deleteSeleGeo();
       this.resourcesMounted();
@@ -165,9 +196,10 @@ export default {
         "./StylePanel.js",
         "./PlotPanel.js"
       ];
+      const basePathInit = this.basePathInit();
       console.log(typeof Cesium === "object", 'typeof Cesium === "object"');
       if (typeof Cesium === "object") {
-        this.urlUpRecursive(Data).then(
+        this.urlUpRecursive(basePathInit).then(
           res => {
             this.$emit("initPlot");
             this.resourcesMountedTime = null;
