@@ -127,10 +127,10 @@
     >
       进入场景
     </div>
-    <div class="newDome-test">
-      <router-link to="/">点击换</router-link>
-      <router-link to="/Polyline">点击换/Polyline</router-link>
-    </div>
+    <!--    <div class="newDome-test">-->
+    <!--      <router-link to="/">点击换</router-link>-->
+    <!--      <router-link to="/Polyline">点击换/Polyline</router-link>-->
+    <!--    </div>-->
   </div>
 </template>
 <!--
