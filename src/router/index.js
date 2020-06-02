@@ -204,7 +204,7 @@ const routes = [
     meta: {
       title: "newDome",
       icon:
-        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+        "https://www.huaitaos.com:8443/iserver/iClient/for3D/webgl/zh/examples/img/terrainAndImagery.jpg"
     },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -218,7 +218,7 @@ const routes = [
     meta: {
       title: "Polylines",
       icon:
-        "http://support.supermap.com.cn:8090/webgl/examples/img/S3MTiles.jpg"
+        "https://www.huaitaos.com:8443/iserver/iClient/for3D/webgl/zh/examples/img/terrainAndImagery.jpg"
     },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
