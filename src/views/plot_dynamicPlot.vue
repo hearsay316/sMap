@@ -360,12 +360,12 @@ export default {
       //globe : Globe 获取地球对象。
       scene.globe.depthTestAgainstTerrain = false;
       serverUrl =
-        "https://47.103.125.18:8443/iserver/services/plot-JY/rest/plot";
+        "https://www.huaitaos.com:8443/iserver/services/plot-JY/rest/plot";
       this.InitPlot(viewer, serverUrl);
       openMap({
         viewer,
         url:
-          "https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace"
+          "https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace"
       }).then(res => {
         setView(
           scene,

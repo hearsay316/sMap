@@ -1,6 +1,6 @@
 export const demoConfig = {
   url:
-    "https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace",
+    "https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace",
   positionXYZ: {
     x: -1209550.6137063126,
     y: 5655779.937735093,
@@ -40,7 +40,8 @@ export const demoConfig = {
   Config: {
     name: "Config",
     setQueryParameter: {
-      url: "https://47.103.125.18:8443/iserver/services/data-userMap/rest/data",
+      url:
+        "https://www.huaitaos.com:8443/iserver/services/data-userMap/rest/data",
       dataSourceName: "testMap",
       dataSetName: "New_Region",
       keyWord: "SmID"
@@ -51,7 +52,7 @@ export const demoConfig = {
     y: 24.969712733889363,
     z: 1573.026203891956
   },
-  serverUrl: "https://47.103.125.18:8443/iserver/services/plot-JY/rest/plot",
+  serverUrl: "https://www.huaitaos.com:8443/iserver/services/plot-JY/rest/plot",
   positionCarts: [
     {
       x: 102.06943685862204,
@@ -76,7 +77,7 @@ export const demoConfig = {
 
 export const demoSingConfig = {
   url:
-    " https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace",
+    " https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace",
   positionXYZ: {
     x: -1209550.6137063126,
     y: 5655779.937735093,
@@ -119,7 +120,7 @@ export const demoSingConfig = {
     name: "Config_1",
     setQueryParameter: {
       url:
-        "https://47.103.125.18:8443/iserver/services/data-supermap03261643/rest/data",
+        "https://www.huaitaos.com:8443/iserver/services/data-supermap03261643/rest/data",
       dataSourceName: "testUser",
       dataSetName: "New_Region3D_1",
       keyWord: "SmID"
@@ -131,7 +132,7 @@ export const demoSingConfig = {
     y: 24.969712733889363,
     z: 1573.026203891956
   },
-  serverUrl: "https://47.103.125.18:8443/iserver/services/plot-JY/rest/plot",
+  serverUrl: "https://www.huaitaos.com:8443/iserver/services/plot-JY/rest/plot",
   positionCarts: [
     {
       x: 102.06943685862204,

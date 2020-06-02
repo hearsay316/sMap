@@ -1,6 +1,10 @@
 <template>
   <div>
     <div id="cesiumContainer"></div>
+    <div class="newDome-test">
+      <router-link to="/">点击换</router-link>
+      <router-link to="/newDome">点击换/Polyline</router-link>
+    </div>
     <super-map :mounted-webgl="webgl"> </super-map>
     <super-map :mounted-webgl="webgl2"> </super-map>
   </div>

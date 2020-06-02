@@ -477,10 +477,10 @@ export default {
       widget = viewer.cesiumWidget;
       this.$refs.loadingbar.remove();
       try {
-        //https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace
+        //https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace
         //添加S3M图层服务
         var promise = scene.open(
-          "https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace"
+          "https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace"
         );
         Cesium.when(
           promise,
@@ -492,7 +492,7 @@ export default {
             //设置属性查询参数
             layer.setQueryParameter({
               url:
-                "https://47.103.125.18:8443/iserver/services/data-userMap/rest/data",
+                "https://www.huaitaos.com:8443/iserver/services/data-userMap/rest/data",
               dataSourceName: "testMap",
               dataSetName: "New_Region",
               keyWord: "SmID"

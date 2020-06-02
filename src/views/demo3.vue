@@ -1248,7 +1248,7 @@ __proto__: Object */
       //globe : Globe 获取地球对象。
       scene.globe.depthTestAgainstTerrain = false;
       serverUrl =
-        "https://47.103.125.18:8443/iserver/services/plot-JY/rest/plot";
+        "https://www.huaitaos.com:8443/iserver/services/plot-JY/rest/plot";
       canvas = scene.canvas;
       widget = viewer.cesiumWidget;
       //globe : Globe 获取地球对象。
@@ -1256,11 +1256,11 @@ __proto__: Object */
       let clampMode = 0;
       this.$refs.loadingbar.remove();
       try {
-        //https://47.103.125.18:8443/iserver/services/3D-tempWorkspace_1/rest/realspace
-        //https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace/datas/Config.openrealspace
-        //添加S3M图层服务 https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace
+        //https://www.huaitaos.com:8443/iserver/services/3D-tempWorkspace_1/rest/realspace
+        //https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace/datas/Config.openrealspace
+        //添加S3M图层服务 https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace
         var promise = scene.open(
-          "https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace"
+          "https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace"
         );
         Cesium.when(
           promise,
@@ -1273,7 +1273,7 @@ __proto__: Object */
             //设置属性查询参数
             layer.setQueryParameter({
               url:
-                "https://47.103.125.18:8443/iserver/services/data-userMap/rest/data",
+                "https://www.huaitaos.com:8443/iserver/services/data-userMap/rest/data",
               dataSourceName: "testMap",
               dataSetName: "New_Region",
               keyWord: "SmID"

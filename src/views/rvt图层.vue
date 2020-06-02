@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       url:
-        "https://47.103.125.18:8443/iserver/services/3D-supermap03261643/rest/realspace",
+        "https://www.huaitaos.com:8443/iserver/services/3D-supermap03261643/rest/realspace",
       positionXYZ: {
         x: -1209550.6137063126,
         y: 5655779.937735093,
