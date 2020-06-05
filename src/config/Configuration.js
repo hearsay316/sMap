@@ -135,6 +135,7 @@ export function InitPlot(viewer, serverUrl, Cesium) {
  * @param viewer
  * @param cart
  * @param Fire
+ * @param Cesium
  * @returns {*}
  */
 export function viewerMountedWater(viewer, cart, Fire, Cesium) {
@@ -351,6 +352,7 @@ export function viewerMountedDeployCart(viewer, positionXYZ, Cesium) {
  *
  * @param viewer  视图
  * @param MapFireXYZ 火的坐标 创建火元素
+ * @param Cesium Cesium 实例
  * @param primitivesConfig 配置参数
  */
 export function viewerMountedFire(
@@ -482,6 +484,7 @@ export function observeLayer(layers, config, Cesium) {
  *
  * @returns {Promise<unknown>}
  * @param obj
+ * @param Cesium
  */
 export function openMap(obj, Cesium) {
   let { viewer, url, config, earth, mountedOpenMap, errorOpenMap } = obj;

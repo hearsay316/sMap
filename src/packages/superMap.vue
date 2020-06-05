@@ -1,13 +1,23 @@
 <template>
   <div class="superMap">
     <div class="superMap-item" ref="superMap"></div>
+    <div v-if="superMapTransition" class="superMap-transition-loader">
+      xxxxx
+    </div>
     <slot></slot>
   </div>
 </template>
 
 <!--suppress JSCheckFunctionSignatures, NpmUsedModulesInstalled -->
 <script>
-import * as map from "../config/Configuration";
+// import * as map from "../config/Configuration";
+import {
+  createCesium,
+  openMap,
+  CesiumClickLayer,
+  CesiumClickLeft,
+  CesiumClickRight
+} from "../config/Configuration";
 // import Cesium from "Cesium";
 //todo  props需要做验证
 export default {
@@ -23,7 +33,24 @@ export default {
     errorOpenMap: Function,
     regCesiumClickLayer: Function,
     regCesiumClickLeft: Function,
-    regCesiumClickRight: Function
+    regCesiumClickRight: Function,
+    superMapTransitionLoader: {
+      type: Boolean,
+      default: () => false
+    }
+  },
+  data() {
+    return {
+      superMapTransitionItem: false
+    };
+  },
+  computed: {
+    superMapTransition() {
+      if (this.superMapTransitionLoader) {
+        return false;
+      }
+      return !this.superMapTransitionItem;
+    }
   },
   async mounted() {
     await this.createCesiumInit();
@@ -80,7 +107,6 @@ export default {
       this.mountedWebgl && this.mountedWebgl(this.viewer, Cesium);
       const scene = this.viewer.scene;
       // 打开三维模型
-      // 这个是不是应该用promise 重写?
       this.url &&
         (await this.openMap(
           {
@@ -93,6 +119,8 @@ export default {
           },
           Cesium
         ));
+      // 打开三维模型后 隐藏加载动画
+      this.superMapTransitionItem = true;
       // 注册单体化点击事件
       this.config &&
         this.CesiumClickLayer(this.viewer, feature => {
@@ -172,7 +200,11 @@ export default {
         ? this.script(url)
         : void 0;
     },
-    ...map
+    createCesium,
+    openMap,
+    CesiumClickLayer,
+    CesiumClickLeft,
+    CesiumClickRight
   },
   destroyed() {
     console.log("开始destroyed");
@@ -208,5 +240,16 @@ export default {
 }
 .bubble:after {
   border-color: transparent #34eff9;
+}
+.superMap-transition-loader {
+  position: fixed;
+  bottom: 20px;
+  background: #ffffff;
+  line-height: 60px;
+  width: 300px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
 }
 </style>
