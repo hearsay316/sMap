@@ -1,8 +1,5 @@
 <template>
   <div class="superMap">
-    <!--
-
-    -->
     <transition name="fade">
       <div v-show="superMapTransition" class="superMap-transition-loader">
         <super-map-transition></super-map-transition>
@@ -15,7 +12,6 @@
 
 <!--suppress JSCheckFunctionSignatures, NpmUsedModulesInstalled -->
 <script>
-// import * as map from "../config/Configuration";
 import {
   createCesium,
   openMap,
@@ -23,7 +19,6 @@ import {
   CesiumClickLeft,
   CesiumClickRight
 } from "../config/Configuration";
-// import Cesium from "Cesium";
 //todo  props需要做验证
 export default {
   name: "superMap",

@@ -688,4 +688,15 @@ export default {
     top 10px
     right 410px
     width:74px
+.superMap-transition-loader {
+  position: absolute;
+  bottom: 20px;
+  line-height: 60px;
+  width: 300px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  z-index: 10;
+}
 </style>
