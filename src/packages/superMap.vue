@@ -1,9 +1,14 @@
 <template>
   <div class="superMap">
+    <!--
+
+    -->
+    <transition name="fade">
+      <div v-show="superMapTransition" class="superMap-transition-loader">
+        <super-map-transition></super-map-transition>
+      </div>
+    </transition>
     <div class="superMap-item" ref="superMap"></div>
-    <div v-if="superMapTransition" class="superMap-transition-loader">
-      xxxxx
-    </div>
     <slot></slot>
   </div>
 </template>
@@ -223,9 +228,10 @@ export default {
 };
 </script>
 <style scoped>
-.superMap,
-#superMap {
-  height: 100%;
+.superMap {
+  position: relative;
+  height: 100vh;
+  width: 100%;
 }
 .superMap-item {
   height: 100%;
@@ -242,14 +248,21 @@ export default {
   border-color: transparent #34eff9;
 }
 .superMap-transition-loader {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
-  background: #ffffff;
   line-height: 60px;
   width: 300px;
   left: 0;
   right: 0;
   margin: auto;
   text-align: center;
+  z-index: 10;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

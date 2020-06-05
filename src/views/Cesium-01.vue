@@ -18,5 +18,6 @@ export default {
 <style scoped>
 .Cesium-01 {
   text-align: left;
+  position: relative;
 }
 </style>
