@@ -239,6 +239,20 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "Cesium-01.vue" */ "../views/Cesium-01.vue")
+  },
+  {
+    path: "/Bridge",
+    name: "Bridge",
+    meta: {
+      title: "Bridge.vue",
+      icon:
+        "https://www.huaitaos.com:8443/iserver/iClient/for3D/webgl/zh/examples/img/terrainAndImagery.jpg"
+    },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "Cesium-01.vue" */ "../views/Bridge.vue")
   }
 ];
 

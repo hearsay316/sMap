@@ -601,6 +601,18 @@ export function setView(scene, position, angle, Cesium) {
     throw new error("setView 参数不对");
   }
 }
+export function setPositionView(scene, position, Cesium) {
+  console.log("setView 开始");
+  if (Object.keys(position).length === 3 && Object.keys(angle).length === 3) {
+    let { x, y, z } = position;
+    scene.camera.setView({
+      destination: new Cesium.Cartesian3(x, y, z)
+    });
+    console.log("setView 结束");
+  } else {
+    throw new error("setView 参数不对");
+  }
+}
 
 /**
  *
